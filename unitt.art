@@ -1,0 +1,66 @@
+
+
+runTests: $[testPath :string][
+
+    passed: 0
+    failed: 0
+    fatalError: false
+
+    isTestFile?: $[file :string][
+        filename: last split.path file
+
+        return and? 
+            suffix? filename ".art" 
+            prefix? filename "test"
+    ]
+
+    testfiles: list.recursive testPath | select => isTestFile?
+
+    loop testfiles 'file [ 
+        print ~"\n===== |file| =====\n"
+        result: execute.code ~"arturo |file|"
+
+        output: split.lines result\output
+
+        loop result 'line [
+            print line
+            if in? '✅' line -> inc 'passed
+            if in? '❌' line -> inc 'failed
+        ]
+
+        if result\code > 0 -> fatalError: true
+
+    ]
+
+    print ~"\n===== Statistics =====\n"
+    print ~"⏏️  TOTAL:  |passed + failed| assertions"
+    print ~"✅ PASSED: |passed| assertions"
+    print ~"❌ FAILED: |failed| assertions"
+    print ~"\n===== ========== =====\n"
+
+    if or? (fatalError) (failed > 0) 
+        -> exit.with: 1
+
+]
+
+test: $[description :string testCase :block][
+
+    assert: $[condition :block][
+
+        sep: (attr 'prop)? -> "~" -> "-"
+        template: ~"|sep| assert that |description|"
+
+        passBlock: -> print [color #yellow ~"✅ |template|"]
+        failBlock: -> print [color #yellow ~"❌ |template|"]
+
+        (do condition)? 
+            passBlock
+            failBlock
+
+        print ~"     assertion : |condition|\n"
+    ]
+
+    do testCase
+
+]
+

@@ -1,0 +1,4 @@
+import {../unitt}
+
+do ::
+    runTests "test"
