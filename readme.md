@@ -121,7 +121,7 @@ This will show you:
     Remember that all *tests* must begin with the `test` prefix, and be an `.art` extension. 
 
 ### *Tests*
-- `test: $[description: :string, testCase :block]`:
+- `test: $[description :string, testCase :block]`:
     The test case itself, you need to pass a clear description to it,
     And the logic that you're trying to assert.
     - `.prop`:
