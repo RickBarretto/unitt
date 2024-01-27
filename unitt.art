@@ -18,7 +18,7 @@ runTests: $[testPath :string][
 
     loop testfiles 'file [ 
         print ~"\n===== |file| =====\n"
-        result: execute.code ~"arturo |file|"
+        result: execute.code ~"|sys\binary| |file|"
 
         output: split.lines result\output
 
