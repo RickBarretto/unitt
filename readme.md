@@ -1,12 +1,39 @@
-# Unitt
+<h1 align="center">
+    Unitt
+</h1>
 
-*Unitt* is a basic unit-test tool for the Arturo Programming language.
+<p align="center">
+    <i>Unitt</i> is a basic unit-test tool for the 
+    <a href="https://github.com/arturo-lang/arturo/">
+        Arturo Programming language
+    </a>
+    <br><br>
+    <img 
+        alt="Arturo logo" 
+        width="20" 
+        src="https://github.com/arturo-lang/arturo/raw/master/docs/images/logo.png#gh-light-mode-only"
+    />
+    <img 
+        alt="Arturo logo" 
+        width="20" 
+        src="https://github.com/arturo-lang/arturo/raw/master/docs/images/logo-lightgray.png#gh-dark-mode-only" 
+    />
+</p>
+
+## At a Glance
+
+<img 
+    alt="Running Unitt from terminal"
+    align="center"
+    width="720"
+    src="./docs/running unitt screenshot.png"
+/>
 
 ## Trying Unitt
 
 *Unitt* may be splited into two sections: *the tester* and *the tests*.
 
-*The tester* is the function that is responsible to find, run and return error codes to the final user.
+*The tester* is the section responsible to find, run and return error codes to the final user.
 While *the tests* are responsible to group the rules and logic of the tests.
 
 ### Initial setup
@@ -44,7 +71,8 @@ To run it, call:
 arturo tester.art
 ```
 
-> [NOTE]: You may want to use a hashbang to don't need to call arturo for every run.
+> [!TIP] 
+> You may want to use a hashbang to don't need to call arturo for every run.
 
 ### The *tests* itself
 
@@ -80,7 +108,8 @@ This will show you:
      assertion : [binary? b ++ 1]
 ```
 
-> [!NOTE]: Property-based tests gets a `~` as separator. 
+> [!NOTE]
+> Property-based tests have `~` as separator. 
 
 
 ## Documentation
