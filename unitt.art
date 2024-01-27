@@ -22,7 +22,7 @@ runTests: $[testPath :string][
 
         output: split.lines result\output
 
-        loop result 'line [
+        loop output 'line [
             print line
             if in? '✅' line -> inc 'passed
             if in? '❌' line -> inc 'failed
