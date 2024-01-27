@@ -13,9 +13,12 @@ cd tests/testDefault
 
 # checking the return
 
-cmp -- ./sample ./output    \
-    && echo sucess          \
-    || echo failed
+cmp -- sample output && echo "Sucess!"   \
+    || (
+        echo "Failed!" &&
+        echo "" && 
+        diff sample output
+    ) 
 
 # cleaning test
 rm unitt.art
