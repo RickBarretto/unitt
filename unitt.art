@@ -1,6 +1,19 @@
 
 
 runTests: $[testPath :string][
+    ;; description: « executes test-files inside the `testPath`
+    ;;
+    ;; arguments: [
+    ;;      testPath: « the relative folder that contains the tests
+    ;; ]
+    ;;
+    ;; example: {
+    ;;      ; tester.art
+    ;;      import {unitt}
+    ;;      
+    ;;      do ::
+    ;;          runTests {tests}   
+    ;; }
 
     passed: 0
     failed: 0
