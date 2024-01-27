@@ -1,4 +1,6 @@
-import {../unitt}
+#! arturo
+
+import {unitt}
 
 do ::
     runTests "test"

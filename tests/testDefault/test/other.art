@@ -1,5 +1,5 @@
 code:  import.lean {src/code}
-unitt: import.lean {../unitt}
+unitt: import.lean {unitt}
 
 do ::
 

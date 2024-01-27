@@ -1,0 +1,85 @@
+
+===== test\test1.art =====
+
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [2 <> code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [3 <> code\fun]
+
+[0;33m✅ - assert that will pass[0m 
+     assertion : [1 = code\fun]
+
+[0;33m❌ - assert that will fail[0m 
+     assertion : [2 = code\fun]
+
+
+
+===== test\test2.art =====
+
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [2 <> code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [3 <> code\fun]
+
+[0;33m✅ - assert that will pass[0m 
+     assertion : [1 = code\fun]
+
+[0;33m❌ - assert that will fail[0m 
+     assertion : [2 = code\fun]
+
+
+
+===== test\a\test1.art =====
+
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [2 <> code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [3 <> code\fun]
+
+[0;33m✅ - assert that will pass[0m 
+     assertion : [1 = code\fun]
+
+[0;33m❌ - assert that will fail[0m 
+     assertion : [2 = code\fun]
+
+
+
+===== test\a\test2.art =====
+
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [2 <> code\fun]
+
+[0;33m✅ - assert that are different[0m 
+     assertion : [3 <> code\fun]
+
+[0;33m✅ - assert that will pass[0m 
+     assertion : [1 = code\fun]
+
+[0;33m❌ - assert that will fail[0m 
+     assertion : [2 = code\fun]
+
+
+
+===== Statistics =====
+
+⏏️  TOTAL:  20 assertions
+✅ PASSED: 16 assertions
+❌ FAILED: 4 assertions
+
+===== ========== =====
+
