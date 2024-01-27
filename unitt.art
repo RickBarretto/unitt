@@ -69,8 +69,10 @@ test: $[description :string testCase :block][
 
     assert: $[condition :block][
 
-        sep: (attr 'prop)? -> "~" -> "-"
-        template: ~"|sep| assert that |description|"
+    sep: (attr 'prop)? -> "~" -> "-"
+    template: ~"|sep| assert that |description|"
+
+    assert: $[condition :block][
 
         passBlock: -> print [color #yellow ~"✅ |template|"]
         failBlock: -> print [color #yellow ~"❌ |template|"]
