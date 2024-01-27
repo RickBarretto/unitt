@@ -1,5 +1,5 @@
 #! bash
-# 
+
 # ========== Running the default test ========== #
 
 # copying unitt to tests
