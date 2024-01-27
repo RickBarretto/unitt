@@ -2,10 +2,4 @@ entry: {unitt}
 depends: []
 requires: 0.9.83
 
-; --- Other information ---
-
-version: 0.1.0
-author: {RickBarreto}
-repository: {}
-
 
