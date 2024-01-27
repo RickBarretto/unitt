@@ -1,4 +1,10 @@
-
+;; author: « RickBarretto
+;; year: 2024
+;; licence: « MIT
+;; version: 0.1.1
+;; repository: « https://github.com/RickBarretto/unitt
+;;
+;; export: ['runTests 'test]
 
 runTests: $[testPath :string][
     ;; description: « executes test-files inside the `testPath`
