@@ -22,12 +22,13 @@
 
 ## At a Glance
 
+<p align="center">
 <img 
     alt="Running Unitt from terminal"
-    align="center"
     width="720"
     src="./docs/running unitt screenshot.png"
 />
+</p>
 
 ## Trying Unitt
 
