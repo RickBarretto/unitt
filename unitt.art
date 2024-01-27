@@ -66,8 +66,40 @@ runTests: $[testPath :string][
 ]
 
 test: $[description :string testCase :block][
-
-    assert: $[condition :block][
+    ;; description: {
+    ;;    Run an unit-test, printing it's result.
+    ;;    Assertions should be done with the internal function `assert :block`.
+    ;; }
+    ;; arguments: [
+    ;;      description: « the test description
+    ;;      testCase: {
+    ;;          the block containing the test's logic and assertion
+    ;;      }
+    ;; ]
+    ;; options: [
+    ;;      prop: :logical « defines if a test is property-based
+    ;; ]
+    ;;
+    ;; note: « `assert` is injected, and only available inside the `test`'s block.
+    ;;
+    ;; example: {
+    ;;      ; testAppend.art
+    ;;      import {unitt}
+    ;;      
+    ;;      do ::
+    ;;          test.prop "appending with keyword or operator has the same behavior" [
+    ;;              a: [a b c d e f g]
+    ;;              b: [h i j k l m n]
+    ;;              assert -> (append a b) = (a ++ b)
+    ;;              assert -> (append b a) = (b ++ a)
+    ;;          ]
+    ;;          ; ✅ ~ assert that appending with keyword or operator has the same behavior 
+    ;;          ; assertion : [[append a b] = [a ++ b]]
+    ;;          ;
+    ;;          ; ✅ ~ assert that appending with keyword or operator has the same behavior 
+    ;;          ; assertion : [[append b a] = [b ++ a]]
+    ;;          ;
+    ;; }
 
     sep: (attr 'prop)? -> "~" -> "-"
     template: ~"|sep| assert that |description|"
