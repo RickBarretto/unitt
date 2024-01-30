@@ -12,6 +12,9 @@ runTests: $[testPath :string][
     ;; arguments: [
     ;;      testPath: « the relative folder that contains the tests
     ;; ]
+    ;; options: [
+    ;;      pattern: :string « a simple glob-pattern to select files.
+    ;; ]
     ;;
     ;; example: {
     ;;      ; tester.art
@@ -30,13 +33,18 @@ runTests: $[testPath :string][
     ; this should not return 0 as error code, but 1, instead.
     fatalError: false
 
+    pattern: (attr 'glob)?? "test*.art"
+    testPrefix: first split.by: "*" pattern
+    testSuffix: last  split.by: "*" pattern
+
     isTestFile?: $[file :string][
         ;; description: « Checks if `file` starts with 'test' and is an .art file
+
         filename: last split.path file
 
         return and? 
-            suffix? filename ".art" 
-            prefix? filename "test"
+            prefix? filename testPrefix
+            suffix? filename testSuffix
     ]
 
     testfiles: list.recursive testPath | select => isTestFile?
