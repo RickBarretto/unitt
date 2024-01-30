@@ -14,6 +14,7 @@ runTests: $[testPath :string][
     ;; ]
     ;; options: [
     ;;      pattern: :string « a simple glob-pattern to select files.
+    ;;      suppress: :logical « suppress exit codes.
     ;; ]
     ;;
     ;; example: {
@@ -74,7 +75,9 @@ runTests: $[testPath :string][
     print ~"❌ FAILED: |failed| assertions"
     print ~"\n===== ========== =====\n"
 
-    if or? (fatalError) (failed > 0) 
+    exit?: not? attr 'suppress
+    failed?: or? (fatalError) (failed > 0)
+    if and? exit? failed? 
         -> exit.with: 1
 
 ]
