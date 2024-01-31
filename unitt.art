@@ -78,7 +78,7 @@ runTests: $[testPath :string][
     print ~"❌  FAILED: |failed| assertions"
     print ~"\n===== ========== =====\n"
 
-    exit?: not? attr 'suppress
+    exit?: not? attr? 'suppress
     failed?: or? (fatalError) (failed > 0)
     if and? exit? failed? 
         -> panic "Some tests failed!"
