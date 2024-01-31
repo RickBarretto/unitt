@@ -39,17 +39,17 @@ runTests: $[testPath :string][
     testPrefix: first split.by: "*" pattern
     testSuffix: last  split.by: "*" pattern
 
-    isTestFile?: $[file :string][
+    testFile?: $[file :string][
         ;; description: « Checks if `file` starts with 'test' and is an .art file
 
         filename: last split.path file
 
-        return and? 
+        and? 
             prefix? filename testPrefix
             suffix? filename testSuffix
     ]
 
-    testfiles: list.recursive testPath | select => isTestFile?
+    testfiles: list.recursive testPath | select => testFile?
 
     ; The tests execution
     loop testfiles 'file [ 
