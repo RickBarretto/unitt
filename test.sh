@@ -2,6 +2,8 @@
 
 # ========== Running the default test ========== #
 
+echo "Testing the default test suit"
+
 # copying unitt to tests
 
 cp unitt.art tests/testDefault
@@ -28,6 +30,8 @@ cd ../..
 
 
 # ========== Running the finder test ========== #
+
+echo "Testing the finder test suit"
 
 # copying unitt to tests
 
