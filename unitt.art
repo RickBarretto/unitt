@@ -35,7 +35,7 @@ runTests: $[testPath :string][
     ; this should not return 0 as error code, but 1, instead.
     fatalError: false
 
-    pattern: (attr 'glob)?? "test*.art"
+    pattern: (attr 'pattern)?? "test*.art"
     testPrefix: first split.by: "*" pattern
     testSuffix: last  split.by: "*" pattern
 

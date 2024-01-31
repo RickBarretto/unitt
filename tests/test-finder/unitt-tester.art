@@ -5,10 +5,10 @@ import {unitt}
 do ::
 
     print "===> Finding *.art"
-    runTests.suppress.glob: "*.art" "tests"
+    runTests.suppress.pattern: "*.art" "tests"
     
     print "===> Finding *.test.art"
-    runTests.suppress.glob: "*.test.art" "tests"
+    runTests.suppress.pattern: "*.test.art" "tests"
    
     print "===> Finding test*.art"
-    runTests.suppress.glob: "test*.art" "tests"
+    runTests.suppress.pattern: "test*.art" "tests"
