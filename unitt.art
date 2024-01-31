@@ -13,7 +13,7 @@ runTests: $[testPath :string][
     ;;      testPath: « the relative folder that contains the tests
     ;; ]
     ;; options: [
-    ;;      pattern: :string « a simple glob-pattern to select files.
+    ;;      pattern: :string « a simple glob-like pattern to select files.
     ;;      suppress: :logical « suppress exit codes.
     ;; ]
     ;;
