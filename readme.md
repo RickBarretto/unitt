@@ -80,7 +80,7 @@ arturo tester.art
 A real example of tests:
 
 ```art
-unix?: false
+unix?: true
 
 test "appending binaries with integer is working" [
     b: to :binary 0
