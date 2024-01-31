@@ -9,3 +9,6 @@ do ::
     
     print "===> Finding *.test.art"
     runTests.suppress.glob: "*.test.art" "tests"
+   
+    print "===> Finding test*.art"
+    runTests.suppress.glob: "test*.art" "tests"
