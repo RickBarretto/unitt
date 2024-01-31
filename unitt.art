@@ -65,8 +65,8 @@ runTests: $[testPath :string][
     print ~"\n===== Statistics =====\n"
     print ~"⏏️    TOTAL: |passed + failed| assertions"
     print ~"✅  PASSED: |passed| assertions"
-    print ~"❌  FAILED: |failed| assertions"
     print ~"⏩ SKIPPED: |skipped| assertions"
+    print ~"❌  FAILED: |failed| assertions"
     print ~"\n===== ========== =====\n"
 
     if or? (fatalError) (failed > 0) 
