@@ -24,6 +24,8 @@ cmp -- sample output && echo "Sucess!"   \
 rm unitt.art
 rm output
 
+cd ../..
+
 
 # ========== Running the finder test ========== #
 
