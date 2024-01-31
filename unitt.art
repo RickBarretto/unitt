@@ -130,7 +130,10 @@ test: $[description :string testCase :block][
 
         passBlock: -> print [color #yellow ~"✅ |template|"]
         failBlock: -> print [color #yellow ~"❌ |template|"]
-        skipBlock: -> print [color #yellow ~"⏩ |template|"]
+        skipBlock: [ 
+            print [color #yellow ~"⏩ |template|"]
+            print "     skipped! \n"
+        ]
 
         (skip?)? -> do skipBlock [
             (do condition)? 
