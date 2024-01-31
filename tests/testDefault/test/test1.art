@@ -3,7 +3,18 @@ unitt: import.lean {unitt}
 
 do ::
 
+unix?: false
+win?: true
+
 unitt\test "are equal" [
+    assert -> 1 = code\fun
+]
+
+unitt\test.skip: unix? "are equal" [
+    assert -> 1 = code\fun
+]
+
+unitt\test.skip: win? "are equal" [
     assert -> 1 = code\fun
 ]
 

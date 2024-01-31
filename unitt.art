@@ -28,6 +28,7 @@ runTests: $[testPath :string][
     ; Important to final statistics
     passed: 0
     failed: 0
+    skipped: 0
 
     ; Important to return error code.
     ; If some test throw an error and don't explicitly catches it,
@@ -61,6 +62,7 @@ runTests: $[testPath :string][
             print line
             if in? '✅' line -> inc 'passed
             if in? '❌' line -> inc 'failed
+            if in? '⏩' line -> inc 'skipped
         ]
 
         ; if some test throws an error
@@ -70,9 +72,10 @@ runTests: $[testPath :string][
     ]
 
     print ~"\n===== Statistics =====\n"
-    print ~"⏏️  TOTAL:  |passed + failed| assertions"
-    print ~"✅ PASSED: |passed| assertions"
-    print ~"❌ FAILED: |failed| assertions"
+    print ~"⏏️    TOTAL: |passed + failed| assertions"
+    print ~"✅  PASSED: |passed| assertions"
+    print ~"⏩ SKIPPED: |skipped| assertions"
+    print ~"❌  FAILED: |failed| assertions"
     print ~"\n===== ========== =====\n"
 
     exit?: not? attr 'suppress
@@ -95,6 +98,7 @@ test: $[description :string testCase :block][
     ;; ]
     ;; options: [
     ;;      prop: :logical « defines if a test is property-based
+    ;;      skip: :logical « skip test if true
     ;; ]
     ;;
     ;; note: « `assert` is injected, and only available inside the `test`'s block.
@@ -115,22 +119,40 @@ test: $[description :string testCase :block][
     ;;          ;
     ;;          ; ✅ ~ assert that appending with keyword or operator has the same behavior 
     ;;          ; assertion : [[append b a] = [b ++ a]]
-    ;;          ;
+    ;;          
+    ;;          test.skip: unix? "split is working for windows's paths" [
+    ;;              assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
+    ;;          ]
+    ;;          ; # running on Windows:
+    ;;          ; ✅ - assert that split is working for windows's paths 
+    ;;          ; assertion : [[. splited path] = split path .\splited\path]
+    ;;          ; 
+    ;;          ; # running on Unix:
+    ;;          ; ⏩ - assert that split is working for windows's paths 
+    ;;          ; 
     ;; }
 
     sep: (attr 'prop)? -> "~" -> "-"
     template: ~"|sep| assert that |description|"
 
+    skip?: attr 'skip
+
     assert: $[condition :block][
 
         passBlock: -> print [color #yellow ~"✅ |template|"]
         failBlock: -> print [color #yellow ~"❌ |template|"]
+        skipBlock: [ 
+            print [color #yellow ~"⏩ |template|"]
+            print "     skipped! \n"
+        ]
 
-        (do condition)? 
-            passBlock
-            failBlock
+        (skip?)? -> do skipBlock [
+            (do condition)? 
+                passBlock
+                failBlock
 
-        print ~"     assertion : |condition|\n"
+            print ~"     assertion : |condition|\n"
+        ]
     ]
 
     do testCase

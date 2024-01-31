@@ -80,6 +80,8 @@ arturo tester.art
 A real example of tests:
 
 ```art
+unix?: true
+
 test "appending binaries with integer is working" [
     b: to :binary 0
     assert -> as.binary 2 = append b 1
@@ -90,6 +92,10 @@ test.prop "appending binaries with integer returns a binary" [
     b: to :binary 0
     assert -> binary? append b 1
     assert -> binary? b ++ 1
+]
+
+test.skip: unix? "split is working for windows's paths" [
+    assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
 ]
 ```
 
@@ -107,6 +113,9 @@ This will show you:
 
 ✅ - assert that appending binaries with integer returns a binary
      assertion : [binary? b ++ 1]
+
+⏩ - assert that split is working for windows's paths      
+      skipped!
 ```
 
 > [!NOTE]
@@ -126,6 +135,9 @@ This will show you:
     And the logic that you're trying to assert.
     - `.prop`:
         Indicates that a test is property-based.
+    - `.skip :logical`:
+        Skips tests for some condition. 
+        If none condition is given, this will just skip the test.
 - `assert: $[condition :block]`:
     A function that is only available inside the `test` case,
     makes an assertion given the `condition`.
