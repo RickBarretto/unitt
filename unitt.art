@@ -24,6 +24,7 @@ runTests: $[testPath :string][
     ; Important to final statistics
     passed: 0
     failed: 0
+    skipped: 0
 
     ; Important to return error code.
     ; If some test throw an error and don't explicitly catches it,
@@ -52,6 +53,7 @@ runTests: $[testPath :string][
             print line
             if in? '✅' line -> inc 'passed
             if in? '❌' line -> inc 'failed
+            if in? '⏩' line -> inc 'skipped
         ]
 
         ; if some test throws an error
@@ -61,9 +63,10 @@ runTests: $[testPath :string][
     ]
 
     print ~"\n===== Statistics =====\n"
-    print ~"⏏️  TOTAL:  |passed + failed| assertions"
-    print ~"✅ PASSED: |passed| assertions"
-    print ~"❌ FAILED: |failed| assertions"
+    print ~"⏏️    TOTAL: |passed + failed| assertions"
+    print ~"✅  PASSED: |passed| assertions"
+    print ~"❌  FAILED: |failed| assertions"
+    print ~"⏩ SKIPPED: |skipped| assertions"
     print ~"\n===== ========== =====\n"
 
     if or? (fatalError) (failed > 0) 
