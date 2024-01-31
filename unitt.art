@@ -81,7 +81,7 @@ runTests: $[testPath :string][
     exit?: not? attr 'suppress
     failed?: or? (fatalError) (failed > 0)
     if and? exit? failed? 
-        -> exit.with: 1
+        -> panic "Some tests failed!"
 
 ]
 
