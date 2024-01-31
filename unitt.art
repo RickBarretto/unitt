@@ -84,7 +84,7 @@ test: $[description :string testCase :block][
     ;; ]
     ;; options: [
     ;;      prop: :logical « defines if a test is property-based
-    ;;      disable: :logical « skip test if true
+    ;;      skip: :logical « skip test if true
     ;; ]
     ;;
     ;; note: « `assert` is injected, and only available inside the `test`'s block.
@@ -106,7 +106,7 @@ test: $[description :string testCase :block][
     ;;          ; ✅ ~ assert that appending with keyword or operator has the same behavior 
     ;;          ; assertion : [[append b a] = [b ++ a]]
     ;;          
-    ;;          test.disable: unix? "split is working for windows's paths" [
+    ;;          test.skip: unix? "split is working for windows's paths" [
     ;;              assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
     ;;          ]
     ;;          ; ✅ - assert that split is working for windows's paths 
@@ -128,7 +128,7 @@ test: $[description :string testCase :block][
         print ~"     assertion : |condition|\n"
     ]
 
-    if not? attr 'disable [
+    if not? attr 'skip [
         do testCase
     ]
 
