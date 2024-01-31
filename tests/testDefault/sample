@@ -4,6 +4,12 @@
 [0;33m✅ - assert that are equal[0m 
      assertion : [1 = code\fun]
 
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m⏩ - assert that are equal[0m 
+     skipped! 
+
 [0;33m✅ - assert that are different[0m 
      assertion : [2 <> code\fun]
 
@@ -22,6 +28,12 @@
 
 [0;33m✅ - assert that are equal[0m 
      assertion : [1 = code\fun]
+
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m⏩ - assert that are equal[0m 
+     skipped! 
 
 [0;33m✅ - assert that are different[0m 
      assertion : [2 <> code\fun]
@@ -42,6 +54,12 @@
 [0;33m✅ - assert that are equal[0m 
      assertion : [1 = code\fun]
 
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m⏩ - assert that are equal[0m 
+     skipped! 
+
 [0;33m✅ - assert that are different[0m 
      assertion : [2 <> code\fun]
 
@@ -61,6 +79,12 @@
 [0;33m✅ - assert that are equal[0m 
      assertion : [1 = code\fun]
 
+[0;33m✅ - assert that are equal[0m 
+     assertion : [1 = code\fun]
+
+[0;33m⏩ - assert that are equal[0m 
+     skipped! 
+
 [0;33m✅ - assert that are different[0m 
      assertion : [2 <> code\fun]
 
@@ -77,9 +101,10 @@
 
 ===== Statistics =====
 
-⏏️  TOTAL:  20 assertions
-✅ PASSED: 16 assertions
-❌ FAILED: 4 assertions
+⏏️    TOTAL: 24 assertions
+✅  PASSED: 20 assertions
+❌  FAILED: 4 assertions
+⏩ SKIPPED: 4 assertions
 
 ===== ========== =====
 
