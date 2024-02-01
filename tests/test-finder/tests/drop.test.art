@@ -1,0 +1,21 @@
+code:  import.lean {src/code}
+unitt: import.lean {unitt}
+
+do ::
+
+unitt\test "are equal" [
+    assert -> 1 = code\fun
+]
+
+unitt\test "are different" [
+    assert -> 2 <> code\fun
+    assert -> 3 <> code\fun
+]
+
+unitt\test "will pass" [
+    assert -> 1 = code\fun
+]
+
+unitt\test "will fail" [
+    assert -> 2 = code\fun
+]

@@ -1,0 +1,14 @@
+#! arturo
+
+import {unitt}
+
+do ::
+
+    print "===> Finding *.art"
+    runTests.suppress.pattern: "*.art" "tests"
+    
+    print "===> Finding *.test.art"
+    runTests.suppress.pattern: "*.test.art" "tests"
+   
+    print "===> Finding test*.art"
+    runTests.suppress.pattern: "test*.art" "tests"

@@ -1,0 +1,6 @@
+#! arturo
+
+result: split.lines execute ~"|sys\binary| unitt-tester.art"
+
+select 'result 'line -> prefix? line "=="
+loop result => print

@@ -12,6 +12,10 @@ runTests: $[testPath :string][
     ;; arguments: [
     ;;      testPath: « the relative folder that contains the tests
     ;; ]
+    ;; options: [
+    ;;      pattern: :string « a simple glob-like pattern to select files.
+    ;;      suppress: :logical « suppress exit codes.
+    ;; ]
     ;;
     ;; example: {
     ;;      ; tester.art
@@ -31,16 +35,25 @@ runTests: $[testPath :string][
     ; this should not return 0 as error code, but 1, instead.
     fatalError: false
 
-    isTestFile?: $[file :string][
+    pattern: (attr 'pattern)?? "test*.art"
+
+    ensure.that: ~".pattern: '|pattern|' must have only one wildcard '*'."
+        -> one? enumerate pattern 'ch -> ch = '*'
+
+    testPrefix: first split.by: "*" pattern
+    testSuffix: last  split.by: "*" pattern
+
+    testFile?: $[file :string][
         ;; description: « Checks if `file` starts with 'test' and is an .art file
+
         filename: last split.path file
 
-        return and? 
-            suffix? filename ".art" 
-            prefix? filename "test"
+        and? 
+            prefix? filename testPrefix
+            suffix? filename testSuffix
     ]
 
-    testfiles: list.recursive testPath | select => isTestFile?
+    testfiles: list.recursive testPath | select => testFile?
 
     ; The tests execution
     loop testfiles 'file [ 
@@ -69,8 +82,10 @@ runTests: $[testPath :string][
     print ~"❌  FAILED: |failed| assertions"
     print ~"\n===== ========== =====\n"
 
-    if or? (fatalError) (failed > 0) 
-        -> exit.with: 1
+    exit?: not? attr? 'suppress
+    failed?: or? (fatalError) (failed > 0)
+    if and? exit? failed? 
+        -> panic "Some tests failed!"
 
 ]
 
