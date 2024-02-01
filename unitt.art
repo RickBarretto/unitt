@@ -36,6 +36,10 @@ runTests: $[testPath :string][
     fatalError: false
 
     pattern: (attr 'pattern)?? "test*.art"
+
+    ensure.that: ~".pattern: '|pattern|' must have only one wildcard '*'."
+        -> one? enumerate pattern 'ch -> ch = '*'
+
     testPrefix: first split.by: "*" pattern
     testSuffix: last  split.by: "*" pattern
 
