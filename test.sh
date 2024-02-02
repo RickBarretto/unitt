@@ -15,11 +15,11 @@ cd tests/testDefault
 
 # checking the return
 
-cmp -- sample output && echo "Sucess!"   \
+diff --brief --side-by-side sample output && echo -e "Sucess!\n" \
     || (
         echo "Failed!" &&
-        echo "" && 
-        diff sample output
+        echo ""
+        # diff sample output
     ) 
 
 # cleaning test
@@ -44,14 +44,31 @@ cd tests/test-finder
 
 # checking the return
 
-cmp -- sample output && echo "Sucess!"   \
+diff --brief --side-by-side sample output && echo "Sucess!"   \
     || (
         echo "Failed!" &&
-        echo "" && 
-        diff sample output
+        echo ""
+        # diff sample output
     ) 
 
 # cleaning test
 rm unitt.art
 rm output
 
+# cd ../..
+
+# # ========== Running the failfast ========== #
+
+# echo "Testing the failfast for assertions"
+
+# # copying unitt to tests
+
+# cp unitt.art tests/test-failfast
+# cd tests/test-failfast
+
+# # testing assertions
+# ./test-assertion.art && echo "Sucess!" || echo "Failed!"
+# ./test-runtime.art && echo "Sucess!" || echo "Failed!"
+
+# # cleaning test
+# rm unitt.art
