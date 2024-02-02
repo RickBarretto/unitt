@@ -1,0 +1,21 @@
+code:  import.lean {src/code}
+unitt: import.lean {unitt}
+
+do ::
+
+unitt\test "I must pass" [
+    assert -> true
+]
+
+unitt\test "I must pass too" [
+    assert -> true
+    assert -> true
+]
+
+unitt\test "I must break the test" [
+    assert -> false
+]
+
+unitt\test "will fail" [
+    assert -> false
+]
