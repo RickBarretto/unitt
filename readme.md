@@ -151,6 +151,9 @@ so that is great if you're working with *Continuous Integration*.
 - `runTests: $[folder :string]`:
     The *runner function*, this function will look for *tests* inside the relative `folder`.
     Remember that all *tests* must begin with the `test` prefix, and be an `.art` extension.
+    - `.failFast`:
+        Fails on the first error found. 
+        This works at file scope due to our current way of running tests.
     - `.pattern :string`:
         Defines what is a test-file via a kind-of *glob* pattern.
         Use a `*` as spliter. 
