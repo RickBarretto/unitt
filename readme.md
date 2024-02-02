@@ -121,6 +121,29 @@ This will show you:
 > [!NOTE]
 > Property-based tests have `~` as separator. 
 
+### The *Runner*
+
+Basically, you can run your *tests units* without a *runner*. 
+But there are some reasons why you should prefer to use a `runTests` function to run them.
+
+First, your *runner*'s output will give you important information about the current run.
+This will show you the file being runned, 
+the tests's status
+and at the end a summary of failed, skipped and passed tests:
+
+```
+===== Statistics =====
+
+⏏️   TOTAL: 24 assertions
+✅  PASSED: 20 assertions
+⏩ SKIPPED: 4 assertions
+❌  FAILED: 4 assertions
+
+===== ========== =====
+```
+
+Also, the runner is able to return an error code, 
+so that is great if you're working with *Continuous Integration*.
 
 ## Documentation
 
