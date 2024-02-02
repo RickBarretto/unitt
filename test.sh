@@ -44,10 +44,9 @@ cd tests/test-finder
 
 # checking the return
 
-diff --brief --side-by-side sample output && echo "Sucess!"   \
+diff --brief --side-by-side sample output && echo -e "Sucess!\n"   \
     || (
-        echo "Failed!" &&
-        echo ""
+        echo -e "Failed!\n"
         # diff sample output
     ) 
 
@@ -55,7 +54,7 @@ diff --brief --side-by-side sample output && echo "Sucess!"   \
 rm unitt.art
 rm output
 
-# cd ../..
+cd ../..
 
 # ========== Running the failfast ========== #
 
