@@ -15,12 +15,8 @@ cd tests/testDefault
 
 # checking the return
 
-diff --brief --side-by-side sample output && echo -e "Sucess!\n" \
-    || (
-        echo "Failed!" &&
-        echo ""
-        # diff sample output
-    ) 
+diff --brief sample output ||           \
+    diff --side-by-side sample output
 
 # cleaning test
 rm unitt.art
@@ -44,11 +40,8 @@ cd tests/test-finder
 
 # checking the return
 
-diff --brief --side-by-side sample output && echo -e "Sucess!\n"   \
-    || (
-        echo -e "Failed!\n"
-        # diff sample output
-    ) 
+diff --brief sample output ||           \
+    diff --side-by-side sample output 
 
 # cleaning test
 rm unitt.art
@@ -68,10 +61,8 @@ cd tests/test-failfast
 # testing assertions
 ./tester.art > output 
 
-diff --brief --side-by-side sample output && echo "Sucess!"   \
-    || (
-        echo -e "Failed!\n"
-    )
+diff --brief sample output ||           \
+    diff --side-by-side sample output
 
 # cleaning test
 rm unitt.art
