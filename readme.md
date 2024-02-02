@@ -32,9 +32,9 @@
 
 ## Trying Unitt
 
-*Unitt* may be splited into two sections: *the tester* and *the tests*.
+*Unitt* may be splited into two sections: *runner* and *the tests*.
 
-*The tester* is the section responsible to find, run and return error codes to the final user.
+*The runner* is the section responsible to find, run and return error codes to the final user.
 While *the tests* are responsible to group the rules and logic of the tests.
 
 ### Initial setup
@@ -44,7 +44,7 @@ It's recomended that your *runner* be at the root of your directory, right befor
 All of your *tests* must begin with the `test` prefix and end with the `.art` extension to be found,
 since you may want to mix them with some other files.
 
-Being that said, that is the right way of setting up your *tester*:
+Being that said, that is the right way of setting up your *runner*:
 
 Let's consider that you have the following directory:
 
