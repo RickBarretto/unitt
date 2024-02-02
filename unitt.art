@@ -13,7 +13,8 @@ runTests: $[testPath :string][
     ;;      testPath: « the relative folder that contains the tests
     ;; ]
     ;; options: [
-    ;;      pattern: :string « a simple glob-like pattern to select files.
+    ;;      failFast: :logical « fails on the first error found. (at file scope)
+    ;;      pattern:  :string  « a simple glob-like pattern to select files.
     ;;      suppress: :logical « suppress exit codes.
     ;; ]
     ;;
@@ -34,6 +35,7 @@ runTests: $[testPath :string][
     ; If some test throw an error and don't explicitly catches it,
     ; this should not return 0 as error code, but 1, instead.
     fatalError: false
+    failFast: logical? attr 'failFast
 
     pattern: (attr 'pattern)?? "test*.art"
 
@@ -72,6 +74,9 @@ runTests: $[testPath :string][
         ; if some test throws an error
         if result\code > 0 -> 
             fatalError: true
+
+        if failFast -> if or? fatalError failed > 0 -> 
+            break
 
     ]
 
