@@ -57,18 +57,24 @@ rm output
 
 # cd ../..
 
-# # ========== Running the failfast ========== #
+# ========== Running the failfast ========== #
 
-# echo "Testing the failfast for assertions"
+echo "Testing the failfast for assertions"
 
-# # copying unitt to tests
+# copying unitt to tests
 
-# cp unitt.art tests/test-failfast
-# cd tests/test-failfast
+cp unitt.art tests/test-failfast
+cd tests/test-failfast
 
-# # testing assertions
-# ./test-assertion.art && echo "Sucess!" || echo "Failed!"
-# ./test-runtime.art && echo "Sucess!" || echo "Failed!"
+# testing assertions
+./tester.art > output 
 
-# # cleaning test
-# rm unitt.art
+diff --brief --side-by-side sample output && echo "Sucess!"   \
+    || (
+        echo -e "Failed!\n"
+    )
+
+# cleaning test
+rm unitt.art
+rm output
+cd ../..
