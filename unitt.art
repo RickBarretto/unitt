@@ -161,7 +161,7 @@ test: $[description :string testCase :block][
         failBlock: -> print [color #yellow ~"|__testIdent|❌ |template|"]
         skipBlock: [ 
             print [color #yellow ~"|__testIdent|⏩ |template|"]
-            print "     skipped! \n"
+            print ~"|__testIdent|     skipped! \n"
         ]
 
         (skip?)? -> do skipBlock [
@@ -169,7 +169,7 @@ test: $[description :string testCase :block][
                 passBlock
                 failBlock
 
-            print [__testIdent ~"     assertion : |condition|\n"]
+            print ~"|__testIdent|     assertion : |condition|\n"
         ]
     ]
 
