@@ -94,6 +94,15 @@ runTests: $[testPath :string][
 
 ]
 
+__testIdent: ""
+
+suite: $[description :string tests :block][
+    print ["Suite:" description "\n"]
+    __testIdent: "    "
+    do tests
+]
+
+
 test: $[description :string testCase :block][
     ;; description: {
     ;;    Run an unit-test, printing it's result.
@@ -148,10 +157,10 @@ test: $[description :string testCase :block][
 
     assert: $[condition :block][
 
-        passBlock: -> print [color #yellow ~"✅ |template|"]
-        failBlock: -> print [color #yellow ~"❌ |template|"]
+        passBlock: -> print [color #yellow ~"|__testIdent|✅ |template|"]
+        failBlock: -> print [color #yellow ~"|__testIdent|❌ |template|"]
         skipBlock: [ 
-            print [color #yellow ~"⏩ |template|"]
+            print [color #yellow ~"|__testIdent|⏩ |template|"]
             print "     skipped! \n"
         ]
 
@@ -160,7 +169,7 @@ test: $[description :string testCase :block][
                 passBlock
                 failBlock
 
-            print ~"     assertion : |condition|\n"
+            print [__testIdent ~"     assertion : |condition|\n"]
         ]
     ]
 
