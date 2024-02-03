@@ -6,8 +6,8 @@ echo "Testing the default test suit"
 
 # copying unitt to tests
 
-cp unitt.art tests/testDefault
-cd tests/testDefault
+cp unitt.art tests/test-default
+cd tests/test-default
 
 # running
 
