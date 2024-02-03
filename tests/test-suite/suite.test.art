@@ -1,0 +1,31 @@
+#! arturo
+
+import {unitt}!
+
+test "I'm not indented" [
+    assert -> true
+]
+
+suite "Indenting tests" [
+
+    test "I'm indented" [
+        assert -> true
+    ]
+
+    test.skip "I'm indented" [
+        assert -> true
+    ]
+
+    test "I'm indented" [
+        assert -> false
+    ]
+
+]
+
+test.skip "I'm not indented" [
+    assert -> false
+]
+
+test "I'm not indented" [
+    assert -> false
+]
