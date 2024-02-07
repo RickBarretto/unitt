@@ -1,8 +1,7 @@
 #! arturo
 
-import {unitt}
+import {unitt}!
 
-do ::
 
-    runTests.failFast.suppress: "test*.runtime-error.art" "tests"
-    runTests.failFast.suppress: "test*.assertion-error.art" "tests"
+runTests.failFast.suppress: "test*.runtime-error.art" "tests"
+runTests.failFast.suppress: "test*.assertion-error.art" "tests"

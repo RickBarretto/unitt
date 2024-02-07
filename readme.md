@@ -60,10 +60,9 @@ tester.art
 Into your `tester.art`, you must:
 
 ```art
-import {unitt}
+import {unitt}!
 
-do ::
-    runTests "tests"
+runTests "tests"
 ```
 
 To run it, call:

@@ -1,21 +1,20 @@
-code:  import.lean {src/code}
-unitt: import.lean {unitt}
+import {unitt}!
+code:  import.lean {src/code}!
 
-do ::
 
-unitt\test "I must pass" [
+test "I must pass" [
     assert -> true
 ]
 
-unitt\test "I must pass too" [
+test "I must pass too" [
     assert -> true
     assert -> true
 ]
 
-unitt\test "I must break the test" [
+test "I must break the test" [
     assert -> false
 ]
 
-unitt\test "will fail" [
+test "will fail" [
     assert -> false
 ]
