@@ -1,33 +1,33 @@
 code:  import.lean {src/code}
-unitt: import.lean {unitt}
+import {unitt}
 
 do ::
 
 unix?: false
 win?: true
 
-unitt\test "are equal" [
+test "are equal" [
     assert -> 1 = code\fun
 ]
 
-unitt\test.skip: unix? "are equal" [
+test.skip: unix? "are equal" [
     assert -> 1 = code\fun
 ]
 
-unitt\test.skip: win? "are equal" [
+test.skip: win? "are equal" [
     assert -> 1 = code\fun
 ]
 
 
-unitt\test "are different" [
+test "are different" [
     assert -> 2 <> code\fun
     assert -> 3 <> code\fun
 ]
 
-unitt\test "will pass" [
+test "will pass" [
     assert -> 1 = code\fun
 ]
 
-unitt\test "will fail" [
+test "will fail" [
     assert -> 2 = code\fun
 ]

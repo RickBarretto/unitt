@@ -1,21 +1,21 @@
 code:  import.lean {code}
-unitt: import.lean {unitt}
+import {unitt}
 
 do ::
 
-unitt\test "I must never run" [
+test "I must never run" [
     assert -> true
 ]
 
-unitt\test "I must never run" [
+test "I must never run" [
     assert -> true
     assert -> true
 ]
 
-unitt\test "I must never run" [
+test "I must never run" [
     assert -> false
 ]
 
-unitt\test "I must never run" [
+test "I must never run" [
     assert -> false
 ]
