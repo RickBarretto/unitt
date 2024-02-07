@@ -1,7 +1,6 @@
-code:  import.lean {src/code}
-import {unitt}
+import {unitt}!
+code:  import.lean {src/code}!
 
-do ::
 
 test "are equal" [
     assert -> 1 = code\fun

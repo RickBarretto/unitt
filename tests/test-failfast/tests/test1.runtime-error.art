@@ -1,7 +1,6 @@
+import {unitt}!
 code:  import.lean {code}
-import {unitt}
 
-do ::
 
 test "I must never run" [
     assert -> true

@@ -1,6 +1,6 @@
 #! arturo
 
-import {unitt}
+import {unitt}!
 
-do ::
-    runTests "test"
+
+runTests "test"
