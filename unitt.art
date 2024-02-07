@@ -20,10 +20,9 @@ runTests: $[testPath :string][
     ;;
     ;; example: {
     ;;      ; tester.art
-    ;;      import {unitt}
+    ;;      import {unitt}!
     ;;      
-    ;;      do ::
-    ;;          runTests {tests}   
+    ;;      runTests {tests}   
     ;; }
 
     ; Important to final statistics
@@ -114,9 +113,9 @@ test: $[description :string testCase :block][
     ;;
     ;; example: {
     ;;      ; testAppend.art
-    ;;      import {unitt}
+    ;;      import {unitt}!
     ;;      
-    ;;      do ::
+    ;;      
     ;;          test.prop "appending with keyword or operator has the same behavior" [
     ;;              a: [a b c d e f g]
     ;;              b: [h i j k l m n]
