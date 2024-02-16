@@ -203,18 +203,23 @@ test: $[description :string testCase :block][
             print ~"|_unittTestsIndentation|     skipped! \n"
         ]
 
+        statics: (attr 'static) ?? []
+
         (skip?)? -> do skipBlock [
             (equal? @condition @[true])? 
                 passBlock
                 failBlock
 
             prints ~"|_unittTestsIndentation|     assertion :"
-
+            staticTypes: [:function :literal :pathLiteral]
             loop.with: 'i condition 'cond [
                 prints " "
-                (throws? [el: var cond])?
-                    -> prints cond
-                    -> prints el
+                
+                (or? throws? [el: var cond] in? cond statics)? 
+                    -> prints as.code cond
+                    -> (in? type el staticTypes)? 
+                        -> prints as.code cond
+                        -> prints as.code el
             ]
 
             prints "\n"
