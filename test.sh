@@ -68,3 +68,23 @@ diff --brief sample output ||           \
 rm unitt.art
 rm output
 cd ../..
+
+# ========== Running the test suite ========== #
+
+echo "Testing the test grouping via suite"
+
+# copying unitt to tests
+
+cp unitt.art tests/test-suite
+cd tests/test-suite
+
+# testing assertions
+./suite.test.art > output 
+
+diff --brief sample output ||           \
+    diff --side-by-side sample output
+
+# cleaning test
+rm unitt.art
+rm output
+cd ../..
