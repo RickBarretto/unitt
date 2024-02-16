@@ -93,18 +93,6 @@ runTests: $[testPath :string][
 
 ]
 
-; TODO: Solve acessing `__testIndent` from imports
-;
-; Right now, if you import `unitt` scopeless, this will work well.
-; But, by importing this with `.lean` attribute, this won't work.
-;
-; The reson is, modules are imported as dict-like objects, so,
-; `__testIndent` is actually `unitt\__testIndent` when imported with `.lean`. 
-; Internally our functions are calling `__testIndent`, that will not exist
-; if imported with `.lean`. The same is true for the inverse.
-; So, there is no silver bullet.
-;
-; This feature will be here only here, until I actually solve this.
 __testIndent: ""
 
 suite: $[description :string tests :block][
