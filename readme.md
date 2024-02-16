@@ -177,6 +177,13 @@ so that is great if you're working with *Continuous Integration*.
     A function that is only available inside the `test` case,
     makes an assertion given the `condition`.
 
+
+> [!WARNING]
+> Never import this lib as `.lean`, or this will break the current code.
+> This happens due to the nature of Arturo (being concatenative), 
+> and the way we importings are working right now.
+> This may change in future.
+
 ---
 
 > Background photo on ["At a Glance"](#at-a-glance) 

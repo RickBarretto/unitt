@@ -4,6 +4,11 @@
 ;; version: 0.1.1
 ;; repository: « https://github.com/RickBarretto/unitt
 ;;
+;; warning: {
+;;    Never import this as lean, or this will break the whole code.
+;;    At least, for now. This may change in future updates.
+;; }
+;;
 ;; export: ['runTests 'test]
 
 runTests: $[testPath :string][
