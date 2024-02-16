@@ -176,6 +176,8 @@ so that is great if you're working with *Continuous Integration*.
 - `assert: $[condition :block]`:
     A function that is only available inside the `test` case,
     makes an assertion given the `condition`.
+- `suite: $[description :string tests :block]`:
+    Visually groups tests together.
 
 
 > [!WARNING]
