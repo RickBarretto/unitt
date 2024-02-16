@@ -1,20 +1,16 @@
 [0;33m✅ - assert that I'm not indented[0m 
-     assertion : [true]
-
+     assertion : true
 Suite: Indenting tests 
  
 [0;33m    ✅ - assert that I'm indented[0m 
-         assertion : [true]
-
+         assertion : true
 [0;33m    ⏩ - assert that I'm indented[0m 
          skipped! 
 
 [0;33m    ❌ - assert that I'm indented[0m 
-         assertion : [false]
-
+         assertion : false
 [0;33m⏩ - assert that I'm not indented[0m 
      skipped! 
 
 [0;33m❌ - assert that I'm not indented[0m 
-     assertion : [false]
-
+     assertion : false
