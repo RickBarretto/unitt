@@ -93,11 +93,11 @@ runTests: $[testPath :string][
 
 ]
 
-__testIndent: ""
+_unittTestsIndentation: ""
 
 suite: $[description :string tests :block][
     print ["Suite:" description "\n"]
-    __testIndent: "    "
+    _unittTestsIndentation: "    "
     do tests
 ]
 
@@ -156,11 +156,11 @@ test: $[description :string testCase :block][
 
     assert: $[condition :block][
 
-        passBlock: -> print [color #yellow ~"|__testIndent|✅ |template|"]
-        failBlock: -> print [color #yellow ~"|__testIndent|❌ |template|"]
+        passBlock: -> print [color #yellow ~"|_unittTestsIndentation|✅ |template|"]
+        failBlock: -> print [color #yellow ~"|_unittTestsIndentation|❌ |template|"]
         skipBlock: [ 
-            print [color #yellow ~"|__testIndent|⏩ |template|"]
-            print ~"|__testIndent|     skipped! \n"
+            print [color #yellow ~"|_unittTestsIndentation|⏩ |template|"]
+            print ~"|_unittTestsIndentation|     skipped! \n"
         ]
 
         (skip?)? -> do skipBlock [
@@ -168,7 +168,7 @@ test: $[description :string testCase :block][
                 passBlock
                 failBlock
 
-            print ~"|__testIndent|     assertion : |condition|\n"
+            print ~"|_unittTestsIndentation|     assertion : |condition|\n"
         ]
     ]
 
