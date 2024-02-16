@@ -208,7 +208,16 @@ test: $[description :string testCase :block][
                 passBlock
                 failBlock
 
-            print ~"|_unittTestsIndentation|     assertion : |condition|\n"
+            prints ~"|_unittTestsIndentation|     assertion :"
+
+            loop.with: 'i condition 'cond [
+                prints " "
+                (throws? [el: var cond])?
+                    -> prints cond
+                    -> prints el
+            ]
+
+            prints "\n"
         ]
     ]
 
