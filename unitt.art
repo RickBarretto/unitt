@@ -204,7 +204,7 @@ test: $[description :string testCase :block][
         ]
 
         (skip?)? -> do skipBlock [
-            (do condition)? 
+            (equal? @condition @[true])? 
                 passBlock
                 failBlock
 
