@@ -74,6 +74,16 @@ arturo tester.art
 > [!TIP] 
 > You may want to use a hashbang to don't need to call arturo for every run.
 
+> [!TIP]
+> If you want be able to test some specific tests from the CLI, you can:
+> ```art
+>  import {unitt}!
+>  
+>  runTests (empty? arg)? 
+>      -> findTests "tests"
+>      -> arg
+> ```
+
 ### The *tests* itself
 
 A real example of tests:
