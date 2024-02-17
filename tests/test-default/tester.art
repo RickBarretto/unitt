@@ -3,4 +3,4 @@
 import {unitt}!
 
 
-runTests "test"
+runTests findTests "test"
