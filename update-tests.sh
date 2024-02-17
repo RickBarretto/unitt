@@ -31,10 +31,21 @@ rm unitt.art
 cd ../..
 
 # ========== Running the test suite ========== #
+
 cp unitt.art tests/test-suite
 cd tests/test-suite
 
 ./suite.test.art > sample
+
+rm unitt.art
+cd ../..
+
+# ========== Running the test eval ========== #
+
+cp unitt.art tests/test-eval
+cd tests/test-eval
+
+./test.art > sample
 
 rm unitt.art
 cd ../..
