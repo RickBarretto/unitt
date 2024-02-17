@@ -215,27 +215,27 @@ test: $[description :string testCase :block][
         ]
 
         evaluateExpression: $[expr][
+            statics: statics
             staticTypes: [:function :literal :pathLiteral]
-            loop expr 'value [
-                prints " "
-
-                if inline? value [
-                    prints "("
-                    _: evaluateExpression to :block value
-                    prints " )"
+            staticPrinting: [
+                    prints " "
+                    prints value
+                    continue
+                ]
+            
+            loop expr 'value [                
+                if inline? value  [
+                    _: evaluateExpression to :inline value
                     continue
                 ]
 
-                if or? throws? [val: var value] in? value statics [
-                    prints as.code value
-                    continue
-                ]
+                if or? throws? [val: var value] in? value statics
+                    staticPrinting
 
-                if in? type val staticTypes [
-                    prints as.code value
-                    continue
-                ]
+                if in? type val staticTypes 
+                    staticPrinting
                 
+                prints " "
                 prints as.code val
             ]
 
