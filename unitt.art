@@ -176,6 +176,7 @@ test: $[description :string testCase :block][
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
     ;;      ;      assertion : ( append [a b c d e f g] [h i j k l m n] ) = [a b c d e f g] ++ [h i j k l m n]
+    ;;      ;
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
     ;;      ;      assertion : ( append [h i j k l m n] [a b c d e f g] ) = [h i j k l m n] ++ [a b c d e f g]
     ;;          
@@ -253,7 +254,7 @@ test: $[description :string testCase :block][
 
         prints ~"|_unittTestsIndentation|     assertion :"
         evaluateExpression condition
-        prints "\n"
+        print "\n"
 
     ]
 
