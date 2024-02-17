@@ -22,10 +22,10 @@ Suite: Test pre-evaluation
          assertion: ((sum [2 3 4])) [1 2 3 4 5]
 
 [0;33m    ❌ ~ assert that is possible to evaluate before-hand with `@`[0m 
-         assertion: sum 2 3 4  1 2 3 4 5 
+         assertion: sum [2 3 4] [1 2 3 4 5]
 
 [0;33m    ❌ ~ assert that is possible to evaluate before-hand with `@`[0m 
-         assertion: 9  1 2 3 4 5 
+         assertion: [9] [1 2 3 4 5]
 
 [0;33m    ❌ ~ assert that `a` and `b` are considered static[0m 
          assertion: a = b
