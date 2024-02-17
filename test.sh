@@ -88,3 +88,23 @@ diff --brief sample output ||           \
 rm unitt.art
 rm output
 cd ../..
+
+# ========== Running the test eval ========== #
+
+echo "Testing the test's values evaluation"
+
+# copying unitt to tests
+
+cp unitt.art tests/test-eval
+cd tests/test-eval
+
+# testing assertions
+./test.art > output 
+
+diff --brief sample output ||           \
+    diff --side-by-side sample output
+
+# cleaning test
+rm unitt.art
+rm output
+cd ../..

@@ -2,19 +2,19 @@
 ===== tests\test1.assertion-error.art =====
 
 [0;33m✅ - assert that I must pass[0m 
-     assertion : [true]
+     assertion: true
 
 [0;33m✅ - assert that I must pass too[0m 
-     assertion : [true]
+     assertion: true
 
 [0;33m✅ - assert that I must pass too[0m 
-     assertion : [true]
+     assertion: true
 
 [0;33m❌ - assert that I must break the test[0m 
-     assertion : [false]
+     assertion: false
 
 [0;33m❌ - assert that will fail[0m 
-     assertion : [false]
+     assertion: false
 
 
 
@@ -31,19 +31,19 @@
 ===== tests\test1.assertion-error.art =====
 
 [0;33m✅ - assert that I must pass[0m 
-     assertion : [true]
+     assertion: true
 
 [0;33m✅ - assert that I must pass too[0m 
-     assertion : [true]
+     assertion: true
 
 [0;33m✅ - assert that I must pass too[0m 
-     assertion : [true]
+     assertion: true
 
 [0;33m❌ - assert that I must break the test[0m 
-     assertion : [false]
+     assertion: false
 
 [0;33m❌ - assert that will fail[0m 
-     assertion : [false]
+     assertion: false
 
 
 

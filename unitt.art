@@ -139,6 +139,7 @@ suite: $[description :string tests :block][
     print ["Suite:" description "\n"]
     _unittTestsIndentation: "    "
     do tests
+    print ""
 ]
 
 
@@ -156,37 +157,47 @@ test: $[description :string testCase :block][
     ;; options: [
     ;;      prop: :logical « defines if a test is property-based
     ;;      skip: :logical « skip test if true
+    ;;      static: :block « defines what should not be evaluated when showing
+    ;;      static: :logical « disables runtime eval, forces static display
     ;; ]
     ;;
-    ;; note: « `assert` is injected, and only available inside the `test`'s block.
-    ;;
+    ;; note: {
+    ;;    * `assert` is injected, and only available inside the `test`'s block.
+    ;; }
+    ;; 
     ;; example: {
     ;;      ; testAppend.art
     ;;      import {unitt}!
     ;;      
-    ;;      
     ;;      test.prop "appending with keyword or operator has the same behavior" [
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
-    ;;          assert -> (append a b) = (a ++ b)
-    ;;          assert -> (append b a) = (b ++ a)
+    ;;
+    ;;          assert -> (append a b) = a ++ b
+    ;;          assert -> (append b a) = b ++ a
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
-    ;;      ; assertion : [[append a b] = [a ++ b]]
+    ;;      ;      assertion: append [a b c d e f g] [h i j k l m n] = [a b c d e f g] ++ [h i j k l m n]
     ;;      ;
-    ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
-    ;;      ; assertion : [[append b a] = [b ++ a]]
+    ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
+    ;;      ;      assertion: append [h i j k l m n] [a b c d e f g] = [h i j k l m n] ++ [a b c d e f g]
     ;;          
     ;;      test.skip: unix? "split is working for windows's paths" [
     ;;          assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
     ;;      ]
     ;;      ; # running on Windows:
-    ;;      ; ✅ - assert that split is working for windows's paths 
-    ;;      ; assertion : [[. splited path] = split path .\splited\path]
+    ;;      ; ✅ - assert that split is working for windows's paths
+    ;;      ;      assertion: . splited path  = split path .\splited\path
     ;;      ; 
     ;;      ; # running on Unix:
     ;;      ; ⏩ - assert that split is working for windows's paths 
-    ;;      ; 
+    ;;      
+    ;;      test.static: [a] "`a` won't be evaluated" [
+    ;;          assert -> a = 5 
+    ;;      ]
+    ;;      ; ✅ - assert that `a` won't be evaluated 
+    ;;      ;      assertion : a = 5
+    ;;
     ;; }
 
     sep: (attr 'prop)? -> "~" -> "-"
@@ -196,6 +207,9 @@ test: $[description :string testCase :block][
 
     assert: $[condition :block][
 
+        statics: (attr 'static) ?? []
+        forceStatic?: statics = true
+
         passBlock: -> print [color #yellow ~"|_unittTestsIndentation|✅ |template|"]
         failBlock: -> print [color #yellow ~"|_unittTestsIndentation|❌ |template|"]
         skipBlock: [ 
@@ -203,13 +217,54 @@ test: $[description :string testCase :block][
             print ~"|_unittTestsIndentation|     skipped! \n"
         ]
 
-        (skip?)? -> do skipBlock [
-            (do condition)? 
-                passBlock
-                failBlock
+        evaluateExpression: $[expr][
+            statics: statics
+            staticTypes: [:function :literal :pathLiteral]
+            staticPrinting: [
+                    prints " "
+                    prints as.code value
+                    continue
+                ]
+            
+            loop expr 'value [                
+                if inline? value  [
+                    _: evaluateExpression to :inline value
+                    continue
+                ]
 
-            print ~"|_unittTestsIndentation|     assertion : |condition|\n"
+                if or? throws? [val: var value] in? value statics
+                    staticPrinting
+
+                if in? type val staticTypes 
+                    staticPrinting
+                
+                prints " "
+                prints as.code val
+            ]
+
+            return null
+
         ]
+
+        if skip? [
+            do skipBlock
+            return null
+        ]
+
+        (equal? @condition @[true])? 
+            passBlock
+            failBlock
+
+        prints ~"|_unittTestsIndentation|     assertion:"
+        
+        (forceStatic?)? [
+            prints " "
+            prints -> condition
+        ][
+            evaluateExpression condition
+        ]
+        print "\n"
+
     ]
 
     do testCase

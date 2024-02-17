@@ -173,6 +173,10 @@ so that is great if you're working with *Continuous Integration*.
     - `.skip :logical`:
         Skips tests for some condition. 
         If none condition is given, this will just skip the test.
+    - `.static: :block`:
+        Defines what will and what won't be evaluated.
+    - `.static: :logical`:
+        Disable runtime evaluation, and forces static display.
 - `assert: $[condition :block]`:
     A function that is only available inside the `test` case,
     makes an assertion given the `condition`.
