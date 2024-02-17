@@ -62,7 +62,7 @@ Into your `tester.art`, you must:
 ```art
 import {unitt}!
 
-runTests "tests"
+runTests findTests "tests"
 ```
 
 To run it, call:
