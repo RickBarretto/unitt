@@ -2,6 +2,9 @@
 
 import {unitt}!
 
+patterns: map ["runtime" "assertion"] 'kind
+    -> ~"test*.|kind|-error.art"
 
-runTests.failFast.suppress: "test*.runtime-error.art" "tests"
-runTests.failFast.suppress: "test*.assertion-error.art" "tests"
+loop patterns 'pattern
+    -> runTests.failFast.suppress 
+        findTests.thatMatches: pattern "tests"

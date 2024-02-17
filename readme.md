@@ -62,7 +62,7 @@ Into your `tester.art`, you must:
 ```art
 import {unitt}!
 
-runTests "tests"
+runTests findTests "tests"
 ```
 
 To run it, call:
@@ -147,22 +147,25 @@ so that is great if you're working with *Continuous Integration*.
 ## Documentation
 
 ### *Runner*
-- `runTests: $[folder :string]`:
-    The *runner function*, this function will look for *tests* inside the relative `folder`.
-    Remember that all *tests* must begin with the `test` prefix, and be an `.art` extension.
+- `runTests: $[tests [:string]]`:
+    The *runner function*, this executes all `tests`,
+    show statistics and return a value. 
     - `.failFast`:
         Fails on the first error found. 
         This works at file scope due to our current way of running tests.
-    - `.pattern :string`:
-        Defines what is a test-file via a kind-of *glob* pattern.
-        Use a `*` as spliter. 
-        - Obs.: That is a kind-of *glob* pattern, not a real one. 
-          So just use one and only one `*` to split the pre and suffix.
     - `.suppress`: 
         Suppress `panic`, this means: 
         this won't terminate your tests, 
         won't return an error code
         and won't print a `panic` message. 
+- `findTests: $[folder :string]`:
+    The *finder function*, this function will look for *tests* inside the relative `folder`.
+    The default *test* pattern is "test*.art".
+    - `.thatMatches :string`:
+        Defines what is a test-file via a kind-of *glob* pattern.
+        Use a `*` as spliter. 
+        - Obs.: That is a kind-of *glob* pattern, not a real one. 
+          So just use one and only one `*` to split the pre and suffix.
 
 ### *Tests*
 - `test: $[description :string, testCase :block]`:

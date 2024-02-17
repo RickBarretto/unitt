@@ -9,25 +9,72 @@
 ;;    At least, for now. This may change in future updates.
 ;; }
 ;;
-;; export: ['runTests 'test]
+;; export: ['runTests 'findTests 'test 'suite]
 
-runTests: $[testPath :string][
-    ;; description: « executes test-files inside the `testPath`
+
+findTests: $[testPath :string][
+    ;; description: « finds test files into `testPath`
     ;;
     ;; arguments: [
     ;;      testPath: « the relative folder that contains the tests
     ;; ]
     ;; options: [
-    ;;      failFast: :logical « fails on the first error found. (at file scope)
-    ;;      pattern:  :string  « a simple glob-like pattern to select files.
-    ;;      suppress: :logical « suppress exit codes.
+    ;;      thatMatches: :string {
+    ;;          a simple glob-like pattern to select files.
+    ;;          the default value is "test*.art".
+    ;;      }
     ;; ]
     ;;
     ;; example: {
     ;;      ; tester.art
     ;;      import {unitt}!
     ;;      
-    ;;      runTests {tests}   
+    ;;      runTests findTests.thatMatches: "*.test.art" "tests"   
+    ;; }
+
+    pattern: (attr 'thatMatches)?? "test*.art"
+
+    ensure.that: ~".pattern: '|pattern|' must have only one wildcard '*'."
+        -> one? enumerate pattern 'ch -> ch = '*'
+
+
+    testPrefix: first split.by: "*" pattern
+    testSuffix: last  split.by: "*" pattern
+
+    testFile?: $[file :string][
+        filename: last split.path file
+        and? 
+            prefix? filename testPrefix
+            suffix? filename testSuffix
+    ]
+
+    list.recursive testPath | select => testFile?
+
+]
+
+runTests: $[files :block][
+    ;; description: « executes test-files
+    ;;
+    ;; arguments: [
+    ;;      files: « a block containing the path to the files.
+    ;; ]
+    ;; options: [
+    ;;      failFast: :logical « fails on the first error found. (at file scope)
+    ;;      suppress: :logical « suppress exit codes.
+    ;; ]
+    ;;
+    ;; deprecated: [
+    ;;      option 'pattern :string: since 0.2.1
+    ;;          "See `findTests`."
+    ;; ]
+    ;;
+    ;; seeAlso: [findTests]
+    ;;
+    ;; examples: {
+    ;;      ; tester.art
+    ;;      import {unitt}!
+    ;;      
+    ;;      runTests ["tests/test01.art"]
     ;; }
 
     ; Important to final statistics
@@ -41,28 +88,8 @@ runTests: $[testPath :string][
     fatalError: false
     failFast: logical? attr 'failFast
 
-    pattern: (attr 'pattern)?? "test*.art"
-
-    ensure.that: ~".pattern: '|pattern|' must have only one wildcard '*'."
-        -> one? enumerate pattern 'ch -> ch = '*'
-
-    testPrefix: first split.by: "*" pattern
-    testSuffix: last  split.by: "*" pattern
-
-    testFile?: $[file :string][
-        ;; description: « Checks if `file` starts with 'test' and is an .art file
-
-        filename: last split.path file
-
-        and? 
-            prefix? filename testPrefix
-            suffix? filename testSuffix
-    ]
-
-    testfiles: list.recursive testPath | select => testFile?
-
     ; The tests execution
-    loop testfiles 'file [ 
+    loop files 'file [ 
         print ~"\n===== |file| =====\n"
 
         result: execute.code ~"|sys\binary| |file|"
