@@ -139,6 +139,7 @@ suite: $[description :string tests :block][
     print ["Suite:" description "\n"]
     _unittTestsIndentation: "    "
     do tests
+    print ""
 ]
 
 
