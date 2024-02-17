@@ -64,7 +64,7 @@ runTests: $[files :block][
     ;; ]
     ;;
     ;; deprecated: [
-    ;;      option 'pattern :string: since 0.2.1
+    ;;      option 'pattern :string: since 1.0.0
     ;;          "See `findTests`."
     ;; ]
     ;;
