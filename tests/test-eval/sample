@@ -1,0 +1,57 @@
+Suite: Simple tests with :inline and :block 
+ 
+[0;33m    ✅ ~ assert that works recursively for :inline[0m 
+         assertion: append [a b c d e f g] [h i j k l m n] = [a b c d e f g] ++ [h i j k l m n]
+
+[0;33m    ✅ ~ assert that works recursively for :inline[0m 
+         assertion: append [h i j k l m n] [a b c d e f g] = [h i j k l m n] ++ [a b c d e f g]
+
+[0;33m    ✅ ~ assert that `append a b` is evaluated before-hand[0m 
+         assertion: [a b c d e f g h i j k l m n] = [a b c d e f g] ++ [h i j k l m n]
+
+[0;33m    ✅ ~ assert that considers `ab` as being static[0m 
+         assertion: ab = [a b c d e f g] ++ [h i j k l m n]
+
+[0;33m    ✅ ~ assert that considers everything as being static[0m 
+         assertion: ab = a ++ b
+
+
+Suite: Test pre-evaluation 
+ 
+[0;33m    ❌ ~ assert that is possible to evaluate before-hand with `@`[0m 
+         assertion: ((sum [2 3 4])) [1 2 3 4 5]
+
+[0;33m    ❌ ~ assert that is possible to evaluate before-hand with `@`[0m 
+         assertion: sum 2 3 4  1 2 3 4 5 
+
+[0;33m    ❌ ~ assert that is possible to evaluate before-hand with `@`[0m 
+         assertion: 9  1 2 3 4 5 
+
+[0;33m    ❌ ~ assert that `a` and `b` are considered static[0m 
+         assertion: a = b
+
+[0;33m    ❌ ~ assert that [] and -> are evaluated differently[0m 
+         assertion: a = b
+
+[0;33m    ❌ ~ assert that [] and -> are evaluated differently[0m 
+         assertion: ((sum [2 3 4])) = [1 2 3 4 5]
+
+[0;33m    ❌ ~ assert that `a` and `b` are evaluated before-hand[0m 
+         assertion: false
+
+
+Suite: Test completely static display 
+ 
+[0;33m    ❌ ~ assert that `a` and `b` are considered static[0m 
+         assertion: [a = b] 
+
+[0;33m    ❌ ~ assert that [] and -> are evaluated differently[0m 
+         assertion: [[a = b]] 
+
+[0;33m    ❌ ~ assert that [] and -> are evaluated differently[0m 
+         assertion: ((sum [2 3 4])) = [1 2 3 4 5]
+
+[0;33m    ❌ ~ assert that `a` and `b` is evaluated before-hand[0m 
+         assertion: [false] 
+
+
