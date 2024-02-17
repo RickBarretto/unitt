@@ -161,7 +161,6 @@ test: $[description :string testCase :block][
     ;;
     ;; note: {
     ;;    * `assert` is injected, and only available inside the `test`'s block.
-    ;;    * :inline values are considered as static.
     ;; }
     ;; 
     ;; example: {
@@ -172,16 +171,13 @@ test: $[description :string testCase :block][
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
     ;;
-    ;;          abBlk: append a b
-    ;;          baBlk: append b a
-    ;;
-    ;;          assert -> abBlk = a ++ b
-    ;;          assert -> baBlk = b ++ a
+    ;;          assert -> (append a b) = a ++ b
+    ;;          assert -> (append b a) = b ++ a
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
-    ;;      ;      assertion : [a b c d e f g h i j k l m n] = [a b c d e f g] ++ [h i j k l m n]
+    ;;      ;      assertion : ( append [a b c d e f g] [h i j k l m n] ) = [a b c d e f g] ++ [h i j k l m n]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
-    ;;      ;      assertion : [h i j k l m n a b c d e f g] = [h i j k l m n] ++ [a b c d e f g]
+    ;;      ;      assertion : ( append [h i j k l m n] [a b c d e f g] ) = [h i j k l m n] ++ [a b c d e f g]
     ;;          
     ;;      test.skip: unix? "split is working for windows's paths" [
     ;;          assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
@@ -208,6 +204,7 @@ test: $[description :string testCase :block][
 
     assert: $[condition :block][
 
+        statics: (attr 'static) ?? []
         passBlock: -> print [color #yellow ~"|_unittTestsIndentation|✅ |template|"]
         failBlock: -> print [color #yellow ~"|_unittTestsIndentation|❌ |template|"]
         skipBlock: [ 
@@ -215,7 +212,35 @@ test: $[description :string testCase :block][
             print ~"|_unittTestsIndentation|     skipped! \n"
         ]
 
-        statics: (attr 'static) ?? []
+        evaluateExpression: $[expr][
+            staticTypes: [:function :literal :pathLiteral]
+            loop expr 'value [
+                prints " "
+
+                if inline? value [
+                    prints "("
+                    _: evaluateExpression to :block value
+                    prints " )"
+                    continue
+                ]
+
+                if or? throws? [val: var value] in? value statics [
+                    prints as.code value
+                    continue
+                ]
+
+                if in? type val staticTypes [
+                    prints as.code value
+                    continue
+                ]
+                
+                prints as.code val
+            ]
+
+            return null
+
+        ]
+
 
         (skip?)? -> do skipBlock [
             (equal? @condition @[true])? 
@@ -223,17 +248,7 @@ test: $[description :string testCase :block][
                 failBlock
 
             prints ~"|_unittTestsIndentation|     assertion :"
-            staticTypes: [:function :literal :pathLiteral]
-            loop.with: 'i condition 'cond [
-                prints " "
-                
-                (or? throws? [el: var cond] in? cond statics)? 
-                    -> prints as.code cond
-                    -> (in? type el staticTypes)? 
-                        -> prints as.code cond
-                        -> prints as.code el
-            ]
-
+            evaluateExpression condition
             prints "\n"
         ]
     ]
