@@ -158,6 +158,7 @@ test: $[description :string testCase :block][
     ;;      prop: :logical « defines if a test is property-based
     ;;      skip: :logical « skip test if true
     ;;      static: :block « defines what should not be evaluated when showing
+    ;;      static: :logical « disables runtime eval, forces static display
     ;; ]
     ;;
     ;; note: {
