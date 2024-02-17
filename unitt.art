@@ -207,6 +207,8 @@ test: $[description :string testCase :block][
     assert: $[condition :block][
 
         statics: (attr 'static) ?? []
+        forceStatic?: statics = true
+
         passBlock: -> print [color #yellow ~"|_unittTestsIndentation|✅ |template|"]
         failBlock: -> print [color #yellow ~"|_unittTestsIndentation|❌ |template|"]
         skipBlock: [ 
@@ -252,8 +254,14 @@ test: $[description :string testCase :block][
             passBlock
             failBlock
 
-        prints ~"|_unittTestsIndentation|     assertion :"
-        evaluateExpression condition
+        prints ~"|_unittTestsIndentation|     assertion:"
+        
+        (forceStatic?)? [
+            prints " "
+            prints -> condition
+        ][
+            evaluateExpression condition
+        ]
         print "\n"
 
     ]
