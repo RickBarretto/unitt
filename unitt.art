@@ -222,7 +222,7 @@ test: $[description :string testCase :block][
             staticTypes: [:function :literal :pathLiteral]
             staticPrinting: [
                     prints " "
-                    prints value
+                    prints as.code value
                     continue
                 ]
             
