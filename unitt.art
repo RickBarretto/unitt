@@ -177,17 +177,17 @@ test: $[description :string testCase :block][
     ;;          assert -> (append b a) = b ++ a
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
-    ;;      ;      assertion : ( append [a b c d e f g] [h i j k l m n] ) = [a b c d e f g] ++ [h i j k l m n]
+    ;;      ;      assertion: append [a b c d e f g] [h i j k l m n] = [a b c d e f g] ++ [h i j k l m n]
     ;;      ;
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
-    ;;      ;      assertion : ( append [h i j k l m n] [a b c d e f g] ) = [h i j k l m n] ++ [a b c d e f g]
+    ;;      ;      assertion: append [h i j k l m n] [a b c d e f g] = [h i j k l m n] ++ [a b c d e f g]
     ;;          
     ;;      test.skip: unix? "split is working for windows's paths" [
     ;;          assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
     ;;      ]
     ;;      ; # running on Windows:
     ;;      ; ✅ - assert that split is working for windows's paths
-    ;;      ;      assertion : ["." "splited" "path"] = split .path ".\\splited\\path"
+    ;;      ;      assertion: . splited path  = split path .\splited\path
     ;;      ; 
     ;;      ; # running on Unix:
     ;;      ; ⏩ - assert that split is working for windows's paths 
