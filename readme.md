@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-    <i>Unitt</i> is a basic unit-test tool for the 
+    <i>Unitt</i> is a lean unit-test tool for the 
     <a href="https://github.com/arturo-lang/arturo/">
         Arturo Programming language
     </a>
