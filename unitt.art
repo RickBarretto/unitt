@@ -121,7 +121,7 @@ runTests: $[files :block][
     exit?: not? attr? 'suppress
     failed?: or? (fatalError) (failed > 0)
     if and? exit? failed? 
-        -> panic "Some tests failed!"
+        -> panic.code: 1 "Some tests failed!"
 
 ]
 
