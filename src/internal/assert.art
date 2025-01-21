@@ -33,27 +33,22 @@ define :assertion [
 
 assert: $[condition :block][
 
-    ident: $[value][
-        join @[_unittTestsIndentation if attr 'extra ["     "] value]
-    ]
-
-    passBlock: -> print [color #yellow ident ~"✅ |template|"]
-    failBlock: -> print [color #yellow ident ~"❌ |template|"]
-    skipBlock: [ 
-        print [color #yellow ident ~"⏩ |template|"]
-        print ident.extra ~"skipped! \n"
-    ]
+    ident: $[value]
+        -> join @[_unittTestsIndentation if attr 'extra ["     "] value]
+    format: $[status :string] 
+        -> color #yellow ident ~"|status| |template|"
 
     if skip? [
-        do skipBlock
+        print format "⏩"
+        print ident.extra ~"skipped! \n"
         return null
     ]
 
     assertion: to :assertion @[condition]
 
     (to :logical assertion)? 
-        passBlock
-        failBlock
+        -> print format "✅"
+        -> print format "❌"
 
     print ident.extra ~"|to :string assertion|\n"
 ]
