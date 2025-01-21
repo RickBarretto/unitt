@@ -20,10 +20,11 @@ define :assertion [
     init: method [condition :block][
         \_condition: condition
         \_status: equal? @condition @[true]
+        \_static: attr 'static
     ]
 
     string: method [][
-        repr: switch attr 'static
+        repr: switch \_static
             -> as.code \_condition  
             -> _repr \_condition
 
