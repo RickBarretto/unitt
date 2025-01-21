@@ -40,7 +40,8 @@ assert: $[condition :block][
 
     if skip? [
         print format "⏩"
-        print ident.extra ~"skipped! \n"
+        print ident.extra ~"skipped!"
+        print ""
         return null
     ]
 
@@ -50,5 +51,6 @@ assert: $[condition :block][
         -> print format "✅"
         -> print format "❌"
 
-    print ident.extra ~"|to :string assertion|\n"
+    print ident.extra to :string assertion
+    print ""
 ]
