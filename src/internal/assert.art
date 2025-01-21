@@ -2,7 +2,7 @@ _repr: $[tokens][
     ignorable: [:function :literal :pathLiteral]
     reprToken: $[token :any][
         if inline? token            ; :inline should be 
-            -> return _repr token    ; recurively evaluated
+            -> return _repr token   ; recurively evaluated
 
         if contains? ignorable type token
             -> return as.code token
