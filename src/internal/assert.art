@@ -18,12 +18,16 @@ _repr: $[tokens][
 
 define :assertion [
     init: method [condition :block][
-        \_message: _repr condition
+        \_condition: condition
         \_status: equal? @condition @[true]
     ]
 
     string: method [][
-        ~"assertion: |\_message|"
+        repr: switch attr 'static
+            -> as.code \_condition  
+            -> _repr \_condition
+
+        ~"assertion: |repr|"
     ]
 
     logical: method [][
