@@ -1,8 +1,8 @@
-repr: $[tokens][
+_repr: $[tokens][
     ignorable: [:function :literal :pathLiteral]
     reprToken: $[token :any][
         if inline? token            ; :inline should be 
-            -> return repr token    ; recurively evaluated
+            -> return _repr token    ; recurively evaluated
 
         if contains? ignorable type token
             -> return as.code token
@@ -18,7 +18,7 @@ repr: $[tokens][
 
 define :assertion [
     init: method [condition :block][
-        \_message: repr condition
+        \_message: _repr condition
         \_status: equal? @condition @[true]
     ]
 
