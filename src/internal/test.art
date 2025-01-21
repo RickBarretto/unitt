@@ -1,3 +1,5 @@
+import ./{format}!
+
 test: $[description :string testCase :block][
     ;; description: {
     ;;    Run an unit-test, printing it's result.
@@ -55,9 +57,33 @@ test: $[description :string testCase :block][
     ;;
     ;; }
 
-    sep: (attr 'prop)? -> "~" -> "-"
-    template: ~"|sep| assert that |description|"
-    skip?: attr 'skip
-    do ./{assert.art}
+    __display: $[status][
+        __sep: (attr 'prop)? -> "~" -> "-"
+        format status ~"|__sep| assert that |description|"
+    ]
+
+    if attr 'skip [
+        print ident __display "⏩"
+        print ident.extra ~"skipped!"
+        print ""
+        return null
+    ]
+
+    do ./"assert.art"
+
+    ;; typed [:assertions]
+    __assertions: @[]
     do testCase
+
+    succeeded?: __assertions
+        | map 'assertion [to :logical assertion]
+        | all?
+
+    switch succeeded?
+        -> print ident __display "✅"
+        -> print ident __display "❌"
+    
+    loop __assertions [assertion] [
+        print ident.extra to :string assertion
+    ]
 ]

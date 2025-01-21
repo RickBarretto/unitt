@@ -36,25 +36,6 @@ define :assertion [
 ]
 
 assert: $[condition :block][
-
-    ident: $[value]
-        -> join @[_unittTestsIndentation if attr 'extra ["     "] value]
-    format: $[status :string] 
-        -> color #yellow ident ~"|status| |template|"
-
-    if skip? [
-        print format "⏩"
-        print ident.extra ~"skipped!"
-        print ""
-        return null
-    ]
-
     assertion: to :assertion @[condition]
-
-    (to :logical assertion)? 
-        -> print format "✅"
-        -> print format "❌"
-
-    print ident.extra to :string assertion
-    print ""
+    append '__assertions assertion
 ]
