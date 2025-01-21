@@ -1,8 +1,37 @@
+repr: $[tokens][
+    ignorable: [:function :literal :pathLiteral]
+    reprToken: $[token :any][
+        if inline? token            ; :inline should be 
+            -> return repr token    ; recurively evaluated
+
+        if contains? ignorable type token
+            -> return as.code token
+
+        switch throws? [value: var token]
+            -> as.code token
+            -> as.code value
+    ]
+
+    tokens | map => [reprToken &] 
+           | join.with: " "
+]
+
+define :assertion [
+    init: method [condition :block][
+        \_condition: condition
+        \_status: equal? @condition @[true]
+    ]
+
+    string: method [][
+        ~"assertion: |repr \_condition|"
+    ]
+
+    logical: method [][
+        \_status
+    ]
+]
+
 assert: $[condition :block][
-
-    statics: (attr 'static) ?? []
-    forceStatic?: statics = true
-
     passBlock: -> print [color #yellow ~"|_unittTestsIndentation|✅ |template|"]
     failBlock: -> print [color #yellow ~"|_unittTestsIndentation|❌ |template|"]
     skipBlock: [ 
@@ -10,52 +39,16 @@ assert: $[condition :block][
         print ~"|_unittTestsIndentation|     skipped! \n"
     ]
 
-    evaluateExpression: $[expr][
-        statics: statics
-        staticTypes: [:function :literal :pathLiteral]
-        staticPrinting: [
-                prints " "
-                prints as.code value
-                continue
-            ]
-        
-        loop expr 'value [                
-            if inline? value  [
-                _: evaluateExpression to :inline value
-                continue
-            ]
-
-            if or? throws? [val: var value] in? value statics
-                staticPrinting
-
-            if in? type val staticTypes 
-                staticPrinting
-            
-            prints " "
-            prints as.code val
-        ]
-
-        return null
-
-    ]
-
     if skip? [
         do skipBlock
         return null
     ]
 
-    (equal? @condition @[true])? 
+    assertion: to :assertion @[condition]
+
+    (to :logical assertion)? 
         passBlock
         failBlock
 
-    prints ~"|_unittTestsIndentation|     assertion:"
-    
-    (forceStatic?)? [
-        prints " "
-        prints -> condition
-    ][
-        evaluateExpression condition
-    ]
-    print "\n"
-
+    print ~"|_unittTestsIndentation|     |to :string assertion|\n"
 ]
