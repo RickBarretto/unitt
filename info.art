@@ -1,4 +1,4 @@
-entry: {unitt}
+entry: {src/unitt}
 depends: []
 requires: [> 0.9.83]
 

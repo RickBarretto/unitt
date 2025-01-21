@@ -1,0 +1,112 @@
+findTests: $[testPath :string][
+    ;; description: « finds test files into `testPath`
+    ;;
+    ;; arguments: [
+    ;;      testPath: « the relative folder that contains the tests
+    ;; ]
+    ;; options: [
+    ;;      thatMatches: :string {
+    ;;          a simple glob-like pattern to select files.
+    ;;          the default value is "test*.art".
+    ;;      }
+    ;; ]
+    ;;
+    ;; example: {
+    ;;      ; tester.art
+    ;;      import {unitt}!
+    ;;      
+    ;;      runTests findTests.thatMatches: "*.test.art" "tests"   
+    ;; }
+
+    pattern: (attr 'thatMatches)?? "test*.art"
+
+    ensure.that: ~".pattern: '|pattern|' must have only one wildcard '*'."
+        -> one? enumerate pattern 'ch -> ch = '*'
+
+
+    testPrefix: first split.by: "*" pattern
+    testSuffix: last  split.by: "*" pattern
+
+    testFile?: $[file :string][
+        filename: last split.path file
+        and? 
+            prefix? filename testPrefix
+            suffix? filename testSuffix
+    ]
+
+    list.recursive testPath | select => testFile?
+
+]
+
+runTests: $[files :block][
+    ;; description: « executes test-files
+    ;;
+    ;; arguments: [
+    ;;      files: « a block containing the path to the files.
+    ;; ]
+    ;; options: [
+    ;;      failFast: :logical « fails on the first error found. (at file scope)
+    ;;      suppress: :logical « suppress exit codes.
+    ;; ]
+    ;;
+    ;; deprecated: [
+    ;;      option 'pattern :string: since 1.0.0
+    ;;          "See `findTests`."
+    ;; ]
+    ;;
+    ;; seeAlso: [findTests]
+    ;;
+    ;; examples: {
+    ;;      ; tester.art
+    ;;      import {unitt}!
+    ;;      
+    ;;      runTests ["tests/test01.art"]
+    ;; }
+
+    ; Important to final statistics
+    passed: 0
+    failed: 0
+    skipped: 0
+
+    ; Important to return error code.
+    ; If some test throw an error and don't explicitly catches it,
+    ; this should not return 0 as error code, but 1, instead.
+    fatalError: false
+    failFast: logical? attr 'failFast
+
+    ; The tests execution
+    loop files 'file [ 
+        print ~"\n===== |file| =====\n"
+
+        result: execute.code ~"|sys\binary| |file|"
+        output: split.lines result\output
+
+        loop output 'line [
+            print line
+            if in? '✅' line -> inc 'passed
+            if in? '❌' line -> inc 'failed
+            if in? '⏩' line -> inc 'skipped
+        ]
+
+        ; if some test throws an error
+        if result\code > 0 -> 
+            fatalError: true
+
+        if failFast -> if or? fatalError failed > 0 -> 
+            break
+
+    ]
+
+    print ~"\n===== Statistics =====\n"
+    print ~"⏏️    TOTAL: |passed + failed| assertions"
+    print ~"✅  PASSED: |passed| assertions"
+    print ~"⏩ SKIPPED: |skipped| assertions"
+    print ~"❌  FAILED: |failed| assertions"
+    print ~"\n===== ========== =====\n"
+
+    exit?: not? attr? 'suppress
+    failed?: or? (fatalError) (failed > 0)
+    if and? exit? failed? 
+        -> panic.code: 1 "Some tests failed!"
+
+]

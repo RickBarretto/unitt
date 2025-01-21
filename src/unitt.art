@@ -1,0 +1,16 @@
+;; author: « RickBarretto
+;; year: 2024-2025
+;; licence: « MIT
+;; version: 2.0.0-beta
+;; repository: « https://github.com/RickBarretto/unitt
+;;
+;; warning: {
+;;    Never import this as lean, or this will break the whole code.
+;;    At least, for now. This may change in future updates.
+;; }
+;;
+;; export: ['test 'suite]
+
+import ./{internal/shared}!
+import ./{internal/suite}!
+import ./{internal/test}!

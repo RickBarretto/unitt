@@ -1,0 +1,42 @@
+
+suite: $[description :string tests :block][
+    ;; description: « Visually groups tests.
+    ;;
+    ;; arguments: [
+    ;;      description: « the suite description
+    ;;      test: « the block containing the tests statements
+    ;; ]
+    ;; options: [
+    ;;      prop: :logical « defines if a test is property-based
+    ;;      skip: :logical « skip test if true
+    ;; ]
+    ;;
+    ;; example: {
+    ;;      ; testAppend.art
+    ;;      import {unitt}!
+    ;;      
+    ;;      suite "Groups some tests together" [
+    ;;
+    ;;          test.prop "appending with keyword or operator has the same behavior" [
+    ;;              a: [a b c d e f g]
+    ;;              b: [h i j k l m n]
+    ;;              assert -> (append a b) = (a ++ b)
+    ;;          ]
+    ;;          
+    ;;          test.skip: unix? "split is working for windows's paths" [
+    ;;              assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
+    ;;          ]
+    ;;      ]
+    ;;      ; Suite: Groups some tests together
+    ;;      ;
+    ;;      ;     ✅ ~ assert that appending with keyword or operator has the same behavior 
+    ;;      ;     assertion : [[append a b] = [a ++ b]]
+    ;;      ;
+    ;;      ;     ✅ - assert that split is working for windows's paths 
+    ;;      ;     assertion : [[. splited path] = split path .\splited\path]
+    ;; }
+    print ["Suite:" description "\n"]
+    _unittTestsIndentation: "    "
+    do tests
+    print ""
+]

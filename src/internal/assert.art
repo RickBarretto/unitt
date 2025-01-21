@@ -1,0 +1,61 @@
+assert: $[condition :block][
+
+    statics: (attr 'static) ?? []
+    forceStatic?: statics = true
+
+    passBlock: -> print [color #yellow ~"|_unittTestsIndentation|✅ |template|"]
+    failBlock: -> print [color #yellow ~"|_unittTestsIndentation|❌ |template|"]
+    skipBlock: [ 
+        print [color #yellow ~"|_unittTestsIndentation|⏩ |template|"]
+        print ~"|_unittTestsIndentation|     skipped! \n"
+    ]
+
+    evaluateExpression: $[expr][
+        statics: statics
+        staticTypes: [:function :literal :pathLiteral]
+        staticPrinting: [
+                prints " "
+                prints as.code value
+                continue
+            ]
+        
+        loop expr 'value [                
+            if inline? value  [
+                _: evaluateExpression to :inline value
+                continue
+            ]
+
+            if or? throws? [val: var value] in? value statics
+                staticPrinting
+
+            if in? type val staticTypes 
+                staticPrinting
+            
+            prints " "
+            prints as.code val
+        ]
+
+        return null
+
+    ]
+
+    if skip? [
+        do skipBlock
+        return null
+    ]
+
+    (equal? @condition @[true])? 
+        passBlock
+        failBlock
+
+    prints ~"|_unittTestsIndentation|     assertion:"
+    
+    (forceStatic?)? [
+        prints " "
+        prints -> condition
+    ][
+        evaluateExpression condition
+    ]
+    print "\n"
+
+]
