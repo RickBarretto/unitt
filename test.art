@@ -23,14 +23,14 @@ test "this fails" [
     assert.static -> equal? 3 (add a 2)
 ]
 
-suite "group 1" [
-    test "..." []
-    test "..." []
-    test "..." []
-]
+; suite "group 1" [
+;     test "..." []
+;     test "..." []
+;     test "..." []
+; ]
 
-suite "group 2" [
-    test "..." []
-    test "..." []
-    test "..." []
-]
+; suite "group 2" [
+;     test "..." []
+;     test "..." []
+;     test "..." []
+; ]
