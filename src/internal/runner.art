@@ -1,3 +1,8 @@
+_unitt_section: method [title :string][
+    if attr 'end -> title: join @.of: (size title) "="
+    render ~"\n===== |title| =====\n"
+]
+
 define :unitt [
 
     init: method [files :block][
@@ -10,11 +15,6 @@ define :unitt [
 
         \fatal?: attr 'fatal
         \suppress?: attr 'suppress
-    ]
-
-    section: method [title :string][
-        if attr 'end -> title: join @.of: (size title) "="
-        render ~"\n===== |title| =====\n"
     ]
 
     statistics: method [][
