@@ -20,12 +20,12 @@ define :unitt [
     statistics: method [][
         title: "Statistics"
         render.template {
-            <|| \section title ||>
-            ⏏️    TOTAL: <||\passed + \failed||> assertions
-            ✅  PASSED: <||\passed||> assertions
-            ⏩ SKIPPED: <||\skipped||> assertions
-            ❌  FAILED: <||\failed||> assertions
-            <|| \section.end title ||>
+            <||= \section title ||>
+            ⏏️    TOTAL: <||= \passed + \failed||> assertions
+            ✅  PASSED: <||= \passed||> assertions
+            ⏩ SKIPPED: <||= \skipped||> assertions
+            ❌  FAILED: <||= \failed||> assertions
+            <||= \section.end title ||>
         }
     ]
 
