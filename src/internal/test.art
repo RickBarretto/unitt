@@ -108,10 +108,7 @@ test: $[description :string testCase :block][
     ;;
     ;; }
 
-    if attr 'skip [
-        print to :string to :test @[description []]
-        return null
-    ]
+    if attr 'skip -> testCase: []
 
     __assertions: @[]
     assert: $[condition :block][
