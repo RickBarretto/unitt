@@ -40,6 +40,11 @@ define :unitt [
         if not? zero? \failed -> \fail
     ]
 
+    append: method [test :test][
+        status: test\status
+        this\[status]: inc this\[status]
+    ]
+
     runAll: method [][
         loop \files 'file -> \run file
         \finish
