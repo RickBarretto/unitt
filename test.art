@@ -1,0 +1,26 @@
+import ./{src/unitt}!
+
+
+test "this passes" [
+    assert -> true
+    assert -> equal? 3 (add 1 2)
+    assert.static -> equal? 3 (add 1 2)
+]
+
+test.skip "this skips" [
+    assert -> true
+    assert -> equal? 3 (add 1 2)
+    assert.static -> equal? 3 (add 1 2)
+]
+
+
+test "this fails" [
+    assert -> true
+    assert -> equal? 4 add 1 2
+    assert.static -> equal? 3 (add 1 2)
+]
+
+suite "A" [
+    test "..." [
+    ]
+]
