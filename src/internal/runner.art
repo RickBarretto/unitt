@@ -71,4 +71,14 @@ runTests: $[files :block][
     ;;      runTests ["tests/test01.art"]
     ;; }
 
+    do ./"test.art"
+
+    unitt: to :unitt @[files]
+    loop files [file] [
+        _unitt_section file
+        do file
+    ]
+
+    do -> unitt\finish
+
 ]
