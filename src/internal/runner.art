@@ -67,11 +67,6 @@ runTests: $[files :block][
     ;;      suppress: :logical « suppress exit codes.
     ;; ]
     ;;
-    ;; deprecated: [
-    ;;      option 'pattern :string: since 1.0.0
-    ;;          "See `findTests`."
-    ;; ]
-    ;;
     ;; seeAlso: [findTests]
     ;;
     ;; examples: {
