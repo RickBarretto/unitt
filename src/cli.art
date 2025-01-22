@@ -1,0 +1,5 @@
+import ./{internal/runner}!
+
+unitt: to :unitt @[arg]
+print unitt\files
+do -> unitt\runAll
