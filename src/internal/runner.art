@@ -1,4 +1,3 @@
-
 define :unitt [
 
     init: method [files :block][
@@ -21,12 +20,12 @@ define :unitt [
     statistics: method [][
         title: "Statistics"
         render.template {
-            <|| section title ||>
-            ⏏️    TOTAL: <||passed + failed||> assertions
-            ✅  PASSED: <||passed||> assertions
-            ⏩ SKIPPED: <||skipped||> assertions
-            ❌  FAILED: <||failed||> assertions
-            <|| section.end title ||>
+            <|| \section title ||>
+            ⏏️    TOTAL: <||\passed + \failed||> assertions
+            ✅  PASSED: <||\passed||> assertions
+            ⏩ SKIPPED: <||\skipped||> assertions
+            ❌  FAILED: <||\failed||> assertions
+            <|| \section.end title ||>
         }
     ]
 
@@ -35,18 +34,21 @@ define :unitt [
     ]
 
     finish: method [][
+        print \statistics
+
         if \suppress?         -> exit
-        if not? zero? \failed -> fail
+        if not? zero? \failed -> \fail
     ]
 
     runAll: method [][
-        loop files 'file -> run file
+        loop \files 'file -> \run file
+        \finish
     ]
 
     run: method [file :string][
-        todo "isolate the runner from the tests"
+        print \section file
+        do file
     ]
-
 ]
 
 runTests: $[files :block][
