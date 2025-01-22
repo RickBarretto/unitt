@@ -45,11 +45,6 @@ define :unitt [
         this\[status]: inc this\[status]
     ]
 
-    runAll: method [][
-        loop \files 'file -> \run file
-        \finish
-    ]
-
     run: method [file :string][
         print \section file
         do file
