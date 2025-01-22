@@ -41,8 +41,3 @@ define :assertion [
         \_status
     ]
 ]
-
-assert: $[condition :block][
-    assertion: to :assertion @[condition]
-    append '__assertions assertion
-]

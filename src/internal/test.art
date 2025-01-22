@@ -1,4 +1,47 @@
 import ./{format}!
+import ./{assert}!
+
+define :test [
+
+    init: method [description :string assertions :block][
+        \skip?: empty? assertions
+        \sep: (attr 'prop)? -> "~" -> "-"
+
+        \description: description
+        \assertions: assertions
+    ]
+
+    symbol: method [][
+        if \skip? -> return "⏩"
+        
+        succeeded?: \assertions
+            | map 'assertion [to :logical assertion]
+            | all?
+
+        switch succeeded? -> "✅" -> "❌"
+    ]
+
+    header: method [][
+        format \symbol ~"|\sep| assert that |\description|"
+    ]
+
+    string: method[][
+        join.with: "\n" flatten  @[
+            ident \header
+            switch \skip? 
+                -> ident.extra ~"skipped!"
+                -> map \assertions [assertion] [
+                    ident.extra to :string assertion
+                ]
+            ""
+        ]
+    ]
+
+    add: method.public.distinct [assertion :assertion][
+        append 'this\assertions assertion 
+    ]
+
+]
 
 test: $[description :string testCase :block][
     ;; description: {
@@ -57,33 +100,17 @@ test: $[description :string testCase :block][
     ;;
     ;; }
 
-    __display: $[status][
-        __sep: (attr 'prop)? -> "~" -> "-"
-        format status ~"|__sep| assert that |description|"
-    ]
-
     if attr 'skip [
-        print ident __display "⏩"
-        print ident.extra ~"skipped!"
-        print ""
+        print to :string to :test @[description []]
         return null
     ]
 
-    do ./"assert.art"
-
-    ;; typed [:assertions]
     __assertions: @[]
-    do testCase
-
-    succeeded?: __assertions
-        | map 'assertion [to :logical assertion]
-        | all?
-
-    switch succeeded?
-        -> print ident __display "✅"
-        -> print ident __display "❌"
-    
-    loop __assertions [assertion] [
-        print ident.extra to :string assertion
+    assert: $[condition :block][
+        '__assertions ++ to :assertion @[condition]
     ]
+
+    do testCase
+    print to :string to :test @[description __assertions]
+
 ]
