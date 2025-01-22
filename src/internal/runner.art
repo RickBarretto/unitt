@@ -5,7 +5,7 @@ _unitt_section: method [title :string][
 
 define :unitt [
 
-    init: method [files :block][
+    init: method [files :block fatal? :logical suppress? :logical][
         ensure -> is? [:string] files
 
         \files: files
@@ -13,8 +13,8 @@ define :unitt [
         \failed: 0
         \skipped: 0
 
-        \fatal?: attr 'fatal
-        \suppress?: attr 'suppress
+        \fatal?: fatal?
+        \suppress?: suppress?
     ]
 
     statistics: method [][
@@ -58,7 +58,7 @@ runTests: $[files :block][
     ;;      files: « a block containing the path to the files.
     ;; ]
     ;; options: [
-    ;;      failFast: :logical « fails on the first error found. (at file scope)
+    ;;      fatal: :logical « fails on the first error found. (at file scope)
     ;;      suppress: :logical « suppress exit codes.
     ;; ]
     ;;
@@ -71,14 +71,23 @@ runTests: $[files :block][
     ;;      runTests ["tests/test01.art"]
     ;; }
 
-    do ./"test.art"
-
-    unitt: to :unitt @[files]
-    loop files [file] [
-        _unitt_section file
-        do file
+    unitt: to :unitt @[
+        files, 
+        (attr 'fatal)?? false, 
+        (attr 'suppress)?? false
     ]
 
+    runFile: $[file :string][
+        _unitt_section file
+        do file
+
+        if? and? unitt\fatal? (unitt\failed > 0) 
+            -> unitt\fail
+    ]
+
+    do ./"test.art"
+
+    loop files [file] -> runFile file
     do -> unitt\finish
 
 ]
