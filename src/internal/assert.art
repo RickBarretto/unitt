@@ -1,14 +1,20 @@
 _repr: $[tokens][
-    ignorable: [:function :literal :pathLiteral]
+    ignorable: [
+        :function 
+        :literal 
+        :pathLiteral 
+        :method 
+        :object
+    ]
     reprToken: $[token :any][
         if inline? token            ; :inline should be 
             -> return _repr token   ; recursively evaluated
 
-        if contains? ignorable type token
-            -> return as.code token
+        if throws? [value: var token]
+            -> return token
 
-        switch throws? [value: var token]
-            -> as.code token
+        switch in? (type var token) ignorable
+            -> token
             -> as.code value
     ]
 
