@@ -1,6 +1,0 @@
-#! arturo
-
-import {unitt}!
-
-
-runTests findTests "test"

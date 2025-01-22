@@ -1,0 +1,5 @@
+ident: $[value]
+    -> join @[_unittTestsIndentation if attr 'extra ["     "] value]
+
+format: $[status :string text :string] 
+    -> join.with: " " @[status text]

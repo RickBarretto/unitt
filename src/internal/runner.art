@@ -1,0 +1,93 @@
+_unitt_section: method [title :string][
+    if attr 'end -> title: join @.of: (size title) "="
+    render ~"\n===== |title| =====\n"
+]
+
+define :unitt [
+
+    init: method [files :block fatal? :logical suppress? :logical][
+        ensure -> is? [:string] files
+
+        \files: files
+        \passed: 0
+        \failed: 0
+        \skipped: 0
+
+        \fatal?: fatal?
+        \suppress?: suppress?
+    ]
+
+    statistics: method [][
+        title: "Statistics"
+        render.template {
+            <|| _unitt_section title ||>
+             ⏏️   TOTAL: <||= \passed + \failed||> assertions
+            ✅  PASSED: <||= \passed||> assertions
+            ⏩ SKIPPED: <||= \skipped||> assertions
+            ❌  FAILED: <||= \failed||> assertions
+            <|| _unitt_section.end title ||>
+        }
+    ]
+
+    fail: method [][
+        panic.code: 1 "Some tests have been failed!"
+    ]
+
+    finish: method [][
+        print \statistics
+
+        if \suppress?         -> exit
+        if not? zero? \failed -> \fail
+    ]
+
+    append: method [test :test][
+        status: test\status
+        this\[status]: inc this\[status]
+    ]
+
+    run: method [file :string][
+        print \section file
+        do file
+    ]
+]
+
+runTests: $[files :block][
+    ;; description: « executes test-files
+    ;;
+    ;; arguments: [
+    ;;      files: « a block containing the path to the files.
+    ;; ]
+    ;; options: [
+    ;;      fatal: :logical « fails on the first error found. (at file scope)
+    ;;      suppress: :logical « suppress exit codes.
+    ;; ]
+    ;;
+    ;; seeAlso: [findTests]
+    ;;
+    ;; examples: {
+    ;;      ; tester.art
+    ;;      import {unitt}!
+    ;;      
+    ;;      runTests ["tests/test01.art"]
+    ;; }
+
+    unitt: to :unitt @[
+        files, 
+        (attr 'fatal)?? false, 
+        (attr 'suppress)?? false
+    ]
+
+    runFile: $[file :string][
+        _unitt_section file
+        do file
+
+        if? and? unitt\fatal? (unitt\failed > 0) 
+            -> unitt\fail
+    ]
+
+    do ./"test.art"
+
+    loop files [file] -> runFile file
+    do -> unitt\finish
+
+]

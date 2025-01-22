@@ -1,0 +1,43 @@
+_repr: $[tokens][
+    ignorable: [
+        :function 
+        :literal 
+        :pathLiteral 
+        :method 
+        :object
+    ]
+    reprToken: $[token :any][
+        if inline? token            ; :inline should be 
+            -> return _repr token   ; recursively evaluated
+
+        if throws? [value: var token]
+            -> return token
+
+        switch in? (type var token) ignorable
+            -> token
+            -> as.code value
+    ]
+
+    tokens | map => [reprToken &] 
+           | join.with: " "
+]
+
+define :assertion [
+    init: method [condition :block][
+        \_condition: condition
+        \_status: equal? @condition @[true]
+        \_static: attr 'static
+    ]
+
+    string: method [][
+        repr: switch \_static
+            -> as.code \_condition  
+            -> _repr \_condition
+
+        ~"assertion: |repr|"
+    ]
+
+    logical: method [][
+        \_status
+    ]
+]
