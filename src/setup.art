@@ -38,6 +38,56 @@ findTests: $[testPath :string][
 
 ]
 
+define :unitt [
+
+    init: method [files :block][
+        ensure -> is? [:string] files
+
+        \files: files
+        \passed: 0
+        \failed: 0
+        \skipped: 0
+
+        \fatal?: attr 'fatal
+        \suppress?: attr 'suppress
+    ]
+
+    section: method [title :string][
+        if attr 'end -> title: join @.of: (size title) "="
+        render ~"\n===== |title| =====\n"
+    ]
+
+    statistics: method [][
+        title: "Statistics"
+        render.template {
+            <|| section title ||>
+            ⏏️    TOTAL: <||passed + failed||> assertions
+            ✅  PASSED: <||passed||> assertions
+            ⏩ SKIPPED: <||skipped||> assertions
+            ❌  FAILED: <||failed||> assertions
+            <|| section.end title ||>
+        }
+    ]
+
+    fail: method [][
+        panic.code: 1 "Some tests have been failed!"
+    ]
+
+    finish: method [][
+        if \suppress?         -> exit
+        if not? zero? \failed -> fail
+    ]
+
+    runAll: method [][
+        loop files 'file -> run file
+    ]
+
+    run: method [file :string][
+        todo "isolate the runner from the tests"
+    ]
+
+]
+
 runTests: $[files :block][
     ;; description: « executes test-files
     ;;
@@ -62,51 +112,5 @@ runTests: $[files :block][
     ;;      
     ;;      runTests ["tests/test01.art"]
     ;; }
-
-    ; Important to final statistics
-    passed: 0
-    failed: 0
-    skipped: 0
-
-    ; Important to return error code.
-    ; If some test throw an error and don't explicitly catches it,
-    ; this should not return 0 as error code, but 1, instead.
-    fatalError: false
-    failFast: logical? attr 'failFast
-
-    ; The tests execution
-    loop files 'file [ 
-        print ~"\n===== |file| =====\n"
-
-        result: execute.code ~"|sys\binary| |file|"
-        output: split.lines result\output
-
-        loop output 'line [
-            print line
-            if in? '✅' line -> inc 'passed
-            if in? '❌' line -> inc 'failed
-            if in? '⏩' line -> inc 'skipped
-        ]
-
-        ; if some test throws an error
-        if result\code > 0 -> 
-            fatalError: true
-
-        if failFast -> if or? fatalError failed > 0 -> 
-            break
-
-    ]
-
-    print ~"\n===== Statistics =====\n"
-    print ~"⏏️    TOTAL: |passed + failed| assertions"
-    print ~"✅  PASSED: |passed| assertions"
-    print ~"⏩ SKIPPED: |skipped| assertions"
-    print ~"❌  FAILED: |failed| assertions"
-    print ~"\n===== ========== =====\n"
-
-    exit?: not? attr? 'suppress
-    failed?: or? (fatalError) (failed > 0)
-    if and? exit? failed? 
-        -> panic.code: 1 "Some tests failed!"
 
 ]
