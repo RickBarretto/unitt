@@ -118,5 +118,5 @@ test: $[description :string testCase :block][
     do testCase
     _self: to :test @[description __assertions]
     print to :string _self
-
+    'unitt ++ _self
 ]
