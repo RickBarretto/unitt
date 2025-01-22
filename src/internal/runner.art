@@ -1,0 +1,77 @@
+
+define :unitt [
+
+    init: method [files :block][
+        ensure -> is? [:string] files
+
+        \files: files
+        \passed: 0
+        \failed: 0
+        \skipped: 0
+
+        \fatal?: attr 'fatal
+        \suppress?: attr 'suppress
+    ]
+
+    section: method [title :string][
+        if attr 'end -> title: join @.of: (size title) "="
+        render ~"\n===== |title| =====\n"
+    ]
+
+    statistics: method [][
+        title: "Statistics"
+        render.template {
+            <|| section title ||>
+            ⏏️    TOTAL: <||passed + failed||> assertions
+            ✅  PASSED: <||passed||> assertions
+            ⏩ SKIPPED: <||skipped||> assertions
+            ❌  FAILED: <||failed||> assertions
+            <|| section.end title ||>
+        }
+    ]
+
+    fail: method [][
+        panic.code: 1 "Some tests have been failed!"
+    ]
+
+    finish: method [][
+        if \suppress?         -> exit
+        if not? zero? \failed -> fail
+    ]
+
+    runAll: method [][
+        loop files 'file -> run file
+    ]
+
+    run: method [file :string][
+        todo "isolate the runner from the tests"
+    ]
+
+]
+
+runTests: $[files :block][
+    ;; description: « executes test-files
+    ;;
+    ;; arguments: [
+    ;;      files: « a block containing the path to the files.
+    ;; ]
+    ;; options: [
+    ;;      failFast: :logical « fails on the first error found. (at file scope)
+    ;;      suppress: :logical « suppress exit codes.
+    ;; ]
+    ;;
+    ;; deprecated: [
+    ;;      option 'pattern :string: since 1.0.0
+    ;;          "See `findTests`."
+    ;; ]
+    ;;
+    ;; seeAlso: [findTests]
+    ;;
+    ;; examples: {
+    ;;      ; tester.art
+    ;;      import {unitt}!
+    ;;      
+    ;;      runTests ["tests/test01.art"]
+    ;; }
+
+]
