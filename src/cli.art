@@ -13,4 +13,5 @@ files: args\values ?? append
 
 runTests
     .fatal: tryOr [args\fatal] false
+    .suppress: tryOr [args\suppress] false
     files
