@@ -12,4 +12,5 @@ files: args\values ?? append
     findTests "tests"
 
 runTests
+    .fatal: tryOr [args\fatal] false
     files
