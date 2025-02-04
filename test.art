@@ -6,6 +6,8 @@ if standalone?
 test "this passes" [
     a: 1
     assert -> true
+    assert.with: 'equal? @[3 add a 2]
+    assert.with: 'equal? [3 add a 2]
     assert -> equal? 3 (add a 2)
     assert.static -> equal? 3 (add a 2)
 ]
