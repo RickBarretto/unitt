@@ -3,5 +3,11 @@ import ./{internal/finder}!
 
 print args
 
+files: args\values ?? append 
+    files    findTests "tests"
+files: args\values ?? append 
+    findTests "test" 
+    findTests "tests"
 
-runTests arg
+runTests
+    files
