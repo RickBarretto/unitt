@@ -1,3 +1,7 @@
 import ./{internal/runner}!
+import ./{internal/finder}!
+
+print args
+
 
 runTests arg
