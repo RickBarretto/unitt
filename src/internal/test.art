@@ -122,3 +122,6 @@ test: $[description :string testCase :block][
     print to :string _self
     'unitt ++ _self
 ]
+
+it: var 'test
+should: var 'test
