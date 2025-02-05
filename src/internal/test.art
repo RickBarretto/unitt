@@ -112,8 +112,9 @@ test: $[description :string testCase :block][
 
     __assertions: @[]
     assert: $[condition :block][
-        if (fn: <= (attr 'with)?? null)
-            -> condition: flatten @[to :word fn] ++ @[condition]
+        __fn: @[attr 'with attr 'to attr 'be ] | filter => null?
+        if not? empty? __fn
+            -> condition: flatten @[to :word last __fn] ++ @[condition]
         '__assertions ++ to :assertion @[condition]
     ]
 
