@@ -6,10 +6,11 @@ if standalone?
 test "this passes" [
     a: 1
     assert -> true
-    assert.with: 'equal? @[3 add a 2]
+    expects.to.be: 'equal? @[3 add a 2]
+    expects.be: 'equal? [3 add a 2]
     assert.with: 'equal? [3 add a 2]
     assert -> equal? 3 (add a 2)
-    assert.static -> equal? 3 (add a 2)
+    expects.static -> equal? 3 (add a 2)
 ]
 
 test.skip "this skips" [
@@ -29,12 +30,14 @@ test "this fails" [
 
 suite "group 1" [
     test "..." []
-    test "..." []
+]
+
+describe "group 2" [
+    it "..." []
+    should "..." []
     test "..." []
 ]
 
-suite "group 2" [
-    test "..." []
-    test "..." []
+spec "group 3" [
     test "..." []
 ]
