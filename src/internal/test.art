@@ -117,6 +117,8 @@ test: $[description :string testCase :block][
         '__assertions ++ to :assertion @[condition]
     ]
 
+    expects: var 'assert
+
     do testCase
     _self: to :test @[description __assertions]
     print to :string _self
