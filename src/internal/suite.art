@@ -40,3 +40,6 @@ suite: $[description :string tests :block][
     do tests
     print ""
 ]
+
+spec: var 'suite
+describe: var 'suite
