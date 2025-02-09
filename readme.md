@@ -168,22 +168,20 @@ This section includes the old-syntax inspired by XUnit.
 Kept for compatibilities with our 1st version.
 
 - `test: $[description :string, testCase :block]`:
-    The test case itself, you need to pass a clear description to it,
-    And the logic that you're trying to assert.
-    - `.prop`:
+    The same as `it`. 
+    Not only kept for compatibility issues,
+    but great to be used when not into a `describe`/`suite` block.
+    - `.prop`: (Temporarially deprecated)
         Indicates that a test is property-based.
     - `.skip :logical`:
         Skips tests for some condition. 
         If none condition is given, this will just skip the test.
-    - `.static: :block`:
-        Defines what will and what won't be evaluated.
     - `.static: :logical`:
         Disable runtime evaluation, and forces static display.
 - `assert: $[condition :block]`:
-    A function that is only available inside the `test` case,
-    makes an assertion given the `condition`.
+    The same as `expects`
 - `suite: $[description :string tests :block]`:
-    Visually groups tests together.
+    The same as `describe`.
 
 ### *Setup*
 - `runTests: $[tests [:string]]`:
