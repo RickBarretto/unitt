@@ -59,52 +59,66 @@ import {unitt}!
 
 unix?: true
 
-suite "test binary appending" [
-    test "operation with integer works" [
+describe "binary appending" [
+    it "should operate integers" [
         b: to :binary 0
-        assert -> as.binary 2 = append b 1
-        assert -> as.binary 1 = b ++ 1
+        expects.be: 'equal? @[as.binary 2 append b 1]
+        expects.be: 'equal? @[as.binary 1 b ++ 1]
     ]
 
-    test.prop "operate binaries with integer returns a binary" [
+    it "should return a binary" [
         b: to :binary 0
-        assert -> binary? append b 1
-        assert -> binary? b ++ 1
+        expects.be: 'binary? @[append b 1]
+        expects.be: 'binary? @[b ++ 1]
     ]
 ]
 
-test.skip: unix? "split works for windows's paths" [
-    assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
+test.skip: unix? "split should deal with windows's paths" [
+    expects.be: 'equal? @[
+        ["." "splited" "path"]
+        split.path ".\\splited\\path"
+    ]
 ]
 
-test "split is works for unix path" [
-    assert -> ["." "splited" "path"] = split.path "./splited/path"
+test "split should deal with unix path" [
+    expects.be: 'equal? @[
+        ["." "splited" "path"] 
+        split.path "./splited/path"
+    ]
 ]
 ```
 
 This will show you:
 
 ```
-Suite: test binary appending 
+===== example.art =====
 
-    ❌ - assert that operation with integer works
-         assertion: as .binary 2 = append  1
+Suite: binary appending 
 
-    ❌ - assert that operation with integer works
-         assertion: as .binary 1 =  ++ 1
+    ❌ - assert that should operate integers
+         ❌: equal? 10 00 01
+         ❌: equal? 1 00 01
 
-    ✅ ~ assert that operate binaries with integer returns a binary
-         assertion: binary? append  1
-
-    ✅ ~ assert that operate binaries with integer returns a binary
-         assertion: binary?  ++ 1
+    ✅ - assert that should return a binary
+         ✅: binary? 00 01
+         ✅: binary? 00 01
 
 
-⏩ - assert that split works for windows's paths 
+⏩ - assert that split should deal with windows's paths
      skipped!
 
-✅ - assert that split is works for unix path
-     assertion: ["." "splited" "path"] = split .path "./splited/path"
+✅ - assert that split should deal with unix path
+     ✅: equal? ["." "splited" "path"] ["." "splited" "path"]
+
+
+===== Statistics =====
+
+ ⏏️   TOTAL: 3 assertions
+✅  PASSED: 2 assertions
+⏩ SKIPPED: 1 assertions
+❌  FAILED: 1 assertions
+
+===== ========== =====
 ```
 
 > [!NOTE]
