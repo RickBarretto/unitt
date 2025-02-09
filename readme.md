@@ -32,37 +32,14 @@
 
 ## Trying Unitt
 
-*Unitt* may be splited into two sections: *runner* and *the tests*.
-
-*The runner* is the section responsible to find, run and return error codes to the final user.
-While *the tests* are responsible to group the rules and logic of the tests.
-
-### Initial setup
-
-It's recomended that your *tester* be at the root of your directory, right before your *tests* folder.
-
-All of your *tests* must begin with the `test` prefix and end with the `.art` extension to be found,
-since you may want to mix them with some other files.
-
-Being that said, that is the right way of setting up your *tester*:
-
-Let's consider that you have the following directory:
-
-```
-src/
-    ...
-tests/
-    ...
-main.art
-tester.art
+```sh
+# Runs test/test*.art
+unitt 
 ```
 
-Into your `tester.art`, you must:
-
-```art
-import {unitt}!
-
-runTests findTests "tests"
+```sh
+# Glob Pattern from Shell
+unitt test/*test.art
 ```
 
 To run it, call:
