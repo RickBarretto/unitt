@@ -159,6 +159,8 @@ Kept for compatibilities with our 1st version.
     - `.static: :logical`
 - `assert: $[condition :block]`:
     The same as `expects`
+    - `.with`
+        The same as `.to` and `.be`.
 - `suite: $[description :string tests :block]`:
     The same as `describe`.
 
