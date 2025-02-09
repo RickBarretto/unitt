@@ -124,23 +124,26 @@ Suite: binary appending
 ## Documentation
 
 ### *Unitt*
-- `test: $[description :string, testCase :block]`:
+- `describe: $[description :string tests :block]`:
+    Groups tests around some feature.
+- `it: $[description :string, testCase :block]`:
     The test case itself, you need to pass a clear description to it,
     And the logic that you're trying to assert.
-    - `.prop`:
+    - `.prop`: (Temporarially deprecated)
         Indicates that a test is property-based.
     - `.skip :logical`:
         Skips tests for some condition. 
-        If none condition is given, this will just skip the test.
-    - `.static: :block`:
-        Defines what will and what won't be evaluated.
-    - `.static: :logical`:
-        Disable runtime evaluation, and forces static display.
-- `assert: $[condition :block]`:
-    A function that is only available inside the `test` case,
+        Will just skip if no condition is provided.
+    - `.static :logical`:
+        Shows it as static code.
+- `expects: $[condition :block]`:
+    A function that is only available inside the `it`/`test` case,
     makes an assertion given the `condition`.
-- `suite: $[description :string tests :block]`:
-    Visually groups tests together.
+    - `.to :literal` (or `.be`)
+        Uses some function to evaluate the statement.
+        This helps to show the function name on display, 
+        instead of a `true`/`false`.
+
 
 ## *Compatibility*
 
