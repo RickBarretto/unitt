@@ -30,14 +30,14 @@ define :test [
     ]
 
     header: method [][
-        format \symbol ~"|\sep| assert that |\description|"
+        color #yellow format \symbol ~"|\sep| assert that |\description|"
     ]
 
     string: method[][
         join.with: "\n" flatten  @[
             ident \header
             switch \skip? 
-                -> ident.extra ~"skipped!"
+                -> color #blue ident.extra ~"skipped!"
                 -> map \assertions [assertion] [
                     ident.extra to :string assertion
                 ]

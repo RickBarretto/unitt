@@ -34,7 +34,9 @@ define :assertion [
             -> as.code \_condition  
             -> _repr \_condition
 
-        ~"assertion: |repr|"
+        switch \_status
+            -> color #green ~"✅: |repr|"
+            -> color #red   ~"❌: |repr|"
     ]
 
     logical: method [][
