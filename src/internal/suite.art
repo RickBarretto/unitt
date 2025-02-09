@@ -15,25 +15,26 @@ suite: $[description :string tests :block][
     ;;      ; testAppend.art
     ;;      import {unitt}!
     ;;      
+    ;;      unix?: true
     ;;      suite "Groups some tests together" [
     ;;
     ;;          test.prop "appending with keyword or operator has the same behavior" [
     ;;              a: [a b c d e f g]
     ;;              b: [h i j k l m n]
-    ;;              assert -> (append a b) = (a ++ b)
+    ;;              assert.with: 'equal? @[as.code append a b as.code a ++ b]
     ;;          ]
     ;;          
     ;;          test.skip: unix? "split is working for windows's paths" [
-    ;;              assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
+    ;;              assert.with: 'equal? @[["." "splited" "path"] split.path ".\\splited\\path"]
     ;;          ]
     ;;      ]
-    ;;      ; Suite: Groups some tests together
+    ;;      ; Suite: Groups some tests together 
     ;;      ;
-    ;;      ;     ✅ ~ assert that appending with keyword or operator has the same behavior 
-    ;;      ;     assertion : [[append a b] = [a ++ b]]
+    ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
+    ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
     ;;      ;
-    ;;      ;     ✅ - assert that split is working for windows's paths 
-    ;;      ;     assertion : [[. splited path] = split path .\splited\path]
+    ;;      ; ⏩ - assert that split is working for windows's paths
+    ;;      ;      skipped!
     ;; }
     print ["Suite:" description "\n"]
     _unittTestsIndentation: "    "
