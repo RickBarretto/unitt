@@ -171,13 +171,9 @@ Kept for compatibilities with our 1st version.
     The same as `it`. 
     Not only kept for compatibility issues,
     but great to be used when not into a `describe`/`suite` block.
-    - `.prop`: (Temporarially deprecated)
-        Indicates that a test is property-based.
-    - `.skip :logical`:
-        Skips tests for some condition. 
-        If none condition is given, this will just skip the test.
-    - `.static: :logical`:
-        Disable runtime evaluation, and forces static display.
+    - `.prop` (Temporarially deprecated)
+    - `.skip :logical`
+    - `.static: :logical`
 - `assert: $[condition :block]`:
     The same as `expects`
 - `suite: $[description :string tests :block]`:
