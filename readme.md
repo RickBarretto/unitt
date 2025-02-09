@@ -170,28 +170,11 @@ so that is great if you're working with *Continuous Integration*.
 
 ## Documentation
 
-### *Runner*
-- `runTests: $[tests [:string]]`:
-    The *runner function*, this executes all `tests`,
-    show statistics and return a value. 
-    - `.failFast`:
-        Fails on the first error found. 
-        This works at file scope due to our current way of running tests.
-    - `.suppress`: 
-        Suppress `panic`, this means: 
-        this won't terminate your tests, 
-        won't return an error code
-        and won't print a `panic` message. 
-- `findTests: $[folder :string]`:
-    The *finder function*, this function will look for *tests* inside the relative `folder`.
-    The default *test* pattern is "test*.art".
-    - `.thatMatches :string`:
-        Defines what is a test-file via a kind-of *glob* pattern.
-        Use a `*` as spliter. 
-        - Obs.: That is a kind-of *glob* pattern, not a real one. 
-          So just use one and only one `*` to split the pre and suffix.
+## *Compatibility*
 
-### *Tests*
+This section includes the old-syntax inspired by XUnit. 
+Kept for compatibilities with our 1st version.
+
 - `test: $[description :string, testCase :block]`:
     The test case itself, you need to pass a clear description to it,
     And the logic that you're trying to assert.
@@ -209,6 +192,23 @@ so that is great if you're working with *Continuous Integration*.
     makes an assertion given the `condition`.
 - `suite: $[description :string tests :block]`:
     Visually groups tests together.
+
+### *Setup*
+- `runTests: $[tests [:string]]`:
+    The *runner function*, this executes all `tests`,
+    show statistics and return a value. 
+    - `.fatal`:
+        Fails on the first error found (per file).
+    - `.suppress`: 
+        Always return 0 as error code. 
+- `findTests: $[folder :string]`:
+    Looks for *tests* inside `folder`.
+    The default *test* pattern is "test*.art".
+    - `.thatMatches :string`:
+        Defines what is a test-file via a kind-of *glob* pattern.
+        Use a `*` as spliter. 
+        - Obs.: That is a kind-of *glob* pattern, not a real one. 
+          So just use one and only one `*` to split the pre and suffix.
 
 
 > [!WARNING]
