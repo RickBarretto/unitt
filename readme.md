@@ -121,26 +121,6 @@ Suite: binary appending
 ===== ========== =====
 ```
 
-> [!NOTE]
-> Property-based tests have `~` as separator. 
-
-### The *Runner*
-
-
-```
-===== Statistics =====
-
-⏏️   TOTAL: 24 assertions
-✅  PASSED: 20 assertions
-⏩ SKIPPED: 4 assertions
-❌  FAILED: 4 assertions
-
-===== ========== =====
-```
-
-Also, the runner is able to return an error code, 
-so that is great if you're working with *Continuous Integration*.
-
 ## Documentation
 
 ### *Unitt*
