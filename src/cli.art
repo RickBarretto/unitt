@@ -1,8 +1,6 @@
 import ./{internal/runner}!
 import ./{internal/finder}!
 
-print args
-
 tryOr: $[action :block alt :any][
     (throws? [val:] ++ action)? -> alt -> val
 ]
