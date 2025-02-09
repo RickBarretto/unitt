@@ -134,8 +134,6 @@ Suite: binary appending
     - `.skip :logical`:
         Skips tests for some condition. 
         Will just skip if no condition is provided.
-    - `.static :logical`:
-        Shows it as static code.
 - `expects: $[condition :block]`:
     A function that is only available inside the `it`/`test` case,
     makes an assertion given the `condition`.
@@ -143,6 +141,8 @@ Suite: binary appending
         Uses some function to evaluate the statement.
         This helps to show the function name on display, 
         instead of a `true`/`false`.
+    - `.static :logical`:
+        Shows it as static code.
 
 
 ## *Compatibility*
@@ -156,11 +156,11 @@ Kept for compatibilities with our 1st version.
     but great to be used when not into a `describe`/`suite` block.
     - `.prop` (Temporarially deprecated)
     - `.skip :logical`
-    - `.static: :logical`
 - `assert: $[condition :block]`:
     The same as `expects`
     - `.with`
-        The same as `.to` and `.be`.
+        The same as `.to` and `.be`
+     - `.static: :logical`
 - `suite: $[description :string tests :block]`:
     The same as `describe`.
 
