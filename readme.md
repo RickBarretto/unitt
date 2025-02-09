@@ -32,8 +32,16 @@
 
 ## Trying Unitt
 
+**Installation**
+
+```
+arturo -p install unitt
+```
+
+**Execution**
+
 ```sh
-# Runs test/test*.art
+# Runs test/test*.art by default
 unitt 
 ```
 
@@ -42,26 +50,7 @@ unitt
 unitt test/*test.art
 ```
 
-To run it, call:
-
-```
-arturo tester.art
-```
-
-> [!TIP] 
-> You may want to use a hashbang to don't need to call arturo for every run.
-
-> [!TIP]
-> If you want be able to test some specific tests from the CLI, you can:
-> ```art
->  import {unitt}!
->  
->  runTests (empty? arg)? 
->      -> findTests "tests"
->      -> arg
-> ```
-
-### The *tests* itself
+### Testing code
 
 A real example of tests:
 
@@ -123,13 +112,6 @@ Suite: test binary appending
 
 ### The *Runner*
 
-Basically, you can run your *tests units* without a *runner*. 
-But there are some reasons why you should prefer to use a `runTests` function to run them.
-
-First, your *runner*'s output will give you important information about the current run.
-This will show you the file being runned, 
-the tests's status
-and at the end a summary of failed, skipped and passed tests:
 
 ```
 ===== Statistics =====
@@ -146,6 +128,25 @@ Also, the runner is able to return an error code,
 so that is great if you're working with *Continuous Integration*.
 
 ## Documentation
+
+### *Unitt*
+- `test: $[description :string, testCase :block]`:
+    The test case itself, you need to pass a clear description to it,
+    And the logic that you're trying to assert.
+    - `.prop`:
+        Indicates that a test is property-based.
+    - `.skip :logical`:
+        Skips tests for some condition. 
+        If none condition is given, this will just skip the test.
+    - `.static: :block`:
+        Defines what will and what won't be evaluated.
+    - `.static: :logical`:
+        Disable runtime evaluation, and forces static display.
+- `assert: $[condition :block]`:
+    A function that is only available inside the `test` case,
+    makes an assertion given the `condition`.
+- `suite: $[description :string tests :block]`:
+    Visually groups tests together.
 
 ## *Compatibility*
 
