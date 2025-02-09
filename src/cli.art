@@ -5,7 +5,9 @@ tryOr: $[action :block alt :any][
     (throws? [val:] ++ action)? -> alt -> val
 ]
 
-files: args\values ?? findTests "tests"
+files: switch empty? args\values
+    -> findTests "tests"
+    -> args\values
 
 runTests
     .fatal: tryOr [args\fatal] false
