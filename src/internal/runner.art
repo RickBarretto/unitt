@@ -1,4 +1,4 @@
-_unitt_section: method [title :string][
+_unitt_section: $[title :string][
     if attr 'end -> title: join @.of: (size title) "="
     render ~"\n===== |title| =====\n"
 ]
@@ -78,14 +78,13 @@ runTests: $[files :block][
     ]
 
     runFile: $[file :string][
-        _unitt_section file
+        _unix: $ => [replace & "\\" "/"]
+        print _unitt_section _unix file
         do file
 
         if? and? unitt\fatal? (unitt\failed > 0) 
             -> unitt\fail
     ]
-
-    do ./"test.art"
 
     loop files [file] -> runFile file
     do -> unitt\finish
