@@ -11,8 +11,6 @@ describe "Simple append" [
     ]
 
     it "has ++ as alias" [
-        ; should print as ``as.code``
-
         expects.be: 'equal? @[append [] [] [] ++ [] ]
         expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
     ]
