@@ -21,7 +21,7 @@ suite "Test :string operations" [
     ; ===== ===== Property-based ===== =====
 
     it "results in :string" [
-        expects.be: 'string? @["Art" ++ "uro"] 
+        expects.be: 'string? @[to :literal "Art" ++ "uro"] 
     ]
    
     it ":char appending results in :string" [
