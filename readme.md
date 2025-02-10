@@ -24,7 +24,7 @@
 
 <p align="center">
 <img 
-    alt="Running Unitt from terminal"
+    alt="Running Unitt from terminal (v2)"
     width="720"
     src="./docs/running unitt screenshot.png"
 />
@@ -32,59 +32,25 @@
 
 ## Trying Unitt
 
-*Unitt* may be splited into two sections: *runner* and *the tests*.
-
-*The runner* is the section responsible to find, run and return error codes to the final user.
-While *the tests* are responsible to group the rules and logic of the tests.
-
-### Initial setup
-
-It's recomended that your *tester* be at the root of your directory, right before your *tests* folder.
-
-All of your *tests* must begin with the `test` prefix and end with the `.art` extension to be found,
-since you may want to mix them with some other files.
-
-Being that said, that is the right way of setting up your *tester*:
-
-Let's consider that you have the following directory:
+**Installation**
 
 ```
-src/
-    ...
-tests/
-    ...
-main.art
-tester.art
+arturo -p install unitt
 ```
 
-Into your `tester.art`, you must:
+**Execution**
 
-```art
-import {unitt}!
-
-runTests findTests "tests"
+```sh
+# Runs test/test*.art by default
+unitt 
 ```
 
-To run it, call:
-
+```sh
+# Glob Pattern from Shell
+unitt test/*test.art
 ```
-arturo tester.art
-```
 
-> [!TIP] 
-> You may want to use a hashbang to don't need to call arturo for every run.
-
-> [!TIP]
-> If you want be able to test some specific tests from the CLI, you can:
-> ```art
->  import {unitt}!
->  
->  runTests (empty? arg)? 
->      -> findTests "tests"
->      -> arg
-> ```
-
-### The *tests* itself
+### Testing code
 
 A real example of tests:
 
@@ -93,122 +59,127 @@ import {unitt}!
 
 unix?: true
 
-suite "test binary appending" [
-    test "operation with integer works" [
+describe "binary appending" [
+    it "should operate integers" [
         b: to :binary 0
-        assert -> as.binary 2 = append b 1
-        assert -> as.binary 1 = b ++ 1
+        expects.be: 'equal? @[as.binary 2 append b 1]
+        expects.be: 'equal? @[as.binary 1 b ++ 1]
     ]
 
-    test.prop "operate binaries with integer returns a binary" [
+    it "should return a binary" [
         b: to :binary 0
-        assert -> binary? append b 1
-        assert -> binary? b ++ 1
+        expects.be: 'binary? @[append b 1]
+        expects.be: 'binary? @[b ++ 1]
     ]
 ]
 
-test.skip: unix? "split works for windows's paths" [
-    assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
+test.skip: unix? "split should deal with windows's paths" [
+    expects.be: 'equal? @[
+        ["." "splited" "path"]
+        split.path ".\\splited\\path"
+    ]
 ]
 
-test "split is works for unix path" [
-    assert -> ["." "splited" "path"] = split.path "./splited/path"
+test "split should deal with unix path" [
+    expects.be: 'equal? @[
+        ["." "splited" "path"] 
+        split.path "./splited/path"
+    ]
 ]
 ```
 
 This will show you:
 
 ```
-Suite: test binary appending 
+===== example.art =====
 
-    ❌ - assert that operation with integer works
-         assertion: as .binary 2 = append  1
+Suite: binary appending 
 
-    ❌ - assert that operation with integer works
-         assertion: as .binary 1 =  ++ 1
+    ❌ - assert that should operate integers
+         ❌: equal? 10 00 01
+         ❌: equal? 1 00 01
 
-    ✅ ~ assert that operate binaries with integer returns a binary
-         assertion: binary? append  1
-
-    ✅ ~ assert that operate binaries with integer returns a binary
-         assertion: binary?  ++ 1
+    ✅ - assert that should return a binary
+         ✅: binary? 00 01
+         ✅: binary? 00 01
 
 
-⏩ - assert that split works for windows's paths 
+⏩ - assert that split should deal with windows's paths
      skipped!
 
-✅ - assert that split is works for unix path
-     assertion: ["." "splited" "path"] = split .path "./splited/path"
-```
+✅ - assert that split should deal with unix path
+     ✅: equal? ["." "splited" "path"] ["." "splited" "path"]
 
-> [!NOTE]
-> Property-based tests have `~` as separator. 
 
-### The *Runner*
-
-Basically, you can run your *tests units* without a *runner*. 
-But there are some reasons why you should prefer to use a `runTests` function to run them.
-
-First, your *runner*'s output will give you important information about the current run.
-This will show you the file being runned, 
-the tests's status
-and at the end a summary of failed, skipped and passed tests:
-
-```
 ===== Statistics =====
 
-⏏️   TOTAL: 24 assertions
-✅  PASSED: 20 assertions
-⏩ SKIPPED: 4 assertions
-❌  FAILED: 4 assertions
+ ⏏️   TOTAL: 3 assertions
+✅  PASSED: 2 assertions
+⏩ SKIPPED: 1 assertions
+❌  FAILED: 1 assertions
 
 ===== ========== =====
 ```
 
-Also, the runner is able to return an error code, 
-so that is great if you're working with *Continuous Integration*.
-
 ## Documentation
 
-### *Runner*
+### *Unitt*
+- `describe: $[description :string tests :block]`:
+    Groups tests around some feature.
+- `it: $[description :string, testCase :block]`:
+    The test case itself, you need to pass a clear description to it,
+    And the logic that you're trying to assert.
+    - `.prop`: (Temporarially deprecated)
+        Indicates that a test is property-based.
+    - `.skip :logical`:
+        Skips tests for some condition. 
+        Will just skip if no condition is provided.
+- `expects: $[condition :block]`:
+    A function that is only available inside the `it`/`test` case,
+    makes an assertion given the `condition`.
+    - `.to :literal` (or `.be`)
+        Uses some function to evaluate the statement.
+        This helps to show the function name on display, 
+        instead of a `true`/`false`.
+    - `.static :logical`:
+        Shows it as static code.
+
+
+## *Compatibility*
+
+This section includes the old-syntax inspired by XUnit. 
+Kept for compatibilities with our 1st version.
+
+- `test: $[description :string, testCase :block]`:
+    The same as `it`. 
+    Not only kept for compatibility issues,
+    but great to be used when not into a `describe`/`suite` block.
+    - `.prop` (Temporarially deprecated)
+    - `.skip :logical`
+- `assert: $[condition :block]`:
+    The same as `expects`
+    - `.with`
+        The same as `.to` and `.be`
+     - `.static: :logical`
+- `suite: $[description :string tests :block]`:
+    The same as `describe`.
+
+### *Setup*
 - `runTests: $[tests [:string]]`:
     The *runner function*, this executes all `tests`,
     show statistics and return a value. 
-    - `.failFast`:
-        Fails on the first error found. 
-        This works at file scope due to our current way of running tests.
+    - `.fatal`:
+        Fails on the first error found (per file).
     - `.suppress`: 
-        Suppress `panic`, this means: 
-        this won't terminate your tests, 
-        won't return an error code
-        and won't print a `panic` message. 
+        Always return 0 as error code. 
 - `findTests: $[folder :string]`:
-    The *finder function*, this function will look for *tests* inside the relative `folder`.
+    Looks for *tests* inside `folder`.
     The default *test* pattern is "test*.art".
     - `.thatMatches :string`:
         Defines what is a test-file via a kind-of *glob* pattern.
         Use a `*` as spliter. 
         - Obs.: That is a kind-of *glob* pattern, not a real one. 
           So just use one and only one `*` to split the pre and suffix.
-
-### *Tests*
-- `test: $[description :string, testCase :block]`:
-    The test case itself, you need to pass a clear description to it,
-    And the logic that you're trying to assert.
-    - `.prop`:
-        Indicates that a test is property-based.
-    - `.skip :logical`:
-        Skips tests for some condition. 
-        If none condition is given, this will just skip the test.
-    - `.static: :block`:
-        Defines what will and what won't be evaluated.
-    - `.static: :logical`:
-        Disable runtime evaluation, and forces static display.
-- `assert: $[condition :block]`:
-    A function that is only available inside the `test` case,
-    makes an assertion given the `condition`.
-- `suite: $[description :string tests :block]`:
-    Visually groups tests together.
 
 
 > [!WARNING]
@@ -220,4 +191,6 @@ so that is great if you're working with *Continuous Integration*.
 ---
 
 > Background photo on ["At a Glance"](#at-a-glance) 
-  by [Jack Anstey](https://unsplash.com/@jack_anstey?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/aerial-photography-of-road-zS4lUqLEiNA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+by [Artem Sapegin](https://unsplash.com/@sapegin?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) 
+on [Unsplash](https://unsplash.com/photos/brown-wooden-boat-floating-on-body-of-water-XGDBdSQ70O0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+      

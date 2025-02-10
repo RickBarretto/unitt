@@ -1,3 +1,15 @@
 import ./{internal/runner}!
+import ./{internal/finder}!
 
-runTests arg
+tryOr: $[action :block alt :any][
+    (throws? [val:] ++ action)? -> alt -> val
+]
+
+files: switch empty? args\values
+    -> findTests "tests"
+    -> args\values
+
+runTests
+    .fatal: tryOr [args\fatal] false
+    .suppress: tryOr [args\suppress] false
+    files

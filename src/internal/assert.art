@@ -5,10 +5,14 @@ _repr: $[tokens][
         :pathLiteral 
         :method 
         :object
+        :symbol
     ]
     reprToken: $[token :any][
         if inline? token            ; :inline should be 
             -> return _repr token   ; recursively evaluated
+
+        if contains? [:string :literal :pathLiteral :symbolLiteral] type token 
+            -> return as.code token
 
         if throws? [value: var token]
             -> return token
@@ -23,7 +27,7 @@ _repr: $[tokens][
 ]
 
 define :assertion [
-    init: method [condition :block][
+    init: method [condition][
         \_condition: condition
         \_status: equal? @condition @[true]
         \_static: attr 'static
@@ -34,7 +38,9 @@ define :assertion [
             -> as.code \_condition  
             -> _repr \_condition
 
-        ~"assertion: |repr|"
+        switch \_status
+            -> color #green ~"✅: |repr|"
+            -> color #red   ~"❌: |repr|"
     ]
 
     logical: method [][

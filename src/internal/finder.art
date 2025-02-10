@@ -18,6 +18,8 @@ findTests: $[testPath :string][
     ;;      runTests findTests.thatMatches: "*.test.art" "tests"   
     ;; }
 
+    unless directory? testPath -> return @[]
+
     pattern: (attr 'thatMatches)?? "test*.art"
 
     ensure.that: ~".pattern: '|pattern|' must have only one wildcard '*'."
