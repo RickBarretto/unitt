@@ -28,7 +28,7 @@ suite: $[description :string tests :block][
     ;;              assert.with: 'equal? @[["." "splited" "path"] split.path ".\\splited\\path"]
     ;;          ]
     ;;      ]
-    ;;      ; Suite: Groups some tests together 
+    ;;      ; Description: Groups some tests together 
     ;;      ;
     ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
     ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
@@ -36,7 +36,7 @@ suite: $[description :string tests :block][
     ;;      ; ⏩ - assert that split is working for windows's paths
     ;;      ;      skipped!
     ;; }
-    print ["Suite:" description "\n"]
+    print ["Description: " description "\n"]
     _unittTestsIndentation: "    "
     do tests
     print ""
