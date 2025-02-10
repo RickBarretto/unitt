@@ -10,6 +10,9 @@ _repr: $[tokens][
         if inline? token            ; :inline should be 
             -> return _repr token   ; recursively evaluated
 
+        if contains? [:string :literal :pathLiteral] type token 
+            -> return as.code token
+
         if throws? [value: var token]
             -> return token
 
