@@ -1,7 +1,7 @@
 import ./{src/unitt}!
 
 
-describe "Simple append" [
+describe "simple append" [
 
     it "keeps the order" [
         expects [equal? [a b c d]     [a] ++ [b c d]]
@@ -16,7 +16,7 @@ describe "Simple append" [
     ]
 ]
 
-suite "Test :string operations" [
+suite "append `:string`s" [
 
     ; ===== ===== Property-based ===== =====
 
