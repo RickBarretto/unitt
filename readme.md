@@ -24,7 +24,7 @@
 
 <p align="center">
 <img 
-    alt="Running Unitt from terminal (old version)"
+    alt="Running Unitt from terminal (v2)"
     width="720"
     src="./docs/running unitt screenshot.png"
 />
@@ -191,4 +191,6 @@ Kept for compatibilities with our 1st version.
 ---
 
 > Background photo on ["At a Glance"](#at-a-glance) 
-  by [Jack Anstey](https://unsplash.com/@jack_anstey?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/aerial-photography-of-road-zS4lUqLEiNA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+by [Artem Sapegin](https://unsplash.com/@sapegin?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) 
+on [Unsplash](https://unsplash.com/photos/brown-wooden-boat-floating-on-body-of-water-XGDBdSQ70O0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+      
