@@ -65,12 +65,10 @@ test: $[description :string testCase :block][
     ;; options: [
     ;;      prop: :logical « defines if a test is property-based
     ;;      skip: :logical « skip test if true
-    ;;      static: :block « defines what should not be evaluated when showing
-    ;;      static: :logical « disables runtime eval, forces static display
     ;; ]
     ;;
     ;; note: {
-    ;;    * `assert` is injected, and only available inside the `test`'s block.
+    ;;    * `assert`/`expects` is injected, and only available inside the `test`'s block.
     ;; }
     ;; 
     ;; example: {
@@ -81,30 +79,31 @@ test: $[description :string testCase :block][
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
     ;;
-    ;;          assert -> (append a b) = a ++ b
-    ;;          assert -> (append b a) = b ++ a
+    ;;          assert.be: 'equal? @[as.code append a b as.code a ++ b]
+    ;;          assert.be: 'equal? @[as.code append b a as.code b ++ a]
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
-    ;;      ;      assertion: append [a b c d e f g] [h i j k l m n] = [a b c d e f g] ++ [h i j k l m n]
+    ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
     ;;      ;
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
-    ;;      ;      assertion: append [h i j k l m n] [a b c d e f g] = [h i j k l m n] ++ [a b c d e f g]
+    ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
     ;;          
     ;;      test.skip: unix? "split is working for windows's paths" [
-    ;;          assert -> ["." "splited" "path"] = split.path ".\\splited\\path"
+    ;;          assert.be: 'equal? ["." "splited" "path"] = split.path ".\\splited\\path"
     ;;      ]
     ;;      ; # running on Windows:
     ;;      ; ✅ - assert that split is working for windows's paths
-    ;;      ;      assertion: . splited path  = split path .\splited\path
+    ;;      ;      ✅: equal? ["." "splited" "path"] ["." "splited" "path"]
     ;;      ; 
     ;;      ; # running on Unix:
     ;;      ; ⏩ - assert that split is working for windows's paths 
+    ;;      ;      skipped!
     ;;      
-    ;;      test.static: [a] "`a` won't be evaluated" [
-    ;;          assert -> a = 5 
+    ;;      test "`a` won't be evaluated" [
+    ;;          assert.static -> a = 5 
     ;;      ]
     ;;      ; ✅ - assert that `a` won't be evaluated 
-    ;;      ;      assertion : a = 5
+    ;;      ;      ✅: a = 5
     ;;
     ;; }
 
