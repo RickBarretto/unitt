@@ -1,7 +1,6 @@
 #! arturo
 
-import ./{internal/runner}!
-import ./{internal/finder}!
+import {unitt}!
 
 tryOr: $[action :block alt :any][
     (throws? [val:] ++ action)? -> alt -> val
