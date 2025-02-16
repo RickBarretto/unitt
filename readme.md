@@ -47,7 +47,7 @@ Create the file `unitt` on the root of your project:
 
 import {unitt}!
 
-__tryOr: $[action :block alt :any][
+tryOr: $[action :block alt :any][
     (throws? [val:] ++ action)? -> alt -> val
 ]
 
@@ -56,8 +56,8 @@ files: switch empty? args\values
     -> args\values
 
 runTests
-    .fatal: __tryOr [args\fatal] false
-    .suppress: __tryOr [args\suppress] false
+    .fatal: tryOr [args\fatal] false
+    .suppress: tryOr [args\suppress] false
     files
 ```
 
