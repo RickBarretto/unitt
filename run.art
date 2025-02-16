@@ -1,3 +1,0 @@
-import ./{src/setup}!
-
-runTests ["test.art"]
