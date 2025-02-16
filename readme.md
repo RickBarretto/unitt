@@ -38,16 +38,37 @@
 arturo -p install unitt
 ```
 
-**Execution**
+**Setup & Execution**
+
+Create the file `unitt` on the root of your project:
+
+```art
+#! arturo
+
+import {unitt}!
+
+__tryOr: $[action :block alt :any][
+    (throws? [val:] ++ action)? -> alt -> val
+]
+
+files: switch empty? args\values
+    -> findTests "tests"
+    -> args\values
+
+runTests
+    .fatal: __tryOr [args\fatal] false
+    .suppress: __tryOr [args\suppress] false
+    files
+```
 
 ```sh
 # Runs test/test*.art by default
-unitt 
+./unitt 
 ```
 
 ```sh
 # Glob Pattern from Shell
-unitt test/*test.art
+./unitt test/*test.art
 ```
 
 ### Testing code
