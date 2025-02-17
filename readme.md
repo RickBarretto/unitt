@@ -150,8 +150,9 @@ Suite: binary appending
 - `it: $[description :string, testCase :block]`:
     The test case itself, you need to pass a clear description to it,
     And the logic that you're trying to assert.
-    - `.prop`: (Temporarially deprecated)
+    - `.prop`:
         Indicates that a test is property-based.
+        The indicator is the `~` separator on the description.
     - `.skip :logical`:
         Skips tests for some condition. 
         Will just skip if no condition is provided.
@@ -175,7 +176,7 @@ Kept for compatibilities with our 1st version.
     The same as `it`. 
     Not only kept for compatibility issues,
     but great to be used when not into a `describe`/`suite` block.
-    - `.prop` (Temporarially deprecated)
+    - `.prop`
     - `.skip :logical`
 - `assert: $[condition :block]`:
     The same as `expects`
