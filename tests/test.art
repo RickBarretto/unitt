@@ -34,6 +34,5 @@ suite "group 1" [
 
 describe "group 2" [
     it "..." []
-    should "..." []
     test "..." []
 ]
