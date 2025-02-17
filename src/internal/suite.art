@@ -42,5 +42,4 @@ suite: $[description :string tests :block][
     print ""
 ]
 
-spec: var 'suite
 describe: var 'suite
