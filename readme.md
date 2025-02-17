@@ -40,7 +40,7 @@ arturo -p install unitt
 
 **Setup & Execution**
 
-Create the file `unitt` on the root of your project:
+Create the file `test` on the root of your project:
 
 ```art
 #! arturo
@@ -63,12 +63,12 @@ runTests
 
 ```sh
 # Runs test/test*.art by default
-./unitt 
+./test
 ```
 
 ```sh
 # Glob Pattern from Shell
-./unitt test/*test.art
+./test test/*test.art
 ```
 
 ### Testing code
