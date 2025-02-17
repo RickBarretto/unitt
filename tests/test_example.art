@@ -21,7 +21,7 @@ test.skip "this skips" [
 ]
 
 
-test "this fails" [
+test.prop "this fails" [
     a: 1
     assert -> true
     assert -> equal? 4 add a 2
