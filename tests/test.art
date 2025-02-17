@@ -37,7 +37,3 @@ describe "group 2" [
     should "..." []
     test "..." []
 ]
-
-spec "group 3" [
-    test "..." []
-]
