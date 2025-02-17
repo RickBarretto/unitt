@@ -1,4 +1,3 @@
 entry:      "src/unitt"
-executable: "src/cli"
 depends:    []
 requires:   [> 0.9.84]
