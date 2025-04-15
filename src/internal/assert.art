@@ -12,14 +12,14 @@ _repr: $[tokens][
             -> return _repr token   ; recursively evaluated
 
         if contains? [:string :literal :pathLiteral :symbolLiteral] type token 
-            -> return as.code token
+            -> return express token
 
         if throws? [value: var token]
             -> return token
 
         switch in? (type var token) ignorable
             -> token
-            -> as.code value
+            -> express value
     ]
 
     tokens | map => [reprToken &] 
@@ -35,7 +35,7 @@ define :assertion [
 
     string: method [][
         repr: switch \_static
-            -> as.code \_condition  
+            -> express \_condition  
             -> _repr \_condition
 
         switch \_status

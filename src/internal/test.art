@@ -79,8 +79,8 @@ test: $[description :string testCase :block][
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
     ;;
-    ;;          assert.be: 'equal? @[as.code append a b as.code a ++ b]
-    ;;          assert.be: 'equal? @[as.code append b a as.code b ++ a]
+    ;;          assert.be: 'equal? @[express append a b express a ++ b]
+    ;;          assert.be: 'equal? @[express append b a express b ++ a]
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
     ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]

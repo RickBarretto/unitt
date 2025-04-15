@@ -21,7 +21,7 @@ suite: $[description :string tests :block][
     ;;          test.prop "appending with keyword or operator has the same behavior" [
     ;;              a: [a b c d e f g]
     ;;              b: [h i j k l m n]
-    ;;              assert.with: 'equal? @[as.code append a b as.code a ++ b]
+    ;;              assert.with: 'equal? @[express append a b express a ++ b]
     ;;          ]
     ;;          
     ;;          test.skip: unix? "split is working for windows's paths" [
