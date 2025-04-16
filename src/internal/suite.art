@@ -1,5 +1,5 @@
 
-suite: $[description :string tests :block][
+describe: $[description :string tests :block][
     ;; description: « Visually groups tests.
     ;;
     ;; arguments: [
@@ -16,7 +16,7 @@ suite: $[description :string tests :block][
     ;;      import {unitt}!
     ;;      
     ;;      unix?: true
-    ;;      suite "Groups some tests together" [
+    ;;      describe "Groups some tests together" [
     ;;
     ;;          test.prop "appending with keyword or operator has the same behavior" [
     ;;              a: [a b c d e f g]
@@ -42,4 +42,4 @@ suite: $[description :string tests :block][
     print ""
 ]
 
-describe: var 'suite
+suite: var 'describe
