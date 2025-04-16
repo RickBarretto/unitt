@@ -54,7 +54,7 @@ define :test [
 it: $[description :string testCase :block][
     ;; description: {
     ;;    Run an unit-test, printing it's result.
-    ;;    Assertions should be done with the internal function `assert :block`.
+    ;;    Assertions should be done with the internal function `expects :block`.
     ;; }
     ;; arguments: [
     ;;      description: « the test description
@@ -68,7 +68,7 @@ it: $[description :string testCase :block][
     ;; ]
     ;;
     ;; note: {
-    ;;    * `assert`/`expects` is injected, and only available inside the `it`'s block.
+    ;;    * `expects`/`assert` is injected, and only available inside the `it`'s block.
     ;; }
     ;; 
     ;; example: {
@@ -79,8 +79,8 @@ it: $[description :string testCase :block][
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
     ;;
-    ;;          assert.be: 'equal? @[express append a b express a ++ b]
-    ;;          assert.be: 'equal? @[express append b a express b ++ a]
+    ;;          expects.be: 'equal? @[express append a b express a ++ b]
+    ;;          expects.be: 'equal? @[express append b a express b ++ a]
     ;;      ]
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
     ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
@@ -89,7 +89,7 @@ it: $[description :string testCase :block][
     ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
     ;;          
     ;;      it.skip: unix? "split is working for windows's paths" [
-    ;;          assert.be: 'equal? ["." "splited" "path"] = split.path ".\\splited\\path"
+    ;;          expects.be: 'equal? ["." "splited" "path"] = split.path ".\\splited\\path"
     ;;      ]
     ;;      ; # running on Windows:
     ;;      ; ✅ - assert that split is working for windows's paths
@@ -100,7 +100,7 @@ it: $[description :string testCase :block][
     ;;      ;      skipped!
     ;;      
     ;;      it "`a` won't be evaluated" [
-    ;;          assert.static -> a = 5 
+    ;;          expects.static -> a = 5 
     ;;      ]
     ;;      ; ✅ - assert that `a` won't be evaluated 
     ;;      ;      ✅: a = 5
@@ -110,7 +110,7 @@ it: $[description :string testCase :block][
     if attr 'skip -> testCase: []
 
     __assertions: @[]
-    assert: $[condition :block][
+    expects: $[condition :block][
         __fn: @[attr 'with attr 'to attr 'be ] | filter => null?
         if not? empty? __fn
             -> condition: 
@@ -119,7 +119,7 @@ it: $[description :string testCase :block][
         '__assertions ++ to :assertion @[condition]
     ]
 
-    expects: var 'assert
+    assert: var 'expects
 
     do testCase
     _self: to :test @[description __assertions]
