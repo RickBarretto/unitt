@@ -51,7 +51,7 @@ define :test [
 
 ]
 
-test: $[description :string testCase :block][
+it: $[description :string testCase :block][
     ;; description: {
     ;;    Run an unit-test, printing it's result.
     ;;    Assertions should be done with the internal function `assert :block`.
@@ -68,14 +68,14 @@ test: $[description :string testCase :block][
     ;; ]
     ;;
     ;; note: {
-    ;;    * `assert`/`expects` is injected, and only available inside the `test`'s block.
+    ;;    * `assert`/`expects` is injected, and only available inside the `it`'s block.
     ;; }
     ;; 
     ;; example: {
     ;;      ; testAppend.art
     ;;      import {unitt}!
     ;;      
-    ;;      test.prop "appending with keyword or operator has the same behavior" [
+    ;;      it.prop "appending with keyword or operator has the same behavior" [
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
     ;;
@@ -88,7 +88,7 @@ test: $[description :string testCase :block][
     ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
     ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
     ;;          
-    ;;      test.skip: unix? "split is working for windows's paths" [
+    ;;      it.skip: unix? "split is working for windows's paths" [
     ;;          assert.be: 'equal? ["." "splited" "path"] = split.path ".\\splited\\path"
     ;;      ]
     ;;      ; # running on Windows:
@@ -99,7 +99,7 @@ test: $[description :string testCase :block][
     ;;      ; ⏩ - assert that split is working for windows's paths 
     ;;      ;      skipped!
     ;;      
-    ;;      test "`a` won't be evaluated" [
+    ;;      it "`a` won't be evaluated" [
     ;;          assert.static -> a = 5 
     ;;      ]
     ;;      ; ✅ - assert that `a` won't be evaluated 
@@ -127,4 +127,4 @@ test: $[description :string testCase :block][
     'unitt ++ _self
 ]
 
-it: var 'test
+test: var 'it
