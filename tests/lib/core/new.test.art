@@ -1,4 +1,4 @@
-import {unitt}!
+import ./{../../../src/unitt}!
 
 pairs: #[
     integer: [2 3]

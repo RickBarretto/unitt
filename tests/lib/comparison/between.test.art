@@ -1,4 +1,4 @@
-import {unitt}!
+import ./{../../../src/unitt}!
 
 numericTypes: [:integer :floating :rational]
 

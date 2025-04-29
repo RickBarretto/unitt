@@ -1,4 +1,4 @@
-import {unitt}!
+import ./{../../../src/unitt}!
 
 fileNotFound: try [throw "File not found"]
 

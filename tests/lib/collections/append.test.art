@@ -1,6 +1,5 @@
-import {unitt}!
+import ./{../../../src/unitt}!
 import relative {../../commons/functions}!
-
 
 suite "Generic testing" [
 
