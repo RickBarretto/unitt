@@ -199,8 +199,7 @@ it: $[description :string testCase :block][
     switch 'standalone = __unitt__scope [
         unitt\standalone: unitt\standalone ++ __local_spec
     ][
-        __unitt_spec\tests: __local_spec
-        unitt\specs: unitt\specs ++ __unitt_spec  
+        __unitt_spec\tests: __unitt_spec\tests ++ __local_spec
     ]
 
 ]
