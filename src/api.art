@@ -1,5 +1,5 @@
 
-unitt: store.json ~".unitt/unitt-|args\filename|.json"
+unitt: store.json ~".unitt/|args\filename|.json"
 unitt\standalone: []
 unitt\specs: []
 
