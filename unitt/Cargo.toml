@@ -1,0 +1,8 @@
+[package]
+name = "unitt"
+version = "3.0.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.37", features = ["derive", "unicode", "wrap_help"] }
+wild = "2.2.1"
