@@ -1,0 +1,27 @@
+import ./{../src/unitt}!
+
+it "I should be standalone" [
+    assert -> string? "I'm standalone"
+]
+
+it "I should be standalone #2" [
+    assert -> string? "I'm standalone"
+]
+
+describe "I'm a scope" [
+
+    it "should be into Scope #1" [
+        assert -> true
+    ]
+    
+    it "should be into Scope #1" [
+        assert -> false
+    ]
+]
+
+describe "scope #2" [
+
+    it "should be into Scope #2" [
+        assert -> true
+    ]
+]
