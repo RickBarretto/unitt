@@ -66,7 +66,8 @@ mod test {
         let file = PathBuf::from("./specs/lib/collections/append.spec.art");
         let result = result_of(arturo, file).await.unwrap();
 
-        assert!(dbg!(result).status.success());
+        let _ = dbg!(String::from_utf8(result.clone().stdout).unwrap().split("\n").collect::<Vec<&str>>());
+        assert!(result.status.success());
     }
 
     #[tokio::test]
