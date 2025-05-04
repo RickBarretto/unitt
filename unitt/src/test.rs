@@ -59,7 +59,8 @@ mod test {
     use super::{*};
 
     #[tokio::test]
-    async fn test_execute_arturo() {
+    #[tokio::test]
+    async fn should_execute_arturo() {
         let _ = env::set_current_dir("..").unwrap();
 
         let arturo = PathBuf::from("./bin/arturo.exe");
@@ -71,7 +72,7 @@ mod test {
     }
 
     #[tokio::test]
-    async fn test_json_read() {
+    async fn should_deserialize_json() {
 
         let example_file = r#"
         {
