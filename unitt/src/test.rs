@@ -63,7 +63,7 @@ mod test {
         let _ = env::set_current_dir("..").unwrap();
 
         let arturo = PathBuf::from("./bin/arturo.exe");
-        let file = PathBuf::from("./specs/lib/collections/append.spec.art");
+        let file = PathBuf::from("specs/lib/collections/append.spec.art");
         let result = result_of(arturo, file).await.unwrap();
 
         let _ = dbg!(String::from_utf8(result.clone().stdout).unwrap().split("\n").collect::<Vec<&str>>());
