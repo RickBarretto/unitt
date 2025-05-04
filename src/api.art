@@ -1,8 +1,14 @@
 
 unitt: store.json ~".unitt/unitt-|args\filename|.json"
-unitt\suites: []
-unitt\assertions: []
-__unitt__scope: "suite-none"
+unitt\standalone: []
+unitt\specs: []
+
+__unitt__scope: 'standalone
+__unitt_spec: #[
+    id: ""
+    description: ""
+    tests: []
+]
 
 
 describe: $[description :string tests :block][
@@ -43,15 +49,26 @@ describe: $[description :string tests :block][
     ;;      ;      skipped!
     ;; }
 
-    __unitt__scope: unique.id "suite-"
-
-    unitt\suites:  unitt\suites ++ #[
-        id: __unitt__scope
+    ; Sets Global variables to current Spec context
+    __unitt__scope: 'specs
+    __unitt_spec: #[
+        id: unique.id "spec-"
         description: description
+        tests: []
     ]
 
     do tests
-    __unitt__scope: "suite-none"
+
+    ; Push current Spec to unitt\specs
+    unitt\specs: unitt\specs ++ __unitt_spec
+
+    ; Resets global variables
+    __unitt__scope: 'standalone
+    __unitt_spec: #[
+        id: ""
+        description: ""
+        assertions: []
+    ]
 ]
 
 suite: var 'describe
@@ -169,13 +186,22 @@ it: $[description :string testCase :block][
 
     do testCase
 
-    __assertionsStatus: map __assertions '__assertion [#[
-        reference: __unitt__scope
-        expression: _repr __assertion
-        result: equal? @__assertion @[true]
-    ]]
+    __assertionsStatus: map __assertions '__assertion [
+         @[_repr __assertion, equal? @__assertion @[true]]
+    ]
 
-    unitt\assertions: unitt\assertions ++ __assertionsStatus
+    __local_spec: #[
+        id: unique.id "test-"
+        description: description
+        assertions: __assertionsStatus
+    ]
+
+    switch 'standalone = __unitt__scope [
+        unitt\standalone: unitt\standalone ++ __local_spec
+    ][
+        __unitt_spec\tests: __local_spec
+        unitt\specs: unitt\specs ++ __unitt_spec  
+    ]
 
 ]
 
