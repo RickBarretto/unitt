@@ -55,11 +55,45 @@ async fn read_result(result: Json) -> Module {
 #[cfg(test)]
 mod test {
     use std::env;
+    use std::fmt::format;
+    use std::fs;
+    use std::vec;
 
     use tokio;
     use super::{*};
 
     #[tokio::test]
+    async fn should_read_from_generated_file() {
+        let _ = env::set_current_dir("..").unwrap();
+
+        let arturo = PathBuf::from("./bin/arturo.exe");
+        let file = PathBuf::from("specs/simple.spec.art");
+        
+        let _ = result_of(arturo, file.clone()).await.unwrap();
+        let json_file = format!("{}.json", file.to_str().unwrap());
+        let result_file = PathBuf::from(".unitt").join(json_file);
+        
+        let json = fs::read_to_string(dbg!(result_file)).unwrap();
+
+        let result = read_result(json).await;
+        
+        assert_eq!(result.standalone[0].description, "I should be standalone".to_string());
+        assert_eq!(result.standalone[0].assertions, vec![("string? \"I\\'m standalone\"".to_string(), true)]);
+        
+        assert_eq!(result.standalone[1].description, "I should be standalone #2".to_string());
+        assert_eq!(result.standalone[1].assertions, vec![("string? \"I\\'m standalone\"".to_string(), true)]);
+        
+        assert_eq!(result.specs[0].description, "I'm a scope".to_string());
+        assert_eq!(result.specs[0].tests[0].description, "should be into Scope #1".to_string());
+        assert_eq!(result.specs[0].tests[0].assertions, vec![("true".to_string(), true)]);
+        assert_eq!(result.specs[0].tests[1].description, "should be into Scope #1".to_string());
+        assert_eq!(result.specs[0].tests[1].assertions, vec![("false".to_string(), false)]);
+        
+        assert_eq!(result.specs[1].description, "scope #2".to_string());
+        assert_eq!(result.specs[1].tests[0].description, "should be into Scope #2".to_string());
+        assert_eq!(result.specs[1].tests[0].assertions, vec![("true".to_string(), true)]);
+    }
+
     #[tokio::test]
     async fn should_execute_arturo() {
         let _ = env::set_current_dir("..").unwrap();
