@@ -23,6 +23,7 @@ struct Statistics {
 #[derive(serde::Deserialize)]
 struct Spec {
     id: String,
+    description: String,
     tests: Vec<Test>
 }
 
@@ -120,6 +121,7 @@ mod test {
             specs: vec![
                 Spec {
                     id: "spec-1".into(),
+                    description: "Spec #1".into(),
                     tests: vec![
                         Test {
                             id: "test-1".into(),
