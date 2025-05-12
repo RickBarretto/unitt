@@ -50,7 +50,6 @@ pub async fn read_result(result: Json) -> Module {
 #[cfg(test)]
 mod test {
     use std::env;
-    use std::fmt::format;
     use std::fs;
     use std::vec;
 

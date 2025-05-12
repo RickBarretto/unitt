@@ -1,8 +1,4 @@
-use std::{default, fs};
-
-
 use serde::Deserialize;
-
 
 #[derive(Deserialize)]
 struct Proxy {
