@@ -1,30 +1,44 @@
-use std::fs;
+use std::{default, fs};
 
 
 use serde::Deserialize;
 
+
 #[derive(Deserialize)]
-pub struct UnittConfig {
+struct Proxy {
+    pub cache: Option<String>,
+    pub tests: Option<String>,
+    pub target: Option<String>,
+} 
+
+
+#[derive(PartialEq, Debug)]
+pub struct Config {
     pub cache: String,
     pub tests: String,
     pub target: String,
 }
 
+impl Config {
+    pub fn from_toml(content: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let proxy: Proxy = toml::from_str(content)?;
+        let default = Config::default();
 
-impl Default for UnittConfig {
-    fn default() -> Self {
-        Self {
-            cache: ".unitt".into(), 
-            tests: "specs".into(), 
-            target: "*.spec.art".into() 
-        }
+        Ok(Config {
+            cache: proxy.cache.unwrap_or(default.cache),
+            tests: proxy.tests.unwrap_or(default.tests),
+            target: proxy.target.unwrap_or(default.target),
+        })
     }
 }
 
-impl UnittConfig {
-    pub fn from_toml_str(content: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let config: UnittConfig = toml::from_str(content)?;
-        Ok(config)
+impl Default for Config {
+    fn default() -> Self {
+        Self { 
+            cache: ".unitt".into(),
+            tests: "specs".into(),
+            target: "*.spec.art".into(),
+        }
     }
 }
 
@@ -34,7 +48,7 @@ mod tests {
 
     #[test]
     fn test_default_config() {
-        let config = UnittConfig::default();
+        let config = Config::default();
         assert_eq!(config.cache, ".unitt");
         assert_eq!(config.tests, "specs");
         assert_eq!(config.target, "*.spec.art");
@@ -48,7 +62,7 @@ mod tests {
             target = "custom_target"
         "#;
 
-        let config: UnittConfig = UnittConfig::from_toml_str(toml_content).unwrap();
+        let config: Config = Config::from_toml(toml_content).unwrap();
         assert_eq!(config.cache, "custom_cache");
         assert_eq!(config.tests, "custom_tests");
         assert_eq!(config.target, "custom_target");
@@ -57,10 +71,10 @@ mod tests {
     #[test]
     fn test_from_toml_str_invalid() {
         let toml_content = r#"
-            invalid_field = "value"
+            invalid_field; = "value"
         "#;
 
-        let result = UnittConfig::from_toml_str(toml_content);
+        let result = Config::from_toml(toml_content);
         assert!(result.is_err());
     }
 
@@ -68,8 +82,8 @@ mod tests {
     fn test_from_toml_str_empty() {
         let toml_content = "";
 
-        let result = UnittConfig::from_toml_str(toml_content);
-        assert!(result.is_err());
+        let result = Config::from_toml(toml_content).unwrap();
+        assert_eq!(result, Config::default());
     }
 }
 
