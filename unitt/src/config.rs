@@ -30,6 +30,22 @@ impl Config {
             target: proxy.target.unwrap_or(default.target),
         })
     }
+
+    pub fn with_cache(mut self, cache: &str) -> Self {
+        self.cache = cache.into();
+        self
+    }
+
+    pub fn with_tests(mut self, tests: &str) -> Self {
+        self.tests = tests.into();
+        self
+    }
+
+    pub fn with_target(mut self, target: &str) -> Self {
+        self.target = target.into();
+        self
+    }
+
 }
 
 impl Default for Config {
@@ -85,6 +101,42 @@ mod tests {
         let result = Config::from_toml(toml_content).unwrap();
         assert_eq!(result, Config::default());
     }
+
+    #[test]
+    fn test_with_cache() {
+        let config = Config::default().with_cache("new_cache");
+        assert_eq!(config.cache, "new_cache");
+        assert_eq!(config.tests, "specs");
+        assert_eq!(config.target, "*.spec.art");
+    }
+
+    #[test]
+    fn test_with_tests() {
+        let config = Config::default().with_tests("new_tests");
+        assert_eq!(config.cache, ".unitt");
+        assert_eq!(config.tests, "new_tests");
+        assert_eq!(config.target, "*.spec.art");
+    }
+
+    #[test]
+    fn test_with_target() {
+        let config = Config::default().with_target("new_target");
+        assert_eq!(config.cache, ".unitt");
+        assert_eq!(config.tests, "specs");
+        assert_eq!(config.target, "new_target");
+    }
+
+    #[test]
+    fn test_with_methods_combined() {
+        let config = Config::default()
+            .with_cache("combined_cache")
+            .with_tests("combined_tests")
+            .with_target("combined_target");
+        assert_eq!(config.cache, "combined_cache");
+        assert_eq!(config.tests, "combined_tests");
+        assert_eq!(config.target, "combined_target");
+    }
+
 }
 
 
