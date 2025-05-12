@@ -7,30 +7,30 @@ use tokio::process::Command;
 
 #[derive(Debug, PartialEq)]
 #[derive(serde::Deserialize)]
-struct Module {
-    standalone: Vec<Test>,
-    specs: Vec<Spec>
+pub struct Module {
+    pub standalone: Vec<Test>,
+    pub specs: Vec<Spec>
 }
 
 #[derive(Debug, PartialEq)]
 #[derive(serde::Deserialize)]
-struct Spec {
-    id: String,
-    description: String,
-    tests: Vec<Test>
+pub struct Spec {
+    pub id: String,
+    pub description: String,
+    pub tests: Vec<Test>
 }
 
 #[derive(Debug, PartialEq)]
 #[derive(serde::Deserialize)]
-struct Test {
-    id: String,
-    description: String,
-    assertions: Vec<(String, bool)>
+pub struct Test {
+    pub id: String,
+    pub description: String,
+    pub assertions: Vec<(String, bool)>
 }
 
 type Json = String;
 
-async fn result_of(arturo: PathBuf, test_file: PathBuf) -> Result<Output, std::io::Error> {
+pub async fn result_of(arturo: PathBuf, test_file: PathBuf) -> Result<Output, std::io::Error> {
     let program = arturo.to_str().unwrap();
     let file = test_file.to_str().unwrap();
     
@@ -40,7 +40,7 @@ async fn result_of(arturo: PathBuf, test_file: PathBuf) -> Result<Output, std::i
         .output().await
 }
 
-async fn read_result(result: Json) -> Module {
+pub async fn read_result(result: Json) -> Module {
     serde_json::from_str(&result).expect("Have right format.")
 }
 
