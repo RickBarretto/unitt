@@ -42,41 +42,20 @@ impl Statistics {
 }
 #[cfg(test)]
 mod tests {
+    use std::default::Default;
+
     use super::*;
 
     #[tokio::test]
     async fn test_statistics_from_with_standalone_tests() {
 
         let standalone = vec![
-            Test {
-                id: "standalone-1".into(),
-                description: "Standalone Test #1".into(),
-                assertions: vec![
-                    ("char? 15".into(), false),
-                ]
-            },
-            Test {
-                id: "standalone-2".into(),
-                description: "Standalone Test #1".into(),
-                assertions: vec![
-                    ("char? 15".into(), true),
-                ]
-            },
-            Test {
-                id: "standalone-3".into(),
-                description: "Standalone Test #1".into(),
-                assertions: vec![
-                    ("char? 15".into(), true),
-                ]
-            },
+            Test { assertions: vec![("".into(), false)], ..Default::default() },
+            Test { assertions: vec![("".into(), true)], ..Default::default() },
+            Test { assertions: vec![("".into(), true)], ..Default::default() },
         ];
 
-        let expected = Module {
-            standalone,
-            specs: vec![]
-        };
-
-        let stats = Statistics::from(expected);
+        let stats = Statistics::from(Module { standalone, specs: vec![]});
 
         assert_eq!(stats.passed, 2);
         assert_eq!(stats.failed, 1);
@@ -87,45 +66,18 @@ mod tests {
     async fn test_statistics_from_with_specs() {
         let specs = vec![
             Spec {
-                id: "spec-1".into(),
-                description: "Spec #1".into(),
+                id: "".into(),
+                description: "".into(),
                 tests: vec![
-                    Test {
-                        id: "test-1".into(),
-                        description: "Test #1".into(),
-                        assertions: vec![
-                            ("string? \"Arturo\"".into(), true),
-                            ("char? 15".into(), false),
-                        ]
-                    }, 
-                    Test {
-                        id: "test-2".into(),
-                        description: "Test #2".into(),
-                        assertions: vec![
-                            ("char? 'A'".into(), true),
-                        ]
-                    }
+                    Test { assertions: vec![("".into(), true), ("".into(), false)], ..Default::default()}, 
+                    Test { assertions: vec![("".into(), true)], ..Default::default() }
                 ]
             },
             Spec {
-                id: "spec-2".into(),
-                description: "Spec #2".into(),
+                id: "".into(), description: "".into(),
                 tests: vec![
-                    Test {
-                        id: "test-3".into(),
-                        description: "Test #1".into(),
-                        assertions: vec![
-                            ("string? \"Arturo\"".into(), true),
-                            ("char? 15".into(), false),
-                        ]
-                    }, 
-                    Test {
-                        id: "test-4".into(),
-                        description: "Test #2".into(),
-                        assertions: vec![
-                            ("char? 'A'".into(), true),
-                        ]
-                    }
+                    Test { assertions: vec![("".into(), true), ("".into(), false)], ..Default::default() }, 
+                    Test { assertions: vec![("".into(), true)], ..Default::default() }
                 ]
             }
         ];
@@ -145,17 +97,13 @@ mod tests {
     #[tokio::test]
     async fn test_statistics_from_with_mixed_data() {
         let standalone = vec![
-            Test {assertions:vec![("assert1".to_string(),true)], id: "".into(), description: "".into() },
-            Test {assertions:vec![("assert2".to_string(),false)], id: "".into(), description: "".into() },
+            Test {assertions:vec![("".into(),true)], ..Default::default() },
+            Test {assertions:vec![("".into(),false)], ..Default::default() },
         ];
-        let specs = vec![Spec {tests:vec![
-            Test{assertions:vec![
-                ("assert3".to_string(),true),
-                ("assert4".to_string(),false)], 
-                id: "".into(), description: "".into() }
-                ], 
-            id: "".into(), description: "".into() }
-        ];
+        let specs = vec![Spec {
+            tests: vec![Test{ assertions:vec![("".into(), true), ("".into(), false)], ..Default::default() }], 
+            ..Default::default()
+        }];
 
         let module = Module {
             standalone,
