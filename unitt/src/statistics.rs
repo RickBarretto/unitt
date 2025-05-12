@@ -46,13 +46,21 @@ mod tests {
 
     use super::*;
 
+    fn truly() -> (String, bool) {
+        (String::from(""), true)
+    }
+    
+    fn falsy() -> (String, bool) {
+        (String::from(""), false)
+    }
+
     #[tokio::test]
     async fn test_statistics_from_with_standalone_tests() {
 
         let standalone = vec![
-            Test { assertions: vec![("".into(), false)], ..Default::default() },
-            Test { assertions: vec![("".into(), true)], ..Default::default() },
-            Test { assertions: vec![("".into(), true)], ..Default::default() },
+            Test { assertions: vec![falsy()], ..Default::default() },
+            Test { assertions: vec![truly()], ..Default::default() },
+            Test { assertions: vec![truly()], ..Default::default() },
         ];
 
         let stats = Statistics::from(Module { standalone, specs: vec![]});
@@ -69,15 +77,15 @@ mod tests {
                 id: "".into(),
                 description: "".into(),
                 tests: vec![
-                    Test { assertions: vec![("".into(), true), ("".into(), false)], ..Default::default()}, 
-                    Test { assertions: vec![("".into(), true)], ..Default::default() }
+                    Test { assertions: vec![truly(), falsy()], ..Default::default()}, 
+                    Test { assertions: vec![truly()], ..Default::default() }
                 ]
             },
             Spec {
                 id: "".into(), description: "".into(),
                 tests: vec![
-                    Test { assertions: vec![("".into(), true), ("".into(), false)], ..Default::default() }, 
-                    Test { assertions: vec![("".into(), true)], ..Default::default() }
+                    Test { assertions: vec![truly(), falsy()], ..Default::default() }, 
+                    Test { assertions: vec![truly()], ..Default::default() }
                 ]
             }
         ];
@@ -97,11 +105,11 @@ mod tests {
     #[tokio::test]
     async fn test_statistics_from_with_mixed_data() {
         let standalone = vec![
-            Test {assertions:vec![("".into(),true)], ..Default::default() },
-            Test {assertions:vec![("".into(),false)], ..Default::default() },
+            Test {assertions:vec![truly()], ..Default::default() },
+            Test {assertions:vec![falsy()], ..Default::default() },
         ];
         let specs = vec![Spec {
-            tests: vec![Test{ assertions:vec![("".into(), true), ("".into(), false)], ..Default::default() }], 
+            tests: vec![Test{ assertions:vec![truly(), falsy()], ..Default::default() }], 
             ..Default::default()
         }];
 
