@@ -14,6 +14,7 @@ pub struct Module {
 
 #[derive(Debug, PartialEq)]
 #[derive(serde::Deserialize)]
+#[derive(Default)]
 pub struct Spec {
     pub id: String,
     pub description: String,
@@ -22,6 +23,7 @@ pub struct Spec {
 
 #[derive(Debug, PartialEq)]
 #[derive(serde::Deserialize)]
+#[derive(Default)]
 pub struct Test {
     pub id: String,
     pub description: String,
