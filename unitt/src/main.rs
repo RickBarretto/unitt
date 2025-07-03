@@ -10,12 +10,22 @@ use glob::glob;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let _args = cli::Arguments::parse();
+    let args = cli::Arguments::parse();
 
     let _ = env::set_current_dir("..")?;
 
     // Load config from file if exists, otherwise use default
-    let config = Config::from_toml(fs::read_to_string("./unitt.toml")?.as_str())?;
+    let mut config = Config::from_toml(fs::read_to_string("./unitt.toml")?.as_str())?;
+
+    if let Some(tests) = args.tests.as_ref() {
+        config = config.with_tests(tests);
+    }
+    if let Some(cache) = args.cache.as_ref() {
+        config = config.with_cache(cache);
+    }
+    if let Some(target) = args.target.as_ref() {
+        config = config.with_target(target);
+    }
 
     // Use glob to find all matching test files
     let pattern = format!("{}/{}", config.tests, config.target);
