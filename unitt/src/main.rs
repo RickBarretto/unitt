@@ -7,6 +7,7 @@ use unitt::test::{result_of, read_result};
 use unitt::statistics::Statistics;
 use unitt::config::Config;
 use glob::glob;
+use tokio::task::JoinSet;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -34,13 +35,34 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Use glob to find all matching test files
     let pattern = format!("{}/{}", config.tests, config.target);
 
+    // Collect all test files first
+    let mut test_files = Vec::new();
     for entry in glob(&pattern)? {
         let file = entry?;
-        let arturo = PathBuf::from("./bin/arturo.exe");
+        test_files.push(file);
+    }
 
-        // Run Arturo and generate the result file
-        let result = result_of(arturo.clone(), file.clone()).await?;
-        if !result.status.success() {
+    let arturo = PathBuf::from("./bin/arturo.exe");
+
+    // Run Arturo on all test files concurrently using tokio
+    let mut join_set = JoinSet::new();
+
+    for file in &test_files {
+        let arturo = arturo.clone();
+        let file = file.clone();
+        join_set.spawn(async move {
+            let result = result_of(arturo, file.clone()).await;
+            (file, result)
+        });
+    }
+
+    while let Some(res) = join_set.join_next().await {
+        let (file, result) = res?;
+        if let Err(e) = result {
+            eprintln!("Arturo execution failed for {}: {}", file.display(), e);
+            continue;
+        }
+        if !result.unwrap().status.success() {
             eprintln!("Arturo execution failed for {}", file.display());
             continue;
         }
