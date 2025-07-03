@@ -33,6 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Use glob to find all matching test files
     let pattern = format!("{}/{}", config.tests, config.target);
+
     for entry in glob(&pattern)? {
         let file = entry?;
         let arturo = PathBuf::from("./bin/arturo.exe");
@@ -43,6 +44,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             eprintln!("Arturo execution failed for {}", file.display());
             continue;
         }
+    }
+
+    for entry in glob(&pattern)? {
+        let file = entry?;
 
         // Read the generated JSON result file
         let json_file = format!("{}.json", file.to_str().unwrap());
