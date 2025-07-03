@@ -27,6 +27,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         config = config.with_target(target);
     }
 
+    // Global statistics
+    let mut total_stats = Statistics { passed: 0, failed: 0, skipped: 0 };
+    let mut file_count = 0u64;
+
     // Use glob to find all matching test files
     let pattern = format!("{}/{}", config.tests, config.target);
     for entry in glob(&pattern)? {
@@ -54,7 +58,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             stats.failed, 
             stats.skipped
         );
+        total_stats.passed += stats.passed;
+        total_stats.failed += stats.failed;
+        total_stats.skipped += stats.skipped;
+        file_count += 1;
     }
+
+    // Print global statistics
+    println!("\nSummary: Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
+        file_count, total_stats.passed, total_stats.failed, total_stats.skipped);
 
     Ok(())
 }
