@@ -29,7 +29,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Calculate and print statistics
     let stats = Statistics::from(module);
-    println!("Passed: {} | Failed: {} | Skipped: {}", stats.passed, stats.failed, stats.skipped);
+    println!("{} >> Passed: {} | Failed: {} | Skipped: {}", 
+        file.to_str().unwrap(), 
+        stats.passed, 
+        stats.failed, 
+        stats.skipped
+    );
 
     Ok(())
 }
