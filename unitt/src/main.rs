@@ -50,9 +50,56 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let json = fs::read_to_string(&result_file)?;
         let module = read_result(json).await;
 
+        // Display detailed tests results
+
+        println!("\n===== {} =====\n", file.file_name().unwrap().to_string_lossy());
+        for test in &module.standalone {
+            let all_passed = test.assertions.iter().all(|(_, r)| *r);
+            let all_failed = test.assertions.iter().all(|(_, r)| !*r);
+            let status = if all_passed {
+                "✅"
+            } else if all_failed {
+                "❌"
+            } else {
+                "❌"
+            };
+            println!("    {} - {}", status, test.description);
+            for (assertion, result) in &test.assertions {
+                let icon = if *result {"✅"} else {"❌"};
+                println!("         {}: {}", icon, assertion);
+            }
+        }
+
+        for spec in &module.specs {
+            println!("\nSuite: {} \n", spec.description);
+            for test in &spec.tests {
+                let all_passed = test.assertions.iter().all(|(_, r)| *r);
+                let all_failed = test.assertions.iter().all(|(_, r)| !*r);
+                let skipped = test.assertions.is_empty();
+                let status = if skipped {
+                    "⏩"
+                } else if all_passed {
+                    "✅"
+                } else if all_failed {
+                    "❌"
+                } else {
+                    "❌"
+                };
+                println!("    {} - {}", status, test.description);
+                if skipped {
+                    println!("         skipped!");
+                } else {
+                    for (assertion, result) in &test.assertions {
+                        let icon = if *result {"✅"} else {"❌"};
+                        println!("         {}: {}", icon, assertion);
+                    }
+                }
+            }
+        }
+
         // Calculate and print statistics
         let stats = Statistics::from(module);
-        println!("{} >> Passed: {} | Failed: {} | Skipped: {}", 
+        println!("\n\n{} >> Passed: {} | Failed: {} | Skipped: {}", 
             file.to_str().unwrap(), 
             stats.passed, 
             stats.failed, 
