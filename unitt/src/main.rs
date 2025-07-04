@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _ = env::set_current_dir("..")?;
 
     let args = cli::Arguments::parse();
-    let config: Config = actual_config(args)?;
+    let config: Config = cli::actual_config(args)?;
     let pattern = format!("{}/{}", config.tests, config.target);
 
     let arturo = PathBuf::from("./bin/arturo.exe");
@@ -57,16 +57,6 @@ async fn collect_tests(pattern: &str, arturo: &PathBuf) {
             continue;
         }
     }
-}
-
-fn actual_config(args: cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
-    let toml = fs::read_to_string("./unitt.toml")?;
-    let config = Config::from_toml(&toml)?;
-    Ok(Config {
-        tests: args.tests.clone().unwrap_or(config.tests),
-        cache: args.cache.clone().unwrap_or(config.cache),
-        target: args.target.clone().unwrap_or(config.target),
-    })
 }
 
 fn print_test_result(test: &test::Test) {
