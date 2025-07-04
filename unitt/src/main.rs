@@ -22,10 +22,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     runner::reset_cache(config.cache.clone());
     runner::generate_tests(&pattern, &arturo).await;
 
-    let tests = collector::load_tests(&config);
+    let tests: Vec<collector::LoadedTest> = 
+        collector::load_tests(&config).collect();
 
     println!("\nFinal Summary:");
-    println!("{}", display::display_tests(tests));
+    display::display_tests(&tests);
+    println!("{}", display::summary_of(&tests));
 
     Ok(())
 }

@@ -42,12 +42,7 @@ pub fn print_test_result(test: &test::Test) {
 }
 
 
-pub fn display_tests<'a, I>(loaded_tests: I) -> Summary
-where
-    I: IntoIterator<Item = LoadedTest>,
-{
-    let mut total_stats = Statistics { passed: 0, failed: 0, skipped: 0 };
-    let mut file_count = 0u64;
+pub fn display_tests(loaded_tests: &[LoadedTest]) {
     for LoadedTest {filename, module} in loaded_tests {
         println!("\n===== {} =====\n", filename);
         
@@ -69,14 +64,18 @@ where
             stats.failed, 
             stats.skipped
         );
-
-        total_stats.passed += stats.passed;
-        total_stats.failed += stats.failed;
-        total_stats.skipped += stats.skipped;
-        file_count += 1;
-
     }
+}
 
+pub fn summary_of(loaded_tests: &[LoadedTest]) -> Summary {
+    let (total_stats, file_count) = loaded_tests
+        .iter() // changed from into_iter() to iter()
+        .map(|LoadedTest { module, .. }| Statistics::from(module))
+        .fold((Statistics { passed: 0, failed: 0, skipped: 0 }, 0u64), |(mut acc, count), stats| {
+            acc.passed += stats.passed;
+            acc.failed += stats.failed;
+            acc.skipped += stats.skipped;
+            (acc, count + 1)
+        });
     Summary { status: total_stats, file_count }
-
 }

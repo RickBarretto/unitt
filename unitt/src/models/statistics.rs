@@ -8,7 +8,7 @@ pub struct Statistics {
 }
 
 impl Statistics {
-    pub fn from(module: test::Module) -> Self {
+    pub fn from(module: &test::Module) -> Self {
         let all_specs = module.specs.iter()
                 .flat_map(|spec| spec.tests.iter())
                 .flat_map(|test| &test.assertions);
@@ -49,7 +49,7 @@ mod tests {
             Test { assertions: vec![truly()], ..Default::default() },
         ];
 
-        let stats = Statistics::from(Module { standalone, specs: vec![]});
+        let stats = Statistics::from(&Module { standalone, specs: vec![]});
 
         assert_eq!(stats.passed, 2);
         assert_eq!(stats.failed, 1);
@@ -81,7 +81,7 @@ mod tests {
             specs
         };
 
-        let stats = Statistics::from(expected);
+        let stats = Statistics::from(&expected);
 
         assert_eq!(stats.passed, 4);
         assert_eq!(stats.failed, 2);
@@ -104,7 +104,7 @@ mod tests {
             specs,
         };
 
-        let stats = Statistics::from(module);
+        let stats = Statistics::from(&module);
 
         assert_eq!(stats.passed, 2);
         assert_eq!(stats.failed, 2);
