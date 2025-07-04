@@ -151,11 +151,12 @@ struct ModuleStreamItem {
 fn all_modules(pattern: &str, config: &Config) -> impl Iterator<Item = ModuleStreamItem> {
     let files: Vec<_> = glob(pattern).unwrap().filter_map(Result::ok).collect();
     let cache = config.cache.clone();
+
     files.into_iter().map(move |file| {
-        let json_file = format!("{}.json", file.to_str().unwrap());
-        let result_file = PathBuf::from(&cache).join(json_file);
+        let result_file = PathBuf::from(&cache).join(format!("{}.json", file.to_string_lossy()));
         let json = fs::read_to_string(&result_file).unwrap_or_default();
         let module = test::Module::from_json(&json);
+
         ModuleStreamItem {
             filename: file.file_name().unwrap().to_string_lossy().into(),
             module,
