@@ -1,9 +1,14 @@
+use std::fs;
 use std::path::PathBuf;
 
 use glob::glob;
 use tokio::task::JoinSet;
 
 use crate::models::test::run_test_file;
+
+pub fn remove_cache(cache: String) {
+    let _ = fs::remove_dir_all(cache);
+}
 
 pub async fn collect_tests(pattern: &str, arturo: &PathBuf) {
     let test_files: Vec<_> = glob(pattern)
