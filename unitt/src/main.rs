@@ -16,11 +16,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let args = cli::Arguments::parse();
     let config: Config = cli::actual_config(args)?;
-    let pattern = format!("{}/{}", config.tests, config.target);
 
     let arturo = PathBuf::from("./bin/arturo.exe");
     runner::reset_cache(config.cache.clone());
-    runner::generate_tests(&pattern, &arturo).await;
+    runner::generate_tests(&config, &arturo).await;
 
     let tests: Vec<collector::LoadedTest> = 
         collector::load_tests(&config).collect();

@@ -4,14 +4,16 @@ use std::path::PathBuf;
 use glob::glob;
 use tokio::task::JoinSet;
 
+use crate::models::config::Config;
 use crate::models::test::run_test_file;
 
 pub fn reset_cache(cache: String) {
     let _ = fs::remove_dir_all(cache);
 }
 
-pub async fn generate_tests(pattern: &str, arturo: &PathBuf) {
-    let test_files: Vec<_> = glob(pattern)
+pub async fn generate_tests(config: &Config, arturo: &PathBuf) {
+    let pattern = format!("{}/{}", config.tests, config.target);
+    let test_files: Vec<_> = glob(&pattern)
         .expect("Invalid glob pattern")
         .filter_map(Result::ok)
         .collect();
