@@ -74,6 +74,31 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+fn print_test_result(test: &test::Test) {
+    let all_passed = test.assertions.iter().all(|(_, r)| *r);
+    let all_failed = test.assertions.iter().all(|(_, r)| !*r);
+    let skipped = test.assertions.is_empty();
+
+    let status = match (skipped, all_passed, all_failed) {
+        (true, _, _) => "⏩",
+        (false, true, _) => "✅",
+        _ => "❌",
+    };
+
+    println!("    {} - {}", status, test.description);
+
+    if skipped {
+        println!("         skipped!");
+        return;
+    }
+
+    for (assertion, result) in &test.assertions {
+        let icon = if *result {"✅"} else {"❌"};
+        println!("         {}: {}", icon, assertion);
+    }
+
+}
+
 fn display_tests(config: &Config) -> Summary {
     let mut total_stats = Statistics { passed: 0, failed: 0, skipped: 0 };
     let mut file_count = 0u64;
@@ -81,45 +106,12 @@ fn display_tests(config: &Config) -> Summary {
 
         println!("\n===== {} =====\n", filename);
         for test in &module.standalone {
-            let all_passed = test.assertions.iter().all(|(_, r)| *r);
-            let all_failed = test.assertions.iter().all(|(_, r)| !*r);
-            let status = if all_passed {
-                "✅"
-            } else if all_failed {
-                "❌"
-            } else {
-                "❌"
-            };
-            println!("    {} - {}", status, test.description);
-            for (assertion, result) in &test.assertions {
-                let icon = if *result {"✅"} else {"❌"};
-                println!("         {}: {}", icon, assertion);
-            }
+            print_test_result(test);
         }
         for spec in &module.specs {
             println!("\nSuite: {} \n", spec.description);
             for test in &spec.tests {
-                let all_passed = test.assertions.iter().all(|(_, r)| *r);
-                let all_failed = test.assertions.iter().all(|(_, r)| !*r);
-                let skipped = test.assertions.is_empty();
-                let status = if skipped {
-                    "⏩"
-                } else if all_passed {
-                    "✅"
-                } else if all_failed {
-                    "❌"
-                } else {
-                    "❌"
-                };
-                println!("    {} - {}", status, test.description);
-                if skipped {
-                    println!("         skipped!");
-                } else {
-                    for (assertion, result) in &test.assertions {
-                        let icon = if *result {"✅"} else {"❌"};
-                        println!("         {}: {}", icon, assertion);
-                    }
-                }
+                print_test_result(test);
             }
         }
 
