@@ -27,13 +27,11 @@ pub async fn generate_tests(pattern: &str, arturo: &PathBuf) {
 
     while let Some(res) = join_set.join_next().await {
         let (file, result) = res.expect("JoinSet error");
-        if let Err(e) = result {
-            eprintln!("Arturo execution failed for {}: {}", file.display(), e);
-            continue;
+        if let Err(err) = result {
+            panic!("Arturo execution failed for {}: {}", file.display(), err);
         }
         if !result.unwrap().status.success() {
-            eprintln!("Arturo execution failed for {}", file.display());
-            continue;
+            panic!("Arturo execution failed for {}", file.display());
         }
     }
 }
