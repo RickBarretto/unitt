@@ -19,10 +19,10 @@ pub struct Arguments {
     #[arg(long)]
     pub fail_fast: bool,
     #[arg(long)]
-    pub supress: bool,
+    pub suppress: bool,
 }
 
-pub fn actual_config(args: cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
+pub fn actual_config(args: &cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
     let toml = fs::read_to_string("./unitt.toml")?;
     let config = Config::from_toml(&toml)?;
     Ok(Config {

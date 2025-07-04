@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _ = env::set_current_dir("..")?;
 
     let args = cli::Arguments::parse();
-    let config: Config = cli::actual_config(args)?;
+    let config: Config = cli::actual_config(&args)?;
 
     let arturo = PathBuf::from("./bin/arturo.exe");
     runner::reset_cache(config.cache.clone());
@@ -26,6 +26,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     display::display_tests(&tests);
     display::display_summary(&summary);
+
+    if summary.status.failed > 0 && !args.suppress {
+        eprintln!("Some tests failed!");
+        std::process::exit(1);
+    }
 
     Ok(())
 }
