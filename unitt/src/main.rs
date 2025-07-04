@@ -153,13 +153,17 @@ fn all_modules(pattern: &str, config: &Config) -> impl Iterator<Item = ModuleStr
     let cache = config.cache.clone();
 
     files.into_iter().map(move |file| {
-        let result_file = PathBuf::from(&cache).join(format!("{}.json", file.to_string_lossy()));
-        let json = fs::read_to_string(&result_file).unwrap_or_default();
-        let module = test::Module::from_json(&json);
+        let module = module_from_path(cache.clone(), &file);
 
         ModuleStreamItem {
             filename: file.file_name().unwrap().to_string_lossy().into(),
             module,
         }
     })
+}
+
+fn module_from_path(cache: String, file: &PathBuf) -> test::Module {
+    let result_file: PathBuf = PathBuf::from(&cache).join(format!("{}.json", file.to_string_lossy()));
+    let json: String = fs::read_to_string(&result_file).unwrap_or_default();
+    test::Module::from_json(&json)
 }
