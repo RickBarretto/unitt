@@ -32,10 +32,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         config = config.with_target(target);
     }
 
-    // Global statistics
-    let mut total_stats = Statistics { passed: 0, failed: 0, skipped: 0 };
-    let mut file_count = 0u64;
-
     // Use glob to find all matching test files
     let pattern = format!("{}/{}", config.tests, config.target);
 
@@ -72,15 +68,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    display_tests(&config, &mut total_stats, &mut file_count)?;
-
-    println!("\nSummary: Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
-        file_count, total_stats.passed, total_stats.failed, total_stats.skipped);
+    println!("\nFinal Summary:");
+    println!("{}", display_tests(&config));
 
     Ok(())
 }
 
-fn display_tests(config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
+fn display_tests(config: &Config) -> Summary {
+    let mut total_stats = Statistics { passed: 0, failed: 0, skipped: 0 };
+    let mut file_count = 0u64;
     for ModuleStreamItem {filename, module} in all_modules_of(config) {
 
         println!("\n===== {} =====\n", filename);
@@ -134,12 +130,26 @@ fn display_tests(config: &Config, total_stats: &mut Statistics, file_count: &mut
             stats.failed, 
             stats.skipped
         );
+
         total_stats.passed += stats.passed;
         total_stats.failed += stats.failed;
         total_stats.skipped += stats.skipped;
-        *file_count += 1;
+        file_count += 1;
     }
-    Ok(())
+
+    Summary { status: total_stats, file_count }
+}
+
+struct Summary {
+    status: Statistics,
+    file_count: u64,
+}
+
+impl std::fmt::Display for Summary {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
+            self.file_count, self.status.passed, self.status.failed, self.status.skipped)
+    }
 }
 
 struct ModuleStreamItem {
