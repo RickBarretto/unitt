@@ -21,21 +21,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config: Config = actual_config(args)?;
     let pattern = format!("{}/{}", config.tests, config.target);
 
-    // Collect all test files first
-    let mut test_files = Vec::new();
-    for entry in glob(&pattern)? {
-        let file = entry?;
-        test_files.push(file);
-    }
-
     let arturo = PathBuf::from("./bin/arturo.exe");
+    collect_tests(&pattern, &arturo).await;
 
-    // Run Arturo on all test files concurrently using tokio
+    println!("\nFinal Summary:");
+    println!("{}", display_tests(&config));
+
+    Ok(())
+}
+
+async fn collect_tests(pattern: &str, arturo: &PathBuf) {
+    let test_files: Vec<_> = glob(pattern)
+        .expect("Invalid glob pattern")
+        .filter_map(Result::ok)
+        .collect();
+
     let mut join_set = JoinSet::new();
-
     for file in &test_files {
-        let arturo = arturo.clone();
-        let file = file.clone();
+        let (arturo, file) = (arturo.clone(), file.clone());
         join_set.spawn(async move {
             let result = run_test_file(arturo, file.clone()).await;
             (file, result)
@@ -43,7 +46,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     while let Some(res) = join_set.join_next().await {
-        let (file, result) = res?;
+        let (file, result) = res.expect("JoinSet error");
         if let Err(e) = result {
             eprintln!("Arturo execution failed for {}: {}", file.display(), e);
             continue;
@@ -53,11 +56,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             continue;
         }
     }
-
-    println!("\nFinal Summary:");
-    println!("{}", display_tests(&config));
-
-    Ok(())
 }
 
 fn actual_config(args: cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
