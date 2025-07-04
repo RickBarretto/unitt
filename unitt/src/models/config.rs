@@ -12,6 +12,7 @@ pub struct Config {
     pub cache: String,
     pub tests: String,
     pub target: String,
+    pub fail_fast: bool,
 }
 
 impl Config {
@@ -23,6 +24,7 @@ impl Config {
             cache: proxy.cache.unwrap_or(default.cache),
             tests: proxy.tests.unwrap_or(default.tests),
             target: proxy.target.unwrap_or(default.target),
+            fail_fast: false
         })
     }
 }
@@ -33,6 +35,7 @@ impl Default for Config {
             cache: ".unitt".into(),
             tests: "specs".into(),
             target: "*.spec.art".into(),
+            fail_fast: false
         }
     }
 }

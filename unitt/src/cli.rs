@@ -29,5 +29,6 @@ pub fn actual_config(args: &cli::Arguments) -> Result<Config, Box<dyn std::error
         tests: args.tests.clone().unwrap_or(config.tests),
         cache: args.cache.clone().unwrap_or(config.cache),
         target: args.target.clone().unwrap_or(config.target),
+        fail_fast: args.fail_fast,
     })
 }
