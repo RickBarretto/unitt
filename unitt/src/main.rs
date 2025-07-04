@@ -25,8 +25,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let tests: Vec<collector::LoadedTest> = 
         collector::load_tests(&config).collect();
 
-    println!("\nFinal Summary:");
     display::display_tests(&tests);
+    
+    println!("\nFinal Summary:");
     println!("{}", display::summary_of(&tests));
 
     Ok(())
