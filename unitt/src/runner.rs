@@ -30,8 +30,9 @@ pub async fn generate_tests(pattern: &str, arturo: &PathBuf) {
         if let Err(err) = result {
             panic!("Arturo execution failed for {}: {}", file.display(), err);
         }
-        if !result.unwrap().status.success() {
-            panic!("Arturo execution failed for {}", file.display());
+        let output = result.unwrap();
+        if !output.status.success() {
+            panic!("Arturo execution failed for {}:\n{}", file.display(), String::from_utf8_lossy(&output.stdout));
         }
     }
 }
