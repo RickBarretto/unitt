@@ -76,7 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
+fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
     for entry in glob(pattern)? {
         let file = entry?;
 
