@@ -5,10 +5,10 @@ mod display;
 mod models;
 mod runner;
 
-use models::config::{Config};
+use models::config::Config;
 
-use std::path::PathBuf;
 use std::env;
+use std::path::PathBuf;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -21,8 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     runner::reset_cache(config.cache.clone());
     runner::generate_tests(&config, &arturo).await;
 
-    let tests: Vec<collector::LoadedTest> = 
-        collector::load_tests(&config).collect();
+    let tests: Vec<collector::LoadedTest> = collector::load_tests(&config).collect();
 
     display::display_tests(&tests);
     display::display_summary(&tests);

@@ -5,8 +5,7 @@ struct Proxy {
     pub cache: Option<String>,
     pub tests: Option<String>,
     pub target: Option<String>,
-} 
-
+}
 
 #[derive(PartialEq, Debug)]
 pub struct Config {
@@ -30,7 +29,7 @@ impl Config {
 
 impl Default for Config {
     fn default() -> Self {
-        Self { 
+        Self {
             cache: ".unitt".into(),
             tests: "specs".into(),
             target: "*.spec.art".into(),
@@ -81,7 +80,4 @@ mod tests {
         let result = Config::from_toml(toml_content).unwrap();
         assert_eq!(result, Config::default());
     }
-
 }
-
-

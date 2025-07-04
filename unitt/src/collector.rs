@@ -1,4 +1,3 @@
-
 use std::fs;
 use std::path::PathBuf;
 
@@ -28,7 +27,8 @@ pub fn load_tests(config: &Config) -> impl Iterator<Item = LoadedTest> {
 }
 
 fn module_from_path(cache: String, file: &PathBuf) -> test::Module {
-    let result_file: PathBuf = PathBuf::from(&cache).join(format!("{}.json", file.to_string_lossy()));
+    let result_file: PathBuf =
+        PathBuf::from(&cache).join(format!("{}.json", file.to_string_lossy()));
     let json: String = fs::read_to_string(&result_file).unwrap_or_default();
     test::Module::from_json(&json)
 }

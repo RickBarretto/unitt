@@ -15,7 +15,7 @@ pub struct Arguments {
     pub cache: Option<String>,
     #[arg(long)]
     pub target: Option<String>,
-    
+
     #[arg(long)]
     pub fail_fast: bool,
     #[arg(long)]
