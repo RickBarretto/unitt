@@ -1,11 +1,15 @@
 use clap::Parser;
 mod cli;
+mod test;
+mod config;
+mod statistics;
+
 use std::path::PathBuf;
 use std::env;
 use std::fs;
-use unitt::test::{result_of, read_result};
-use unitt::statistics::Statistics;
-use unitt::config::Config;
+use test::{run_test_file};
+use statistics::Statistics;
+use config::Config;
 use glob::glob;
 use tokio::task::JoinSet;
 
@@ -51,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let arturo = arturo.clone();
         let file = file.clone();
         join_set.spawn(async move {
-            let result = result_of(arturo, file.clone()).await;
+            let result = run_test_file(arturo, file.clone()).await;
             (file, result)
         });
     }
@@ -68,7 +72,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    display_tests(&pattern, &config, &mut total_stats, &mut file_count).await?;
+    display_tests(&pattern, &config, &mut total_stats, &mut file_count)?;
 
     println!("\nSummary: Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
         file_count, total_stats.passed, total_stats.failed, total_stats.skipped);
@@ -77,15 +81,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
-    for entry in glob(pattern)? {
-        let file = entry?;
+    for ModuleStreamItem {filename, module} in all_modules(pattern, config) {
 
-        let json_file = format!("{}.json", file.to_str().unwrap());
-        let result_file = PathBuf::from(&config.cache).join(json_file);
-        let json = fs::read_to_string(&result_file)?;
-        let module = read_result(json).await;
-
-        println!("\n===== {} =====\n", file.file_name().unwrap().to_string_lossy());
+        println!("\n===== {} =====\n", filename);
         for test in &module.standalone {
             let all_passed = test.assertions.iter().all(|(_, r)| *r);
             let all_failed = test.assertions.iter().all(|(_, r)| !*r);
@@ -131,7 +129,7 @@ fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, f
 
         let stats = Statistics::from(module);
         println!("\n\n{} >> Passed: {} | Failed: {} | Skipped: {}", 
-            file.to_str().unwrap(), 
+            filename, 
             stats.passed, 
             stats.failed, 
             stats.skipped
@@ -142,4 +140,25 @@ fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, f
         *file_count += 1;
     }
     Ok(())
+}
+
+struct ModuleStreamItem {
+    pub filename: String,
+    pub module: test::Module,
+}
+
+
+fn all_modules(pattern: &str, config: &Config) -> impl Iterator<Item = ModuleStreamItem> {
+    let files: Vec<_> = glob(pattern).unwrap().filter_map(Result::ok).collect();
+    let cache = config.cache.clone();
+    files.into_iter().map(move |file| {
+        let json_file = format!("{}.json", file.to_str().unwrap());
+        let result_file = PathBuf::from(&cache).join(json_file);
+        let json = fs::read_to_string(&result_file).unwrap_or_default();
+        let module = test::Module::from_json(&json);
+        ModuleStreamItem {
+            filename: file.file_name().unwrap().to_string_lossy().into(),
+            module,
+        }
+    })
 }
