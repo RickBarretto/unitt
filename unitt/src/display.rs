@@ -5,8 +5,8 @@ use crate::models::statistics::Statistics;
 use crate::models::test;
 
 pub struct Summary {
-    status: Statistics,
-    file_count: u64,
+    pub status: Statistics,
+    pub file_count: u64,
 }
 
 impl std::fmt::Display for Summary {
