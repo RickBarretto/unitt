@@ -15,24 +15,10 @@ use tokio::task::JoinSet;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args = cli::Arguments::parse();
-
     let _ = env::set_current_dir("..")?;
 
-    // Load config from file if exists, otherwise use default
-    let mut config = Config::from_toml(fs::read_to_string("./unitt.toml")?.as_str())?;
-
-    if let Some(tests) = args.tests.as_ref() {
-        config = config.with_tests(tests);
-    }
-    if let Some(cache) = args.cache.as_ref() {
-        config = config.with_cache(cache);
-    }
-    if let Some(target) = args.target.as_ref() {
-        config = config.with_target(target);
-    }
-
-    // Use glob to find all matching test files
+    let args = cli::Arguments::parse();
+    let config: Config = actual_config(args)?;
     let pattern = format!("{}/{}", config.tests, config.target);
 
     // Collect all test files first
@@ -72,6 +58,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{}", display_tests(&config));
 
     Ok(())
+}
+
+fn actual_config(args: cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
+    let toml = fs::read_to_string("./unitt.toml")?;
+    let config = Config::from_toml(&toml)?;
+    Ok(Config {
+        tests: args.tests.clone().unwrap_or(config.tests),
+        cache: args.cache.clone().unwrap_or(config.cache),
+        target: args.target.clone().unwrap_or(config.target),
+    })
 }
 
 fn print_test_result(test: &test::Test) {
