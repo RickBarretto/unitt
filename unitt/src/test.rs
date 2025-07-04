@@ -12,6 +12,12 @@ pub struct Module {
     pub specs: Vec<Spec>
 }
 
+impl Module {
+    pub fn from_json(json: &str) -> Self {
+        serde_json::from_str(json).expect("Have right format.")
+    }
+}
+
 #[derive(Debug, PartialEq)]
 #[derive(serde::Deserialize)]
 #[derive(Default)]
@@ -42,10 +48,6 @@ pub async fn result_of(arturo: PathBuf, test_file: PathBuf) -> Result<Output, st
         .output().await
 }
 
-pub fn module_from_json(result: Json) -> Module {
-    serde_json::from_str(&result).expect("Have right format.")
-}
-
 
 #[cfg(test)]
 mod test {
@@ -69,7 +71,7 @@ mod test {
         
         let json = fs::read_to_string(dbg!(result_file)).unwrap();
 
-        let result = module_from_json(json);
+        let result = Module::from_json(&json);
         
         assert_eq!(result.standalone[0].description, "I should be standalone".to_string());
         assert_eq!(result.standalone[0].assertions, vec![("string? \"I\\'m standalone\"".to_string(), true)]);
@@ -171,7 +173,7 @@ mod test {
             ]
         };
 
-        let actual = module_from_json(example_file.into());
+        let actual = Module::from_json(example_file);
         assert_eq!(expected, actual);
 
     }
