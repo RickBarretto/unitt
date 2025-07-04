@@ -42,7 +42,7 @@ pub async fn result_of(arturo: PathBuf, test_file: PathBuf) -> Result<Output, st
         .output().await
 }
 
-pub fn read_result(result: Json) -> Module {
+pub fn module_from_json(result: Json) -> Module {
     serde_json::from_str(&result).expect("Have right format.")
 }
 
@@ -69,7 +69,7 @@ mod test {
         
         let json = fs::read_to_string(dbg!(result_file)).unwrap();
 
-        let result = read_result(json);
+        let result = module_from_json(json);
         
         assert_eq!(result.standalone[0].description, "I should be standalone".to_string());
         assert_eq!(result.standalone[0].assertions, vec![("string? \"I\\'m standalone\"".to_string(), true)]);
@@ -171,7 +171,7 @@ mod test {
             ]
         };
 
-        let actual = read_result(example_file.into());
+        let actual = module_from_json(example_file.into());
         assert_eq!(expected, actual);
 
     }
