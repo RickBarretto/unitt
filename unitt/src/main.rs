@@ -72,7 +72,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    display_tests(&pattern, &config, &mut total_stats, &mut file_count)?;
+    display_tests(&config, &mut total_stats, &mut file_count)?;
 
     println!("\nSummary: Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
         file_count, total_stats.passed, total_stats.failed, total_stats.skipped);
@@ -80,8 +80,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
-    for ModuleStreamItem {filename, module} in all_modules(pattern, config) {
+fn display_tests(config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
+    for ModuleStreamItem {filename, module} in all_modules_of(config) {
 
         println!("\n===== {} =====\n", filename);
         for test in &module.standalone {
@@ -148,8 +148,9 @@ struct ModuleStreamItem {
 }
 
 
-fn all_modules(pattern: &str, config: &Config) -> impl Iterator<Item = ModuleStreamItem> {
-    let files: Vec<_> = glob(pattern).unwrap().filter_map(Result::ok).collect();
+fn all_modules_of(config: &Config) -> impl Iterator<Item = ModuleStreamItem> {
+    let pattern = config.target.clone();
+    let files: Vec<_> = glob(&pattern).unwrap().filter_map(Result::ok).collect();
     let cache = config.cache.clone();
 
     files.into_iter().map(move |file| {
