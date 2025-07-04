@@ -9,33 +9,21 @@ pub struct Statistics {
 
 impl Statistics {
     pub fn from(module: test::Module) -> Self {
-        let mut passed = 0u64;
-        let mut failed = 0u64;
-        let skipped = 0u64;
+        let all_specs = module.specs.iter()
+                .flat_map(|spec| spec.tests.iter())
+                .flat_map(|test| &test.assertions);
 
-        // Count assertions in standalone tests
-        module.standalone.iter().for_each(|test| {
-            for (_, result) in &test.assertions {
-                if *result {
-                    passed += 1;
-                } else {
-                    failed += 1;
-                }
+        let all_assertions = module.standalone.iter()
+            .flat_map(|test| &test.assertions)
+            .chain(all_specs);
+
+        let (passed, failed) = all_assertions.fold(
+            (0u64, 0u64), |(passed, failed), &(_, result)| {
+                if result { (passed + 1, failed) } else { (passed, failed + 1) }
             }
-        });
-        // Count assertions in specs
-        for spec in &module.specs {
-            for test in &spec.tests {
-                for (_, result) in &test.assertions {
-                    if *result {
-                        passed += 1;
-                    } else {
-                        failed += 1;
-                    }
-                }
-            }
-        }
-        Statistics { passed, skipped, failed }
+        );
+
+        Statistics { passed, failed, skipped: 0 }
     }
 }
 #[cfg(test)]
