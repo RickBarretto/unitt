@@ -6,7 +6,7 @@ use tokio::task::JoinSet;
 
 use crate::models::test::run_test_file;
 
-pub fn remove_cache(cache: String) {
+pub fn reset_cache(cache: String) {
     let _ = fs::remove_dir_all(cache);
 }
 

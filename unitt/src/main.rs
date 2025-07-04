@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pattern = format!("{}/{}", config.tests, config.target);
 
     let arturo = PathBuf::from("./bin/arturo.exe");
-    runner::remove_cache(config.cache.clone());
+    runner::reset_cache(config.cache.clone());
     runner::generate_tests(&pattern, &arturo).await;
 
     println!("\nFinal Summary:");
