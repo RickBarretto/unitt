@@ -26,9 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         collector::load_tests(&config).collect();
 
     display::display_tests(&tests);
-    
-    println!("\nFinal Summary:");
-    println!("{}", display::summary_of(&tests));
+    display::display_summary(&tests);
 
     Ok(())
 }
