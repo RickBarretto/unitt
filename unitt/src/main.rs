@@ -68,16 +68,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    for entry in glob(&pattern)? {
+    display_tests(&pattern, &config, &mut total_stats, &mut file_count).await?;
+
+    println!("\nSummary: Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
+        file_count, total_stats.passed, total_stats.failed, total_stats.skipped);
+
+    Ok(())
+}
+
+async fn display_tests(pattern: &str, config: &Config, total_stats: &mut Statistics, file_count: &mut u64) -> Result<(), Box<dyn std::error::Error>> {
+    for entry in glob(pattern)? {
         let file = entry?;
 
-        // Read the generated JSON result file
         let json_file = format!("{}.json", file.to_str().unwrap());
         let result_file = PathBuf::from(&config.cache).join(json_file);
         let json = fs::read_to_string(&result_file)?;
         let module = read_result(json).await;
-
-        // Display detailed tests results
 
         println!("\n===== {} =====\n", file.file_name().unwrap().to_string_lossy());
         for test in &module.standalone {
@@ -96,7 +102,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("         {}: {}", icon, assertion);
             }
         }
-
         for spec in &module.specs {
             println!("\nSuite: {} \n", spec.description);
             for test in &spec.tests {
@@ -124,7 +129,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
-        // Calculate and print statistics
         let stats = Statistics::from(module);
         println!("\n\n{} >> Passed: {} | Failed: {} | Skipped: {}", 
             file.to_str().unwrap(), 
@@ -135,12 +139,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         total_stats.passed += stats.passed;
         total_stats.failed += stats.failed;
         total_stats.skipped += stats.skipped;
-        file_count += 1;
+        *file_count += 1;
     }
-
-    // Print global statistics
-    println!("\nSummary: Files: {} | Passed: {} | Failed: {} | Skipped: {}", 
-        file_count, total_stats.passed, total_stats.failed, total_stats.skipped);
-
     Ok(())
 }
