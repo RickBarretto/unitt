@@ -1,15 +1,16 @@
 use clap::Parser;
 mod cli;
-mod test;
-mod config;
-mod statistics;
+mod models;
+
+use models::config::{Config};
+use models::{test};
+use models::test::{run_test_file};
+use models::statistics::{Statistics};
+
 
 use std::path::PathBuf;
 use std::env;
 use std::fs;
-use test::{run_test_file};
-use statistics::Statistics;
-use config::Config;
 use glob::glob;
 use tokio::task::JoinSet;
 

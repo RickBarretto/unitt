@@ -1,4 +1,4 @@
-use crate::test;
+use super::{test};
 
 #[derive(Debug, PartialEq)]
 pub struct Statistics {
@@ -29,7 +29,7 @@ impl Statistics {
 #[cfg(test)]
 mod tests {
     use std::default::Default;
-    use crate::test::{Module, Spec, Test};
+    use test::{Module, Spec, Test};
     use super::*;
 
     fn truly() -> (String, bool) {
