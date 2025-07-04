@@ -26,22 +26,6 @@ impl Config {
             target: proxy.target.unwrap_or(default.target),
         })
     }
-
-    pub fn with_cache(mut self, cache: &str) -> Self {
-        self.cache = cache.into();
-        self
-    }
-
-    pub fn with_tests(mut self, tests: &str) -> Self {
-        self.tests = tests.into();
-        self
-    }
-
-    pub fn with_target(mut self, target: &str) -> Self {
-        self.target = target.into();
-        self
-    }
-
 }
 
 impl Default for Config {
