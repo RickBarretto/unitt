@@ -66,13 +66,12 @@ pub fn display_tests(loaded_tests: &[LoadedTest]) {
     }
 }
 
-pub fn display_summary(loaded_tests: &[LoadedTest]) {
-    let summary = summary_of(loaded_tests);
+pub fn display_summary(summary: &Summary) {
     println!("\n===== {} =====\n", "Final Summary");
     println!("{}", summary);
 }
 
-fn summary_of(loaded_tests: &[LoadedTest]) -> Summary {
+pub fn summary_of(loaded_tests: &[LoadedTest]) -> Summary {
     let (total_stats, file_count) = loaded_tests
         .iter()
         .map(|LoadedTest { module, .. }| Statistics::from(module))
