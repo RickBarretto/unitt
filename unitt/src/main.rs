@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let arturo = PathBuf::from("./bin/arturo.exe");
     runner::remove_cache(config.cache.clone());
-    runner::collect_tests(&pattern, &arturo).await;
+    runner::generate_tests(&pattern, &arturo).await;
 
     println!("\nFinal Summary:");
     println!("{}", display::display_tests(&config));

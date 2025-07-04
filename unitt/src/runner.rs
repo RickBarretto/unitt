@@ -10,7 +10,7 @@ pub fn remove_cache(cache: String) {
     let _ = fs::remove_dir_all(cache);
 }
 
-pub async fn collect_tests(pattern: &str, arturo: &PathBuf) {
+pub async fn generate_tests(pattern: &str, arturo: &PathBuf) {
     let test_files: Vec<_> = glob(pattern)
         .expect("Invalid glob pattern")
         .filter_map(Result::ok)
