@@ -36,8 +36,6 @@ pub struct Test {
     pub assertions: Vec<(String, bool)>
 }
 
-type Json = String;
-
 pub async fn run_test_file(arturo: PathBuf, test_file: PathBuf) -> Result<Output, std::io::Error> {
     let program = arturo.to_str().unwrap();
     let file = test_file.to_str().unwrap();
