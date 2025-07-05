@@ -1,16 +1,14 @@
 #! arturo
 
-import {unitt}!
+files: split.words args\values
+loop files 'file [
+    arguments: ~"--filename:|file|"
 
-tryOr: $[action :block alt :any][
-    (throws? [val:] ++ action)? -> alt -> val
+    execute ~{./bin/arturo ./|file| |arguments|}
+
 ]
 
-files: switch empty? args\values
-    -> findTests "tests"
-    -> args\values
-
-runTests
-    .fatal: tryOr [args\fatal] false
-    .suppress: tryOr [args\suppress] false
-    files
+; runTests
+;     .fatal: tryOr [args\fatal] false
+;     .suppress: tryOr [args\suppress] false
+;     files

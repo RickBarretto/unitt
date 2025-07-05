@@ -11,9 +11,4 @@
 ;;
 ;; export: ['test 'suite]
 
-import ./{internal/shared}!
-import ./{internal/suite}!
-import ./{internal/test}!
-
-; For setting-up the runner manually 😉
-import ./{setup}!
+import ./{api}!
