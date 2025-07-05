@@ -1,3 +1,12 @@
 entry:      "src/unitt"
 depends:    []
 requires:   [> 0.9.84]
+
+name: "unitt"
+description: "Lean unit testing tool for Arturo"
+license: "MIT"
+authors: ["RickBarretto"]
+homepage: "https://unitt.pkgr.art"
+repository: "https://github.com/rickbarretto/unitt"
+keywords: [arturo testing unittesting cli]
+categories = [development tool]
