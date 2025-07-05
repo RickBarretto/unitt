@@ -2,7 +2,8 @@ use std::fs;
 
 use clap::Parser;
 
-use crate::{cli, models::config::Config};
+use crate::cli;
+use crate::models::config::Config;
 
 #[derive(Parser, Debug)]
 #[command(name = "unitt")]

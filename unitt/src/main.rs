@@ -1,19 +1,17 @@
-use clap::Parser;
 mod cli;
 mod collector;
 mod display;
 mod models;
 mod runner;
 
-use models::config::Config;
-
-use std::env;
 use std::path::PathBuf;
+
+use clap::Parser;
+
+use models::config::Config;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let _ = env::set_current_dir("..")?;
-
     let args = cli::Arguments::parse();
     let config: Config = cli::actual_config(&args)?;
 
