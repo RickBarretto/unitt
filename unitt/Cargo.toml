@@ -1,6 +1,13 @@
 [package]
 name = "unitt"
+description = "Lean unit testing tool for Arturo"
 version = "3.0.0"
+license = "MIT"
+authors = ["RickBarretto"]
+homepage = "https://unitt.pkgr.art"
+repository = "https://github.com/rickbarretto/unitt"
+keywords = ["arturo", "testing", "unit-testing", "cli"]
+categories = ["command-line-utilities", "development-tools"]
 edition = "2021"
 
 [dependencies]
