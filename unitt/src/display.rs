@@ -21,14 +21,13 @@ impl std::fmt::Display for Summary {
 }
 
 pub fn print_test_result(test: &test::Test, failfast: bool) {
-    let all_passed = test.assertions.iter().all(|(_, r)| *r);
-    let all_failed = test.assertions.iter().all(|(_, r)| !*r);
+    let some_failed = test.assertions.iter().any(|(_, r)| !*r);
     let skipped = test.assertions.is_empty();
 
-    let status = match (skipped, all_passed, all_failed) {
-        (true, _, _) => "⏩",
-        (false, true, _) => "✅",
-        _ => "❌",
+    let status = match (skipped, some_failed) {
+        (true, _) => "⏩",
+        (false, false) => "✅",
+        _ => "❌", 
     };
 
     println!("    {} - {}", status, test.description);
