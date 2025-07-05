@@ -1,6 +1,7 @@
 use std;
 
 use crate::collector::LoadedTest;
+use crate::models::config::Config;
 use crate::models::statistics::Statistics;
 use crate::models::test;
 
@@ -19,7 +20,7 @@ impl std::fmt::Display for Summary {
     }
 }
 
-pub fn print_test_result(test: &test::Test) {
+pub fn print_test_result(test: &test::Test, failfast: bool) {
     let all_passed = test.assertions.iter().all(|(_, r)| *r);
     let all_failed = test.assertions.iter().all(|(_, r)| !*r);
     let skipped = test.assertions.is_empty();
@@ -41,20 +42,25 @@ pub fn print_test_result(test: &test::Test) {
         let icon = if *result { "✅" } else { "❌" };
         println!("         {}: {}", icon, assertion);
     }
+
+    if status == "❌" && failfast {
+        panic!("         Aborting due to failfast mode!");
+    }
+
 }
 
-pub fn display_tests(loaded_tests: &[LoadedTest]) {
+pub fn display_tests(loaded_tests: &[LoadedTest], config: &Config) {
     for LoadedTest { filename, module } in loaded_tests {
         println!("\n===== {} =====\n", filename);
 
         for test in &module.standalone {
-            print_test_result(test);
+            print_test_result(test, config.fail_fast);
         }
 
         for spec in &module.specs {
             println!("\nSuite: {} \n", spec.description);
             for test in &spec.tests {
-                print_test_result(test);
+                print_test_result(test, config.fail_fast);
             }
         }
 

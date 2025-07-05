@@ -24,7 +24,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let tests: Vec<collector::LoadedTest> = collector::load_tests(&config).collect();
     let summary = display::summary_of(&tests);
 
-    display::display_tests(&tests);
+    display::display_tests(&tests, &config);
     display::display_summary(&summary);
 
     if summary.status.failed > 0 && !args.suppress {
