@@ -7,19 +7,21 @@ use crate::models::config::Config;
 
 #[derive(Parser, Debug)]
 #[command(name = "unitt")]
-#[command(version = "v3.0.0")]
+#[command(version, author="RickBarretto")]
 #[command(about = "Lean unit testing tool for Arturo")]
 pub struct Arguments {
-    #[arg(long)]
+    #[arg(long, default_value="specs", help="Path to test files directory.")]
     pub tests: Option<String>,
-    #[arg(long)]
+
+    #[arg(long, default_value="unitt", help="Path to cache directory.")]
     pub cache: Option<String>,
-    #[arg(long)]
+    
+    #[arg(long, default_value="**/*.spec.art", help="Glob pattern to match test files.")]
     pub target: Option<String>,
 
-    #[arg(long)]
+    #[arg(long, help="Exits on first failure found.")]
     pub fail_fast: bool,
-    #[arg(long)]
+    #[arg(long, help="Suppresses error messages on test failures. Also disables exit code 1 on failure.")]
     pub suppress: bool,
 }
 
