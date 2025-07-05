@@ -9,4 +9,4 @@ authors: ["RickBarretto"]
 homepage: "https://unitt.pkgr.art"
 repository: "https://github.com/rickbarretto/unitt"
 keywords: [arturo testing unittesting cli]
-categories = [development tool]
+categories: [development tool]
