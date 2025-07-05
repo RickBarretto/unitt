@@ -114,7 +114,6 @@ it: $[description :string testCase :block][
     ;;      }
     ;; ]
     ;; options: [
-    ;;      prop: :logical « defines if a test is property-based
     ;;      skip: :logical « skip test if true
     ;; ]
     ;;
@@ -126,17 +125,17 @@ it: $[description :string testCase :block][
     ;;      ; testAppend.art
     ;;      import {unitt}!
     ;;      
-    ;;      it.prop "appending with keyword or operator has the same behavior" [
+    ;;      it "appending with keyword or operator has the same behavior" [
     ;;          a: [a b c d e f g]
     ;;          b: [h i j k l m n]
     ;;
     ;;          expects.be: 'equal? @[express append a b express a ++ b]
     ;;          expects.be: 'equal? @[express append b a express b ++ a]
     ;;      ]
-    ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior 
+    ;;      ; ✅ - assert that appending with keyword or operator has the same behavior 
     ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
     ;;      ;
-    ;;      ; ✅ ~ assert that appending with keyword or operator has the same behavior
+    ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
     ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
     ;;          
     ;;      it.skip: unix? "split is working for windows's paths" [
