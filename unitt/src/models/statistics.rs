@@ -22,21 +22,30 @@ impl Statistics {
             .chain(all_specs);
 
         let (passed, failed) =
-            all_assertions.fold((0u64, 0u64), |(passed, failed), &(_, result)| {
-                if result {
+            all_assertions.fold((0u64, 0u64), |(passed, failed), (_, result)| {
+                if *result {
                     (passed + 1, failed)
                 } else {
                     (passed, failed + 1)
                 }
             });
 
+        let skipped = module
+            .standalone
+            .iter()
+            .chain(module.specs.iter().flat_map(|spec| &spec.tests))
+            .filter(|test| test.assertions.is_empty())
+            .count() as u64;
+
         Statistics {
             passed,
             failed,
-            skipped: 0,
+            skipped,
         }
     }
 }
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
