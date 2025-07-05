@@ -10,7 +10,7 @@ it "I should be standalone #2" [
 
 describe "I'm a scope" [
 
-    it "should be into Scope #1" [
+    it.skip "should be into Scope #1" [
         assert -> true
     ]
     
