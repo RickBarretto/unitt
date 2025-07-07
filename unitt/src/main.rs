@@ -14,7 +14,8 @@ use models::config::Config;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = cli::Arguments::parse();
     let _ = env::set_current_dir(&args.root);
-    let config: Config = args.clone().into();
+    let config: Config = args.clone()
+        .merge_with(Config::from_toml("unitt.toml"));
 
     runner::reset_cache(config.cache.clone());
     runner::generate_tests(&config, &config.arturo).await;

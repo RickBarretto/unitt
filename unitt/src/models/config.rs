@@ -1,3 +1,5 @@
+use std::fs;
+
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
@@ -16,6 +18,23 @@ pub struct Config {
 }
 
 impl Config {
+
+    pub fn from_toml(path: &str) -> Config {
+        match fs::read_to_string(&path) {
+            Ok(content) => match toml::from_str(&content) {
+                Ok(config) => config,
+                Err(e) => {
+                    eprintln!("Error parsing TOML file {}: {}", path, e);
+                    Config::default()
+                }
+            },
+            Err(e) => {
+                eprintln!("Error reading TOML file {}: {}", path, e);
+                Config::default()
+            }
+        }
+    }
+
     pub fn from_str(toml_content: &str) -> Result<Self, toml::de::Error> {
         toml::from_str(toml_content)
     }
