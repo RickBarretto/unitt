@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
 #[derive(PartialEq)]
-struct Config {
+pub struct Config {
     #[serde(default)]
     pub cache: String,
     #[serde(default)]
