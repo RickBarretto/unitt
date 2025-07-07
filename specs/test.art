@@ -1,35 +1,7 @@
 import ./{../src/unitt}!
 
-test "this passes" [
-    a: 1
-    assert -> true
-    expects.to.be: 'equal? @[3 add a 2]
-    expects.be: 'equal? [3 add a 2]
-    assert.with: 'equal? [3 add a 2]
-    assert -> equal? 3 (add a 2)
-    expects.static -> equal? 3 (add a 2)
-]
-
-test.skip "this skips" [
-    a: 1
-    assert -> true
-    assert -> equal? 3 (add a 2)
-    assert.static -> equal? 3 (add a 2)
-]
-
-
-test "this fails" [
-    a: 1
-    assert -> true
-    assert -> equal? 4 add a 2
-    assert.static -> equal? 3 (add a 2)
-]
-
-suite "group 1" [
-    test "..." []
-]
-
-describe "group 2" [
-    it "..." []
-    test "..." []
+describe "this test*.art module" [
+    it "should not be ran, since this isn't on the target" [
+        throw -> "Your test setup is probably wrong."
+    ]
 ]
