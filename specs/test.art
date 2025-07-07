@@ -1,8 +1,5 @@
 import ./{../src/unitt}!
 
-if standalone?
-    -> panic "Should be ran via CLI or runner script"
-
 test "this passes" [
     a: 1
     assert -> true
