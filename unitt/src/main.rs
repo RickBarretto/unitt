@@ -16,11 +16,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config: Config = args.clone().into();
 
     let _ = env::set_current_dir(&args.root);
-    
-    if !Path::new(&config.arturo).exists() {
-        eprintln!("Arturo binary not found at: {}", config.arturo);
-        std::process::exit(1);
-    }
 
     runner::reset_cache(config.cache.clone());
     runner::generate_tests(&config, &config.arturo).await;
