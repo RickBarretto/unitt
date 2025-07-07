@@ -11,7 +11,7 @@ use crate::models::config::Config;
 pub struct Arguments {
     #[arg(long, default_value="specs", help="Path to test files directory.")]
     pub tests: String,
-    #[arg(long, default_value="unitt", help="Path to cache directory.")]
+    #[arg(long, default_value=".unitt", help="Path to cache directory.")]
     pub cache: String,
     #[arg(long, default_value="**/*.spec.art", help="Glob pattern to match test files.")]
     pub target: String,
