@@ -1,34 +1,23 @@
 use serde::Deserialize;
 
-#[derive(Deserialize)]
-struct Proxy {
-    pub cache: Option<String>,
-    pub tests: Option<String>,
-    pub target: Option<String>,
-    pub arturo: Option<String>,
-}
-
-#[derive(PartialEq, Debug)]
-pub struct Config {
+#[derive(Deserialize, Debug, Clone)]
+#[derive(PartialEq)]
+struct Config {
+    #[serde(default)]
     pub cache: String,
+    #[serde(default)]
     pub tests: String,
+    #[serde(default)]
     pub target: String,
-    pub fail_fast: bool,
+    #[serde(default)]
     pub arturo: String,
+    #[serde(default)]
+    pub fail_fast: bool,
 }
 
 impl Config {
-    pub fn from_toml(content: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let proxy: Proxy = toml::from_str(content)?;
-        let default = Config::default();
-
-        Ok(Config {
-            cache: proxy.cache.unwrap_or(default.cache),
-            tests: proxy.tests.unwrap_or(default.tests),
-            target: proxy.target.unwrap_or(default.target),
-            fail_fast: false,
-            arturo: proxy.arturo.unwrap_or(default.arturo),
-        })
+    pub fn from_str(toml_content: &str) -> Result<Self, toml::de::Error> {
+        toml::from_str(toml_content)
     }
 }
 
@@ -38,8 +27,8 @@ impl Default for Config {
             cache: ".unitt".into(),
             tests: "specs".into(),
             target: "*.spec.art".into(),
-            fail_fast: false,
             arturo: "arturo".into(),
+            fail_fast: false,
         }
     }
 }
@@ -65,7 +54,7 @@ mod tests {
             arturo = "custom_arturo"
         "#;
 
-        let config: Config = Config::from_toml(toml_content).unwrap();
+        let config: Config = Config::from_str(toml_content).unwrap();
         assert_eq!(config.cache, "custom_cache");
         assert_eq!(config.tests, "custom_tests");
         assert_eq!(config.target, "custom_target");
@@ -78,7 +67,7 @@ mod tests {
             invalid_field; = "value"
         "#;
 
-        let result = Config::from_toml(toml_content);
+        let result = Config::from_str(toml_content);
         assert!(result.is_err());
     }
 
@@ -86,7 +75,7 @@ mod tests {
     fn test_from_toml_str_empty() {
         let toml_content = "";
 
-        let result = Config::from_toml(toml_content).unwrap();
+        let result = Config::from_str(toml_content).unwrap();
         assert_eq!(result, Config::default());
     }
 }
