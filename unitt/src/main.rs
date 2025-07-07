@@ -4,6 +4,8 @@ mod display;
 mod models;
 mod runner;
 
+use std::{env, path::Path};
+
 use clap::Parser;
 
 use models::config::Config;
@@ -13,6 +15,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = cli::Arguments::parse();
     let config: Config = cli::actual_config(&args)?;
     let arturo = config.arturo.clone();
+
+    let _ = env::set_current_dir(args.root);
 
     runner::reset_cache(config.cache.clone());
     runner::generate_tests(&config, &arturo).await;

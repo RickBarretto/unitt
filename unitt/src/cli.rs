@@ -1,4 +1,5 @@
 use std::fs;
+use std::path::PathBuf;
 
 use clap::Parser;
 
@@ -26,6 +27,9 @@ pub struct Arguments {
 
     #[arg(long, default_value="arturo", help="Path to the Arturo binary.")]
     pub arturo: Option<String>,
+
+    #[arg(long, default_value=".", help="Root directory for the tests.")]
+    pub root: PathBuf,
 }
 
 pub fn actual_config(args: &cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
