@@ -1,5 +1,5 @@
 - [x] Remove standalone checks from test_*.art tests
-- [ ] Rename test_*.art to *.spec.art
+- [x] Rename test_*.art to *.spec.art
 - [ ] Add test_*.art that asserts that this should not be run
 - [ ] Remove cli.art
 - [ ] Disable unitt if `unitt.toml` does not exist
