@@ -4,7 +4,7 @@ mod display;
 mod models;
 mod runner;
 
-use std::path::PathBuf;
+use std::env;
 
 use clap::Parser;
 
@@ -13,11 +13,12 @@ use models::config::Config;
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = cli::Arguments::parse();
-    let config: Config = cli::actual_config(&args)?;
+    let _ = env::set_current_dir(&args.root);
+    let config: Config = args.clone()
+        .merge_with(Config::from_toml("unitt.toml"));
 
-    let arturo = PathBuf::from("./bin/arturo.exe");
     runner::reset_cache(config.cache.clone());
-    runner::generate_tests(&config, &arturo).await;
+    runner::generate_tests(&config, &config.arturo).await;
 
     let tests: Vec<collector::LoadedTest> = collector::load_tests(&config).collect();
     let summary = display::summary_of(&tests);

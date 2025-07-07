@@ -1,37 +1,41 @@
-use std::fs;
+use std::path::PathBuf;
 
 use clap::Parser;
 
-use crate::cli;
 use crate::models::config::Config;
 
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone, PartialEq)]
 #[command(name = "unitt")]
 #[command(version, author="RickBarretto")]
 #[command(about = "Lean unit testing tool for Arturo")]
 pub struct Arguments {
-    #[arg(long, default_value="specs", help="Path to test files directory.")]
+    // Arguments that can override the default configuration
+    #[arg(long, help="Path to test files directory.")]
     pub tests: Option<String>,
-
-    #[arg(long, default_value="unitt", help="Path to cache directory.")]
+    #[arg(long, help="Path to cache directory.")]
     pub cache: Option<String>,
-    
-    #[arg(long, default_value="**/*.spec.art", help="Glob pattern to match test files.")]
+    #[arg(long, help="Glob pattern to match test files.")]
     pub target: Option<String>,
+    #[arg(long, help="Path to the Arturo binary.")]
+    pub arturo: Option<String>,
 
+    // Arguments that control the behavior of the tool
+    #[arg(long, default_value=".", help="Root directory that contains `unitt.toml`.")]
+    pub root: PathBuf,
     #[arg(long, help="Exits on first failure found.")]
     pub fail_fast: bool,
     #[arg(long, help="Suppresses error messages on test failures. Also disables exit code 1 on failure.")]
     pub suppress: bool,
 }
 
-pub fn actual_config(args: &cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
-    let toml = fs::read_to_string("./unitt.toml")?;
-    let config = Config::from_toml(&toml)?;
-    Ok(Config {
-        tests: args.tests.clone().unwrap_or(config.tests),
-        cache: args.cache.clone().unwrap_or(config.cache),
-        target: args.target.clone().unwrap_or(config.target),
-        fail_fast: args.fail_fast,
-    })
+impl Arguments {
+    pub fn merge_with(self, config: Config) -> Config {
+        Config {
+            cache: self.cache.unwrap_or(config.cache),
+            tests: self.tests.unwrap_or(config.tests),
+            target: self.target.unwrap_or(config.target),
+            arturo: self.arturo.unwrap_or(config.arturo),
+            fail_fast: self.fail_fast,
+        }
+    }
 }

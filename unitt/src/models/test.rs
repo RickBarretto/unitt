@@ -30,11 +30,10 @@ pub struct Test {
     pub assertions: Vec<(String, bool)>,
 }
 
-pub async fn run_test_file(arturo: PathBuf, test_file: PathBuf) -> Result<Output, std::io::Error> {
-    let program = arturo.to_str().unwrap();
+pub async fn run_test_file(arturo: &String, test_file: PathBuf) -> Result<Output, std::io::Error> {
     let file = test_file.to_str().unwrap();
 
-    Command::new(program)
+    Command::new(arturo)
         .arg(file)
         .arg(format!("--filename:{file}"))
         .output()
@@ -54,10 +53,10 @@ mod test {
     async fn should_read_from_generated_file() {
         let _ = env::set_current_dir("..").unwrap();
 
-        let arturo = PathBuf::from("./bin/arturo.exe");
+        let arturo = String::from("./bin/arturo.exe");
         let file = PathBuf::from("specs/simple.spec.art");
 
-        let _ = run_test_file(arturo, file.clone()).await.unwrap();
+        let _ = run_test_file(&arturo, file.clone()).await.unwrap();
         let json_file = format!("{}.json", file.to_str().unwrap());
         let result_file = PathBuf::from(".unitt").join(json_file);
 
@@ -116,9 +115,9 @@ mod test {
     async fn should_execute_arturo() {
         let _ = env::set_current_dir("..").unwrap();
 
-        let arturo = PathBuf::from("./bin/arturo.exe");
+        let arturo = String::from("./bin/arturo.exe");
         let file = PathBuf::from("specs/lib/collections/append.spec.art");
-        let result = run_test_file(arturo, file).await.unwrap();
+        let result = run_test_file(&arturo, file).await.unwrap();
 
         let _ = dbg!(String::from_utf8(result.clone().stdout)
             .unwrap()
