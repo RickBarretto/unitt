@@ -13,10 +13,9 @@ use models::config::Config;
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = cli::Arguments::parse();
-    let config: Config = cli::actual_config(&args)?;
-    let arturo = config.arturo.clone();
+    let config: Config = args.clone().into();
 
-    let _ = env::set_current_dir(args.root);
+    let _ = env::set_current_dir(&args.root);
     
     if !Path::new(&config.arturo).exists() {
         eprintln!("Arturo binary not found at: {}", config.arturo);
@@ -24,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     runner::reset_cache(config.cache.clone());
-    runner::generate_tests(&config, &arturo).await;
+    runner::generate_tests(&config, &config.arturo).await;
 
     let tests: Vec<collector::LoadedTest> = collector::load_tests(&config).collect();
     let summary = display::summary_of(&tests);

@@ -2,7 +2,9 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
-#[derive(Parser, Debug)]
+use crate::models::config::Config;
+
+#[derive(Parser, Debug, Clone, PartialEq)]
 #[command(name = "unitt")]
 #[command(version, author="RickBarretto")]
 #[command(about = "Lean unit testing tool for Arturo")]
@@ -24,4 +26,16 @@ pub struct Arguments {
 
     #[arg(long, default_value=".", help="Root directory for the tests.")]
     pub root: PathBuf,
+}
+
+impl Into<Config> for Arguments {
+    fn into(self) -> Config {
+        Config {
+            cache: self.cache,
+            tests: self.tests,
+            target: self.target,
+            arturo: self.arturo,
+            fail_fast: self.fail_fast,
+        }
+    }
 }
