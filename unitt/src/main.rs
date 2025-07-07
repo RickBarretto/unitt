@@ -4,7 +4,7 @@ mod display;
 mod models;
 mod runner;
 
-use std::{env, path::Path};
+use std::env;
 
 use clap::Parser;
 

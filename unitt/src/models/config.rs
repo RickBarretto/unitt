@@ -21,7 +21,7 @@ impl Config {
 
     pub fn from_toml(path: &str) -> Config {
         match fs::read_to_string(&path) {
-            Ok(content) => match toml::from_str(&content) {
+            Ok(content) => match Self::from_str(&content) {
                 Ok(config) => config,
                 Err(e) => {
                     eprintln!("Error parsing TOML file {}: {}", path, e);
