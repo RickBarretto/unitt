@@ -23,6 +23,9 @@ pub struct Arguments {
     pub fail_fast: bool,
     #[arg(long, help="Suppresses error messages on test failures. Also disables exit code 1 on failure.")]
     pub suppress: bool,
+
+    #[arg(long, default_value="arturo", help="Path to the Arturo binary.")]
+    pub arturo: Option<String>,
 }
 
 pub fn actual_config(args: &cli::Arguments) -> Result<Config, Box<dyn std::error::Error>> {
