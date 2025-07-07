@@ -13,9 +13,8 @@ use models::config::Config;
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = cli::Arguments::parse();
-    let config: Config = args.clone().into();
-
     let _ = env::set_current_dir(&args.root);
+    let config: Config = dbg!(args.clone().into());
 
     runner::reset_cache(config.cache.clone());
     runner::generate_tests(&config, &config.arturo).await;
