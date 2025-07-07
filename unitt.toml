@@ -10,3 +10,6 @@ tests = "specs"
 # File pattern for test files
 # (default: "**.spec.art")
 target = "**/*.spec.art"
+
+# Arturo binary path
+arturo = "./bin/arturo.exe"
