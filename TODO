@@ -1,0 +1,12 @@
+- [ ] Remove standalone checks from test_*.art tests
+- [ ] Rename test_*.art to *.spec.art
+- [ ] Add test_*.art that asserts that this should not be run
+- [ ] Remove cli.art
+- [ ] Disable unitt if `unitt.toml` does not exist
+- [ ] Automatically import unitt
+  - [ ] Create --using argument to force some unitt version
+- [ ] Create simple install script for Rust CLI
+- [ ] Add bin with .gitkeep
+- [ ] Update README.md => to v3
+- [ ] Add internal documentation
+
