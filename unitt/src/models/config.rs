@@ -5,6 +5,7 @@ struct Proxy {
     pub cache: Option<String>,
     pub tests: Option<String>,
     pub target: Option<String>,
+    pub arturo: Option<String>,
 }
 
 #[derive(PartialEq, Debug)]
@@ -13,6 +14,7 @@ pub struct Config {
     pub tests: String,
     pub target: String,
     pub fail_fast: bool,
+    pub arturo: String,
 }
 
 impl Config {
@@ -24,7 +26,8 @@ impl Config {
             cache: proxy.cache.unwrap_or(default.cache),
             tests: proxy.tests.unwrap_or(default.tests),
             target: proxy.target.unwrap_or(default.target),
-            fail_fast: false
+            fail_fast: false,
+            arturo: proxy.arturo.unwrap_or(default.arturo),
         })
     }
 }
@@ -35,7 +38,8 @@ impl Default for Config {
             cache: ".unitt".into(),
             tests: "specs".into(),
             target: "*.spec.art".into(),
-            fail_fast: false
+            fail_fast: false,
+            arturo: "arturo".into(),
         }
     }
 }
@@ -58,12 +62,14 @@ mod tests {
             cache = "custom_cache"
             tests = "custom_tests"
             target = "custom_target"
+            arturo = "custom_arturo"
         "#;
 
         let config: Config = Config::from_toml(toml_content).unwrap();
         assert_eq!(config.cache, "custom_cache");
         assert_eq!(config.tests, "custom_tests");
         assert_eq!(config.target, "custom_target");
+        assert_eq!(config.arturo, "custom_arturo");
     }
 
     #[test]
