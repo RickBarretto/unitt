@@ -11,7 +11,7 @@ pub fn reset_cache(cache: String) {
     let _ = fs::remove_dir_all(cache);
 }
 
-pub async fn generate_tests(config: &Config, arturo: &PathBuf) {
+pub async fn generate_tests(config: &Config, arturo: &String) {
     let pattern = format!("{}/{}", config.tests, config.target);
     let test_files: Vec<_> = glob(&pattern)
         .expect("Invalid glob pattern")
@@ -22,7 +22,7 @@ pub async fn generate_tests(config: &Config, arturo: &PathBuf) {
     for file in &test_files {
         let (arturo, file) = (arturo.clone(), file.clone());
         join_set.spawn(async move {
-            let result = run_test_file(arturo, file.clone()).await;
+            let result = run_test_file(&arturo, file.clone()).await;
             (file, result)
         });
     }
