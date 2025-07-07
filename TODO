@@ -1,7 +1,7 @@
 - [x] Remove standalone checks from test_*.art tests
 - [x] Rename test_*.art to *.spec.art
 - [x] Add test_*.art that asserts that this should not be run
-- [ ] Remove cli.art
+- [x] Remove cli.art
 - [ ] Disable unitt if `unitt.toml` does not exist
 - [ ] Automatically import unitt
   - [ ] Create --using argument to force some unitt version
