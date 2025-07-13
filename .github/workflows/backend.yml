@@ -43,6 +43,9 @@ jobs:
       - name: Build with cross
         run: cross build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
 
+      - name: Debug build output
+        run: ls -lh **/target/**
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
