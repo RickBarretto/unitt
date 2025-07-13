@@ -1,0 +1,70 @@
+name: Cross Compile and Upload Artifacts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  linux-windows-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-unknown-linux-gnu
+          - aarch64-unknown-linux-gnu
+          - i686-unknown-linux-gnu
+          - armv7-unknown-linux-gnueabihf
+          - x86_64-pc-windows-gnu
+          - aarch64-pc-windows-msvc
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Install cross
+        run: cargo install cross --git https://github.com/cross-rs/cross
+
+      - name: Build with cross
+        run: cross build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/unitt*
+
+  macos-build:
+    runs-on: macos-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-apple-darwin
+          - aarch64-apple-darwin
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Build natively
+        run: cargo build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/unitt*
+
+  freebsd-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: FreeBSD build not supported
+        run: echo "FreeBSD cross-compilation not supported in this workflow."
