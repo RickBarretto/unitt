@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/unitt*
+          path: unitt/target/${{ matrix.target }}/release/unitt*
 
   macos-build:
     runs-on: macos-latest
@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/unitt*
+          path: unitt/target/${{ matrix.target }}/release/unitt*
 
   windows-arm64-build:
     runs-on: windows-latest
@@ -113,7 +113,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: aarch64-pc-windows-msvc
-          path: target/aarch64-pc-windows-msvc/release/unitt*
+          path: unitt/target/aarch64-pc-windows-msvc/release/unitt*
 
   freebsd-placeholder:
     runs-on: ubuntu-latest
