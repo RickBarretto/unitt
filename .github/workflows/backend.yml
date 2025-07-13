@@ -32,11 +32,22 @@ jobs:
       - name: Build with cross
         run: cross build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
 
+      - name: Set platform name
+        id: platform
+        run: |
+          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
+            echo "name=windows" >> $GITHUB_OUTPUT
+          elif [[ "${{ matrix.target }}" == *"linux"* ]]; then
+            echo "name=linux" >> $GITHUB_OUTPUT
+          else
+            echo "name=other" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.target }}
-          path: unitt/target/${{ matrix.target }}/release/unitt*
+          name: ${{ steps.platform.outputs.name }}-${{ matrix.target }}
+          path: unitt\target/${{ matrix.target }}/release/unitt*
 
   macos-build:
     runs-on: macos-latest
