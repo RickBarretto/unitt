@@ -23,6 +23,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Install Rust target
         run: rustup target add ${{ matrix.target }}
 
@@ -32,22 +43,11 @@ jobs:
       - name: Build with cross
         run: cross build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
 
-      - name: Set platform name
-        id: platform
-        run: |
-          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
-            echo "name=windows" >> $GITHUB_OUTPUT
-          elif [[ "${{ matrix.target }}" == *"linux"* ]]; then
-            echo "name=linux" >> $GITHUB_OUTPUT
-          else
-            echo "name=other" >> $GITHUB_OUTPUT
-          fi
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.platform.outputs.name }}-${{ matrix.target }}
-          path: unitt\target/${{ matrix.target }}/release/unitt*
+          name: ${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/unitt*
 
   macos-build:
     runs-on: macos-latest
@@ -62,7 +62,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Rust target
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/.cargo/registry
+            ~/Library/Caches/.cargo/git
+          key: macos-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            macos-cargo-
+
+      - name: Install Rust target
         run: rustup target add ${{ matrix.target }}
 
       - name: Build natively
@@ -72,10 +82,38 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target }}
-          path: unitt/target/${{ matrix.target }}/release/unitt*
+          path: target/${{ matrix.target }}/release/unitt*
+
+  windows-arm64-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\.cargo\registry
+            ~\.cargo\git
+          key: windows-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            windows-cargo-
+
+      - name: Install Rust target
+        run: rustup target add aarch64-pc-windows-msvc
+
+      - name: Build natively
+        run: cargo build --release --target aarch64-pc-windows-msvc --manifest-path unitt/Cargo.toml
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aarch64-pc-windows-msvc
+          path: target/aarch64-pc-windows-msvc/release/unitt*
 
   freebsd-placeholder:
     runs-on: ubuntu-latest
     steps:
       - name: FreeBSD build not supported
-        run: echo "FreeBSD cross-compilation not supported in this workflow."
+        run: echo "FreeBSD cross-compilation is not currently supported in this workflow."
