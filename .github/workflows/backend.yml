@@ -34,15 +34,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Get crate metadata
-        id: meta
-        run: |
-          META=$(cargo metadata --manifest-path unitt/Cargo.toml --format-version 1 --no-deps)
-          NAME=$(echo "$META" | jq -r '.packages[0].name')
-          VERSION=$(echo "$META" | jq -r '.packages[0].version')
-          echo "name=$NAME" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Install Rust target
         run: rustup target add ${{ matrix.target }}
 
@@ -52,28 +43,14 @@ jobs:
       - name: Build with cross
         run: cross build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
 
-      - name: Compute artifact name
-        id: tag
-        run: |
-          TARGET=${{ matrix.target }}
-          ARCH=""
-          OS=""
-          case "$TARGET" in
-            *x86_64*linux*)  ARCH="amd64"; OS="linux" ;;
-            *aarch64*linux*) ARCH="arm64"; OS="linux" ;;
-            *i686*linux*)    ARCH="x86";   OS="linux" ;;
-            *armv7*linux*)   ARCH="arm32"; OS="linux" ;;
-            *x86_64*windows*) ARCH="amd64"; OS="windows" ;;
-            *) echo "Unknown target $TARGET"; exit 1 ;;
-          esac
-          echo "os=$OS" >> $GITHUB_OUTPUT
-          echo "arch=$ARCH" >> $GITHUB_OUTPUT
+      - name: Debug build output
+        run: ls -lh **/target/**
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.meta.outputs.name }}-${{ steps.meta.outputs.version }}-${{ steps.tag.outputs.os }}-${{ steps.tag.outputs.arch }}
-          path: target/${{ matrix.target }}/release/${{ steps.meta.outputs.name }}*
+          name: ${{ matrix.target }}
+          path: unitt/target/${{ matrix.target }}/release/unitt*
 
   macos-build:
     runs-on: macos-latest
@@ -88,12 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install tools
-        run: |
-          rustup target add ${{ matrix.target }}
-          brew install jq || true
-
-      - name: Cache Cargo
+      - name: Cache Cargo dependencies
         uses: actions/cache@v4
         with:
           path: |
@@ -103,37 +75,17 @@ jobs:
           restore-keys: |
             macos-cargo-
 
-      - name: Get crate metadata
-        id: meta
-        run: |
-          META=$(cargo metadata --manifest-path unitt/Cargo.toml --format-version 1 --no-deps)
-          NAME=$(echo "$META" | jq -r '.packages[0].name')
-          VERSION=$(echo "$META" | jq -r '.packages[0].version')
-          echo "name=$NAME" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Install Rust target
+        run: rustup target add ${{ matrix.target }}
 
-      - name: Compute artifact name
-        id: tag
-        run: |
-          TARGET=${{ matrix.target }}
-          if [[ "$TARGET" == "x86_64-apple-darwin" ]]; then
-            ARCH="intel"
-          elif [[ "$TARGET" == "aarch64-apple-darwin" ]]; then
-            ARCH="silicon"
-          else
-            ARCH="unknown"
-          fi
-          echo "os=macos" >> $GITHUB_OUTPUT
-          echo "arch=$ARCH" >> $GITHUB_OUTPUT
-
-      - name: Build
+      - name: Build natively
         run: cargo build --release --target ${{ matrix.target }} --manifest-path unitt/Cargo.toml
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.meta.outputs.name }}-${{ steps.meta.outputs.version }}-${{ steps.tag.outputs.os }}-${{ steps.tag.outputs.arch }}
-          path: target/${{ matrix.target }}/release/${{ steps.meta.outputs.name }}*
+          name: ${{ matrix.target }}
+          path: unitt/target/${{ matrix.target }}/release/unitt*
 
   windows-arm64-build:
     runs-on: windows-latest
@@ -141,12 +93,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install tools
-        run: |
-          rustup target add aarch64-pc-windows-msvc
-          choco install jq -y
-
-      - name: Cache Cargo
+      - name: Cache Cargo dependencies
         uses: actions/cache@v4
         with:
           path: |
@@ -156,18 +103,20 @@ jobs:
           restore-keys: |
             windows-cargo-
 
-      - name: Get crate metadata
-        id: meta
-        run: |
-          $meta = cargo metadata --manifest-path unitt/Cargo.toml --format-version 1 --no-deps | ConvertFrom-Json
-          echo "name=$($meta.packages[0].name)" >> $env:GITHUB_OUTPUT
-          echo "version=$($meta.packages[0].version)" >> $env:GITHUB_OUTPUT
+      - name: Install Rust target
+        run: rustup target add aarch64-pc-windows-msvc
 
-      - name: Build
+      - name: Build natively
         run: cargo build --release --target aarch64-pc-windows-msvc --manifest-path unitt/Cargo.toml
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.meta.outputs.name }}-${{ steps.meta.outputs.version }}-windows-arm64
-          path: target/aarch64-pc-windows-msvc/release/${{ steps.meta.outputs.name }}*
+          name: aarch64-pc-windows-msvc
+          path: unitt/target/aarch64-pc-windows-msvc/release/unitt*
+
+  freebsd-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: FreeBSD build not supported
+        run: echo "FreeBSD cross-compilation is not currently supported in this workflow."
