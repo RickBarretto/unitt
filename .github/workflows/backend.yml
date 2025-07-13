@@ -86,6 +86,40 @@ jobs:
           name: ${{ matrix.target }}
           path: unitt/target/${{ matrix.target }}/release/unitt*
 
+  freebsd-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: FreeBSD build not supported
+        run: echo "FreeBSD cross-compilation is not currently supported in this workflow."
+
+  windows-amd64-msvc-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\.cargo\registry
+            ~\.cargo\git
+          key: windows-msvc-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            windows-msvc-cargo-
+
+      - name: Install Rust target
+        run: rustup target add x86_64-pc-windows-msvc
+
+      - name: Build
+        run: cargo build --release --target x86_64-pc-windows-msvc --manifest-path unitt/Cargo.toml
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: x86_64-pc-windows-amd64
+          path: unitt/target/x86_64-pc-windows-msvc/release/unitt.exe
+
   windows-arm64-build:
     runs-on: windows-latest
 
@@ -113,40 +147,3 @@ jobs:
         with:
           name: aarch64-pc-windows-msvc
           path: unitt/target/aarch64-pc-windows-msvc/release/unitt*
-
-  freebsd-placeholder:
-    runs-on: ubuntu-latest
-    steps:
-      - name: FreeBSD build not supported
-        run: echo "FreeBSD cross-compilation is not currently supported in this workflow."
-
-  windows-amd64-msvc-build:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Cargo dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~\.cargo\registry
-            ~\.cargo\git
-          key: windows-msvc-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            windows-msvc-cargo-
-
-      - name: Install Rust target
-        run: rustup target add x86_64-pc-windows-msvc
-
-      - name: Build natively
-        run: cargo build --release --target x86_64-pc-windows-msvc --manifest-path unitt/Cargo.toml
-
-      - name: Debug build output
-        run: Get-ChildItem -Recurse target\x86_64-pc-windows-msvc\release
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: x86_64-pc-windows-msvc
-          path: target/x86_64-pc-windows-msvc/release/unitt.exe
