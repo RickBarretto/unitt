@@ -16,16 +16,8 @@ define :settings [
             -> val
     ] 
 
-    path: method [][
-        \_property 'path
-    ]
-
-    suffix: method [][
-        \_property 'suffix
-    ]
-
-    binary: method [][
-        \_property 'binary
-    ]
+    path:   method => \_property 'path
+    suffix: method => \_property 'suffix
+    binary: method => \_property 'binary
 
 ]
