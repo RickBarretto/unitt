@@ -1,0 +1,30 @@
+
+define :settings [
+
+    init: method [
+        projectSettings :dictionary 
+        defaultSettings :dictionary
+    ][
+        \_project: projectSettings
+        \_default: defaultSettings
+    ]
+
+    _property: method [key :literal][
+        (error? try -> val: \_project\[key])?
+            -> \_default\[key]
+            -> val
+    ] 
+
+    path: method [][
+        \_property 'path
+    ]
+
+    suffix: method [][
+        \_property 'suffix
+    ]
+
+    binary: method [][
+        \_property 'binary
+    ]
+
+]
