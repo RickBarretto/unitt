@@ -11,7 +11,7 @@
 ;;
 ;; export: ['test 'suite]
 
-unitt: store.json ~".unitt/|args\filename|.json"
+unitt: store.native ~".unitt/|args\filename|.art"
 unitt\standalone: []
 unitt\specs: []
 
