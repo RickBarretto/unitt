@@ -1,2 +1,11 @@
 
-print "Hello, world!"
+import ./{runner/settings}!
+import ./{runner/cli}!
+
+print express args
+
+cliSettings: cliConfigFrom args!
+unittSettings: projectConfigFrom "unitt.toml"!
+
+print unittSettings
+print cliSettings

@@ -1,5 +1,5 @@
 
-define :settings [
+define :FileConfig [
 
     init: method [projectSettings :dictionary][
         \_project: projectSettings
@@ -22,6 +22,38 @@ define :settings [
 
 ]
 
-settings: $[tomlFile :string][
-    to :settings [read.toml tomlFile]
+define :CLIConfig [
+    init: method [args :dictionary][
+        \_args: args
+        \_default: #[
+            path: null
+            suffix: null
+            binary: null
+            failfast: false
+            silent: false
+            simple: false
+        ]
+    ]
+
+    _property: method [key :literal][
+        (error? try -> val: \_project\[key])?
+            -> \_default\[key]
+            -> val
+    ]
+
+    path:     method => \_property 'path
+    suffix:   method => \_property 'suffix
+    binary:   method => \_property 'binary
+    failfast: method => \_property 'failfast
+    silent:   method => \_property 'silent
+    simple:   method => \_property 'simple
+
+]
+
+cliConfigFrom: $[args :dictionary][
+    to :CLIConfig [args]
+]
+
+projectConfigFrom: $[tomlFile :string][
+    to :FileConfig [read.toml tomlFile]
 ]
