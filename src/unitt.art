@@ -64,7 +64,6 @@ describe: $[description :string tests :block][
     ; Sets Global variables to current Spec context
     __unitt__scope: 'specs
     __unitt_spec: #[
-        id: unique.id "spec-"
         description: description
         tests: []
     ]
@@ -202,7 +201,6 @@ it: $[description :string testCase :block][
     ]
 
     __local_spec: #[
-        id: unique.id "test-"
         description: description
         assertions: __assertionsStatus
     ]
