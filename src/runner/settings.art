@@ -1,12 +1,13 @@
 
 define :settings [
 
-    init: method [
-        projectSettings :dictionary 
-        defaultSettings :dictionary
-    ][
+    init: method [projectSettings :dictionary][
         \_project: projectSettings
-        \_default: defaultSettings
+        \_default: #[
+            path: "specs"
+            suffix: ".spec.art"
+            binary: "arturo"
+        ]
     ]
 
     _property: method [key :literal][
