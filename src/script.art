@@ -4,8 +4,12 @@ import ./{runner/cli}!
 
 print express args
 
-cliSettings: cliConfigFrom args!
-unittSettings: projectConfigFrom "unitt.toml"!
+settings: settings args read.toml "unitt.toml"!
 
-print unittSettings
-print cliSettings
+print settings
+print settings\path
+print settings\suffix
+print settings\binary
+print settings\failfast
+print settings\silent
+print settings\simple
