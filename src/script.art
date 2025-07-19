@@ -21,3 +21,11 @@ if helpAsked? args [
 
 settings: settings args read.toml "unitt.toml"!
 
+tests: listTests settings
+    | executeAll
+    | collectAll
+
+display
+    .failfast?: settings\failfast 
+    .loud?: not? settings\silent
+    tests
