@@ -5,7 +5,11 @@ import ./{runner/cli}!
 print express args
 
 if unknownArguments? args [
-    print ~{Unknown argument(s): |join.with: ", " unknownArguments args|.}
+    unknowns: unknownArguments args
+        | map => express
+        | join.with: ", "
+
+    print ~"Unknown argument(s): |unknowns|."
     print help
     exit 1
 ]
@@ -17,10 +21,3 @@ if helpAsked? args [
 
 settings: settings args read.toml "unitt.toml"!
 
-; print settings
-; print settings\path
-; print settings\suffix
-; print settings\binary
-; print settings\failfast
-; print settings\silent
-; print settings\simple
