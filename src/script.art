@@ -2,7 +2,11 @@
 import ./{runner/settings}!
 import ./{runner/cli}!
 
-print express args
+import ./{runner/select}!
+
+as: $[object :any target :type][
+    to target object
+]
 
 if unknownArguments? args [
     unknowns: unknownArguments args
@@ -20,7 +24,12 @@ if helpAsked? args [
 ]
 
 settings: settings args read.toml "unitt.toml"!
-tests: listTests settings
-    | executeAll
-    | collectAll
-    | display
+
+listTests settings
+    | as :block
+    | express
+    | print
+
+;     | executeAll
+;     | collectAll
+;     | display
