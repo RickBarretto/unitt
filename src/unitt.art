@@ -76,7 +76,6 @@ describe: $[description :string tests :block][
     ; Resets global variables
     __unitt__scope: 'standalone
     __unitt_spec: #[
-        id: ""
         description: ""
         assertions: []
     ]
