@@ -31,7 +31,13 @@ settings: settings args read.toml "unitt.toml"!
 delete.directory ".unitt"
 
 allTests: listTests settings
-executeTests allTests
+result: executeTests allTests
     | details
     | summary
-    | print
+
+print ""
+print "========== Summary ==========\n"
+print indent.n: 2 to :string result
+print ""
+print "========== ======= ==========\n"
+
