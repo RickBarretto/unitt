@@ -31,9 +31,9 @@ delete.directory ".unitt"
 
 allTests: listTests settings
 result: executeTests allTests
-    | details not? settings\simple
+    | details not? settings\clean
     | summary
 
-if and? do [result\failed?] not? settings\clean [
+if and? do [result\failed?] not? settings\silent [
     panic "Some tests failed"
 ]
