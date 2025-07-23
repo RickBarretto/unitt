@@ -21,10 +21,7 @@ executeTests: $[tests :block][
     switch empty? allTests
         [ print "No tests to execute.", exit 0 ]
         [ _executeAll allTests ]
-]
 
-listExecuted: $[tests :block][
-    ensure -> all? map tests => string?
     tests
         | map => [prepend & "unitt/"]
         | map => normalize

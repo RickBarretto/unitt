@@ -26,9 +26,8 @@ if helpAsked? args [
 
 settings: settings args read.toml "unitt.toml"!
 
+
 allTests: listTests settings
 executeTests allTests
-
-listExecuted allTests
     | express
     | print
