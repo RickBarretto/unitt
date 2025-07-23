@@ -18,9 +18,9 @@ _executeAll: $[tests :block][
 
 executeTests: $[tests :block][
     ensure -> all? map tests => string?
-    switch empty? allTests
+    switch empty? tests
         [ print "No tests to execute.", exit 0 ]
-        [ _executeAll allTests ]
+        [ _executeAll tests ]
 
     tests
         | map => [prepend & ".unitt/"]
