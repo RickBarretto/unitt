@@ -41,3 +41,6 @@ print indent.n: 2 to :string result
 print ""
 print "========== ======= ==========\n"
 
+if and? do [result\failed?] not? settings\silent [
+    panic "Some tests failed"
+]
