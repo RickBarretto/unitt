@@ -23,7 +23,7 @@ define :Settings [
             binary: "arturo"
             failfast: false
             silent: false
-            simple: false
+            clean: false
         ]
     ]
 
@@ -32,7 +32,7 @@ define :Settings [
     binary:   method [][fallback 'binary    @[\_cli \_project \_default]]
     failfast: method [][fallback 'failfast  @[\_cli \_default]]
     silent:   method [][fallback 'silent    @[\_cli \_default]]
-    simple:   method [][fallback 'simple    @[\_cli \_default]]
+    clean:    method [][fallback 'clean    @[\_cli \_default]]
 
 ]
 
