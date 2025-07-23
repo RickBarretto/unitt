@@ -3,6 +3,7 @@ import ./{runner/settings}!
 import ./{runner/cli}!
 
 import ./{runner/select}!
+import ./{runner/execute}!
 
 as: $[object :any target :type][
     to target object
@@ -25,11 +26,9 @@ if helpAsked? args [
 
 settings: settings args read.toml "unitt.toml"!
 
-listTests settings
-    | as :block
+allTests: listTests settings
+executeTests allTests
+
+listExecuted allTests
     | express
     | print
-
-;     | executeAll
-;     | collectAll
-;     | display

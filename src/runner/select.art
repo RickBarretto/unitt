@@ -1,27 +1,7 @@
 ;; Test Collection step.
 
-
-define :TestFiles [
-    ;; CollectedTests is a collection of tests that can be executed.
-
-    init: method [settings :Settings][
-        ;; :Settings gives us the choosen paths and test-files's 
-        ;; naming patterns.
-        \settings: settings
-    ]
-
-    block: method [][
-        ;; Return all files to be tested.
-        ;; Returns: [:string] 
-
-        settings: \settings
-        list.recursive settings\path
-            | select => [suffix? & settings\suffix]
-            | map => normalize
-    ]
-]
-
-
 listTests: $[settings :Settings][
-    to :TestFiles @[settings]!
+    list.recursive settings\path
+        | select => [suffix? & settings\suffix]
+        | map => normalize
 ]

@@ -1,0 +1,31 @@
+_execute: $[test :string][
+    command: ~"arturo |test| --filename:|test|"
+    result: execute.code command
+
+    if not? zero? result\code [
+        ; If the command did not execute successfully, print the error.
+        print ~"Uncaught error in |test|:"
+        print express.pretty result
+        exit 1
+    ]
+]
+
+_executeAll: $[tests :block][
+    loop tests 'testfile [
+        _execute testfile
+    ]
+]
+
+executeTests: $[tests :block][
+    ensure -> all? map tests => string?
+    switch empty? allTests
+        [ print "No tests to execute.", exit 0 ]
+        [ _executeAll allTests ]
+]
+
+listExecuted: $[tests :block][
+    ensure -> all? map tests => string?
+    tests
+        | map => [prepend & "unitt/"]
+        | map => normalize
+]
