@@ -58,7 +58,15 @@ specDetail: $[title :string spec :block][
     print ""
 ]
 
-fileDetail: $[name :string file :dictionary][
+failed?: $[specs :block][
+    specs
+        | map 'test [to :test [test]]
+        | map 'test [do [test\failed?]]
+        | flatten
+        | any?
+]
+
+fileDetail: $[name :string file :dictionary complete? :logical][
     
     standalone: file
         | get 'standalone
@@ -70,22 +78,32 @@ fileDetail: $[name :string file :dictionary][
         | map 'spec [@[spec\description, array get spec 'tests]]
         | flatten.once
 
-    print ~"======== |name| ========"
-    print ""
+    someFailed?: any? 
+        map specs [title spec][failed? spec] 
+        ++ failed? standalone 
+
+    if or? someFailed? complete? [
+        print ~"======== |name| ========"
+        print ""
+    ]
 
     if not? empty? standalone [
-        specDetail "Module's Global Specs" standalone
+        if or? failed? standalone complete? [
+            specDetail "Module's Global Specs" standalone
+        ]
     ]
 
     loop specs [title spec] [
-        specDetail title spec
+        if or? failed? spec complete? [
+            specDetail title spec
+        ]
     ]
 ]
 
 
-details: $[tests :block][
+details: $[tests :block, complete? :logical][
     loop tests 'test [
-        fileDetail test, # test
+        fileDetail test, # test, complete?
     ]
     tests
 ]

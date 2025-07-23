@@ -32,7 +32,7 @@ delete.directory ".unitt"
 
 allTests: listTests settings
 result: executeTests allTests
-    | details
+    | details not? settings\simple
     | summary
 
 print ""
