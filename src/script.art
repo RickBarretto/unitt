@@ -34,6 +34,7 @@ result: executeTests allTests
     | details not? settings\clean
     | summary
 
-if and? do [result\failed?] not? settings\silent [
+
+if and? 0 < result\failed, not? settings\silent [
     panic "Some tests failed"
 ]
