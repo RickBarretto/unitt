@@ -1,0 +1,75 @@
+
+
+debug: $[val][
+    inspect val
+    val
+]
+
+mergeSummaries: $[summaries :block][
+    passed: summaries
+        | map => [get & 'passed]
+        | sum
+    
+    failed: summaries
+        | map => [get & 'failed]
+        | sum
+
+    skipped: summaries
+        | map => [get & 'skipped]
+        | sum
+
+    #[passed: passed failed: failed skipped: skipped]
+
+]
+
+total: $[summary :dictionary][
+    sum @[summary\passed summary\failed summary\skipped]
+]
+
+standaloneSummary: $[test :dictionary][
+    behavior: test
+        | get 'standalone
+        | array
+        | map 'behavior -> get behavior 'assertions
+        | flatten
+        | array
+
+    passed: behavior | filter => string? | enumerate => true?
+    failed: behavior | filter => string? | enumerate => false?
+    skipped: behavior | select => string? | enumerate => empty?
+
+    #[passed: passed failed: failed skipped: skipped]
+]
+
+specsSummary: $[test :dictionary][
+    behavior: test
+        | get 'specs
+        | array
+        | map 'spec [get spec 'tests]
+        | flatten.once
+        | array
+        | map 'behavior [get behavior 'assertions]
+
+    passed: behavior | filter => string? | enumerate => true?
+    failed: behavior | filter => string? | enumerate => false?
+    skipped: behavior | filter => logical? | enumerate => empty?
+
+    #[passed: passed failed: failed skipped: skipped]
+]
+
+fileSummary: $[test :dictionary][
+    mergeSummaries @[
+        standaloneSummary test
+        specsSummary test
+    ]
+]
+
+summary: $[tests :block][
+    print express tests
+    
+    tests
+        | map => dictionary
+        | map => fileSummary
+        | mergeSummaries
+        | print
+]
