@@ -1,5 +1,16 @@
 import ./{../src/unitt}!
 
+test "string should not be interpolated when not asked for" [
+    expects.to.be: 'equal? [
+        "W | A | S | D" 
+        "W | A | S | D"
+    ]
+
+    expects -> equal? 
+        "W | A | S | D" 
+        "W | A | S | D"
+]
+
 test "this passes" [
     a: 1
     assert -> true
