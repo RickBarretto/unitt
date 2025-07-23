@@ -55,21 +55,22 @@ fileSummary: $[test :dictionary][
 ]
 
 define :summary [
-    init: constructor [summary :dictionary]
+    init: method [summary :dictionary][
+        \passed: summary\passed
+        \skipped: summary\skipped
+        \failed:  summary\failed
+    ]
+
+    total: method [][
+        sum @[\passed \skipped \failed]
+    ]
 
     string: method [][
-
-        passed:  \summary\passed
-        skipped: \summary\skipped
-        failed:  \summary\failed
-
-        total: sum @[passed skipped failed]
-
         ~{
-            ⏏️    TOTAL: |total| assertions
-            ✅  PASSED: |passed| assertion
-            ⏩ SKIPPED: |skipped| assertions
-            ❌  FAILED: |failed| assertion
+            ⏏️    TOTAL: |\total| assertions
+            ✅  PASSED: |\passed| assertion
+            ⏩ SKIPPED: |\skipped| assertions
+            ❌  FAILED: |\failed| assertion
         }
     ]
 ]
