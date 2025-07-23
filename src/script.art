@@ -26,6 +26,7 @@ if helpAsked? args [
 
 settings: settings args read.toml "unitt.toml"!
 
+delete.directory ".unitt"
 
 allTests: listTests settings
 executeTests allTests
