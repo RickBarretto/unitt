@@ -21,7 +21,6 @@ define :Settings [
             path: "specs"
             suffix: ".spec.art"
             binary: "arturo"
-            failfast: false
             silent: false
             clean: false
         ]
@@ -30,7 +29,6 @@ define :Settings [
     path:     method [][fallback 'path      @[\_cli \_project \_default]]
     suffix:   method [][fallback 'suffix    @[\_cli \_project \_default]]
     binary:   method [][fallback 'binary    @[\_cli \_project \_default]]
-    failfast: method [][fallback 'failfast  @[\_cli \_default]]
     silent:   method [][fallback 'silent    @[\_cli \_default]]
     clean:    method [][fallback 'clean    @[\_cli \_default]]
 

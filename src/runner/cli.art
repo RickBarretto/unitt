@@ -1,6 +1,6 @@
 
 knownArgs: to [:string] 
-    [help h silent failfast binary path suffix simple values]
+    [help h silent binary path suffix simple values]
 
 debug: $[x][
     inspect dup x
@@ -32,7 +32,6 @@ Usage: unitt [options]
         --help           Show this help message and exit
         --clean          Display failed tests only (per module).
         --silent         Override error code.
-        --failfast       Stop on first exception.
 
     Override `unitt.toml':
 
