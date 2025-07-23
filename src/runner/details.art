@@ -52,7 +52,7 @@ specDetail: $[title :string spec :block][
         | map 'test [to :test [test]]
         | join.with: "\n\n"
 
-    print ~"Spec: |title|"
+    print ~"Describe: |title|"
     print ""
     print indent.n: 4 result
     print ""
