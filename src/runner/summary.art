@@ -84,9 +84,17 @@ newSummary: $[data :dictionary][
 ]
 
 summary: $[tests :block][
-    tests
+    result: tests
         | map => dictionary
         | map => fileSummary
         | mergeSummaries
         | newSummary
+
+    print ""
+    print "========== Summary ==========\n"
+    print indent.n: 2 to :string result
+    print ""
+    print "========== ======= ==========\n"
+
+    result
 ]
