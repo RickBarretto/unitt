@@ -1,6 +1,6 @@
 
 knownArgs: to [:string] 
-    [help h silent binary path suffix simple values]
+    [help h silent binary path suffix clean values]
 
 debug: $[x][
     inspect dup x
