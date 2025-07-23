@@ -22,10 +22,6 @@ mergeSummaries: $[summaries :block][
 
 ]
 
-total: $[summary :dictionary][
-    sum @[summary\passed summary\failed summary\skipped]
-]
-
 standaloneSummary: $[test :dictionary][
     behavior: test
         | get 'standalone
@@ -64,12 +60,34 @@ fileSummary: $[test :dictionary][
     ]
 ]
 
+define :summary [
+    init: constructor [summary :dictionary]
+
+    string: method [][
+
+        passed:  \summary\passed
+        skipped: \summary\skipped
+        failed:  \summary\failed
+
+        total: sum @[passed skipped failed]
+
+        ~{
+            ⏏️    TOTAL: |total| assertions
+            ✅  PASSED: |passed| assertion
+            ⏩ SKIPPED: |skipped| assertions
+            ❌  FAILED: |failed| assertion
+        }
+    ]
+]
+
+newSummary: $[data :dictionary][
+    to :summary [data]
+]
+
 summary: $[tests :block][
-    print express tests
-    
     tests
         | map => dictionary
         | map => fileSummary
         | mergeSummaries
-        | print
+        | newSummary
 ]
