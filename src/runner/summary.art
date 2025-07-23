@@ -65,6 +65,10 @@ define :summary [
         sum @[\passed \skipped \failed]
     ]
 
+    failed?: method [][
+        not? zero? \failed
+    ]
+
     string: method [][
         ~{
             ⏏️    TOTAL: |\total| assertions
