@@ -23,6 +23,6 @@ executeTests: $[tests :block][
         [ _executeAll allTests ]
 
     tests
-        | map => [prepend & "unitt/"]
+        | map => [prepend & ".unitt/"]
         | map => normalize
 ]
