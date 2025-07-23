@@ -20,11 +20,9 @@ standaloneSummary: $[test :dictionary][
         | get 'standalone
         | array
         | map 'behavior -> get behavior 'assertions
-        | flatten
-        | array
 
-    passed: behavior | filter => string? | enumerate => true?
-    failed: behavior | filter => string? | enumerate => false?
+    passed: @flatten behavior | filter => string? | enumerate => true?
+    failed: @flatten behavior | filter => string? | enumerate => false?
     skipped: behavior | select => string? | enumerate => empty?
 
     #[passed: passed failed: failed skipped: skipped]
@@ -38,11 +36,9 @@ specsSummary: $[test :dictionary][
         | flatten.once
         | array
         | map 'behavior [get behavior 'assertions]
-        | flatten
-        | array
 
-    passed: behavior | filter => string? | enumerate => true?
-    failed: behavior | filter => string? | enumerate => false?
+    passed: @flatten behavior | filter => string? | enumerate => true?
+    failed: @flatten behavior | filter => string? | enumerate => false?
     skipped: behavior | filter => logical? | enumerate => empty?
 
     #[passed: passed failed: failed skipped: skipped]
