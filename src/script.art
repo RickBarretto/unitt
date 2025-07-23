@@ -16,9 +16,8 @@ if unknownArguments? args [
         | map => express
         | join.with: ", "
 
-    print ~"Unknown argument(s): |unknowns|."
     print help
-    exit 1
+    panic ~"Unknown argument(s): |unknowns|."
 ]
 
 if helpAsked? args [
