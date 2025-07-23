@@ -1,10 +1,4 @@
 
-
-debug: $[val][
-    inspect val
-    val
-]
-
 mergeSummaries: $[summaries :block][
     passed: summaries
         | map => [get & 'passed]
