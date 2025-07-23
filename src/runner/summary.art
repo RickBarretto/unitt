@@ -1,4 +1,3 @@
-
 mergeSummaries: $[summaries :block][
     passed: summaries
         | map => [get & 'passed]
@@ -39,6 +38,8 @@ specsSummary: $[test :dictionary][
         | flatten.once
         | array
         | map 'behavior [get behavior 'assertions]
+        | flatten
+        | array
 
     passed: behavior | filter => string? | enumerate => true?
     failed: behavior | filter => string? | enumerate => false?
