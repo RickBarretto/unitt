@@ -5,6 +5,7 @@ import ./{runner/cli}!
 import ./{runner/select}!
 import ./{runner/execute}!
 import ./{runner/summary}!
+import ./{runner/details}!
 
 as: $[object :any target :type][
     to target object
@@ -31,5 +32,6 @@ delete.directory ".unitt"
 
 allTests: listTests settings
 executeTests allTests
+    | details
     | summary
     | print
