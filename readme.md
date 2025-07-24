@@ -154,7 +154,7 @@ The 2nd one introduced a RSpec-inspired syntax alternatively, which is now the r
         This helps to show the function name on display, 
         instead of a `true`/`false`.
 
-## *XUnit-ish API*
+### *XUnit-ish API*
 
 - `test: $[description :string, testCase :block]`:
     The same as `it`. 
