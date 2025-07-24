@@ -212,7 +212,6 @@ Kept for compatibilities with our 1st version.
 
 ---
 
-> Background photo on ["At a Glance"](#at-a-glance) 
-by [Artem Sapegin](https://unsplash.com/@sapegin?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) 
-on [Unsplash](https://unsplash.com/photos/brown-wooden-boat-floating-on-body-of-water-XGDBdSQ70O0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
-      
+> Background photo on ["At a Glance"](#at-a-glance)  
+> by [Luca Bravo](https://unsplash.com/@lucabravo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) 
+> on [Unsplash](https://unsplash.com/photos/boat-docked-near-house-VowIFDxogG4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
