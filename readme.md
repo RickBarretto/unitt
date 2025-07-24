@@ -129,15 +129,20 @@ Describe: binary appending
 
 ## Documentation
 
-### *Unitt*
+### *Compatibility*
+
+Unitt supports both: XUnit and RSpec-like syntax.
+
+The 1st version was heavily influenced by XUnit.
+The 2nd one introduced a RSpec-inspired syntax alternatively, which is now the recommended one.
+
+### *Rpec-ish API*
+
 - `describe: $[description :string tests :block]`:
     Groups tests around some feature.
 - `it: $[description :string, testCase :block]`:
     The test case itself, you need to pass a clear description to it,
     And the logic that you're trying to assert.
-    - `.prop`:
-        Indicates that a test is property-based.
-        The indicator is the `~` separator on the description.
     - `.skip :logical`:
         Skips tests for some condition. 
         Will just skip if no condition is provided.
@@ -148,26 +153,16 @@ Describe: binary appending
         Uses some function to evaluate the statement.
         This helps to show the function name on display, 
         instead of a `true`/`false`.
-    - `.static :logical`:
-        Shows it as static code.
 
-
-## *Compatibility*
-
-This section includes the old-syntax inspired by XUnit. 
-Kept for compatibilities with our 1st version.
+## *XUnit-ish API*
 
 - `test: $[description :string, testCase :block]`:
     The same as `it`. 
-    Not only kept for compatibility issues,
-    but great to be used when not into a `describe`/`suite` block.
-    - `.prop`
     - `.skip :logical`
 - `assert: $[condition :block]`:
     The same as `expects`
     - `.with`
         The same as `.to` and `.be`
-     - `.static: :logical`
 - `suite: $[description :string tests :block]`:
     The same as `describe`.
 
