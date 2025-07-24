@@ -24,9 +24,9 @@
 
 <p align="center">
 <img 
-    alt="Running Unitt from terminal (v2)"
+    alt="Running Unitt from terminal (v3)"
     width="720"
-    src="./docs/running unitt screenshot.png"
+    src="./docs/running unitt - v3.png"
 />
 </p>
 
