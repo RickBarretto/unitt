@@ -1,0 +1,7 @@
+;; Test Collection step.
+
+listTests: $[settings :Settings][
+    list.recursive settings\path
+        | select => [suffix? & settings\suffix]
+        | map => normalize
+]

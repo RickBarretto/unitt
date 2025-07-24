@@ -1,15 +1,5 @@
 # unitt.toml - Configuration for unitt
 
-# Directory where cache/results are stored
-cache = ".unitt"
-
-# Directory or wildcard pattern for test files
-# (default: "specs")
-tests = "specs"
-
-# File pattern for test files
-# (default: "**.spec.art")
-target = "**/*.spec.art"
-
-# Arturo binary path
-arturo = "./bin/arturo.exe"
+path = "specs"              # Path to Tests
+suffix = ".spec.art"        # Test file's suffix
+binary = "./bin/arturo"     # Arturo Binary

@@ -1,0 +1,97 @@
+mergeSummaries: $[summaries :block][
+    passed: summaries
+        | map => [get & 'passed]
+        | sum
+    
+    failed: summaries
+        | map => [get & 'failed]
+        | sum
+
+    skipped: summaries
+        | map => [get & 'skipped]
+        | sum
+
+    #[passed: passed failed: failed skipped: skipped]
+
+]
+
+standaloneSummary: $[test :dictionary][
+    behavior: test
+        | get 'standalone
+        | array
+        | map 'behavior -> get behavior 'assertions
+
+    passed: @flatten behavior | filter => string? | enumerate => true?
+    failed: @flatten behavior | filter => string? | enumerate => false?
+    skipped: behavior | select => string? | enumerate => empty?
+
+    #[passed: passed failed: failed skipped: skipped]
+]
+
+specsSummary: $[test :dictionary][
+    behavior: test
+        | get 'specs
+        | array
+        | map 'spec [get spec 'tests]
+        | flatten.once
+        | array
+        | map 'behavior [get behavior 'assertions]
+
+    passed: @flatten behavior | filter => string? | enumerate => true?
+    failed: @flatten behavior | filter => string? | enumerate => false?
+    skipped: behavior | filter => logical? | enumerate => empty?
+
+    #[passed: passed failed: failed skipped: skipped]
+]
+
+fileSummary: $[test :dictionary][
+    mergeSummaries @[
+        standaloneSummary test
+        specsSummary test
+    ]
+]
+
+define :summary [
+    init: method [summary :dictionary][
+        \passed: summary\passed
+        \skipped: summary\skipped
+        \failed:  summary\failed
+    ]
+
+    total: method [][
+        sum @[\passed \skipped \failed]
+    ]
+
+    failed?: method [][
+        not? zero? \failed
+    ]
+
+    string: method [][
+        ~{
+            ⏏️    TOTAL: |\total| assertions
+            ✅  PASSED: |\passed| assertion
+            ⏩ SKIPPED: |\skipped| assertions
+            ❌  FAILED: |\failed| assertion
+        }
+    ]
+]
+
+newSummary: $[data :dictionary][
+    to :summary [data]
+]
+
+summary: $[tests :block][
+    result: tests
+        | map => dictionary
+        | map => fileSummary
+        | mergeSummaries
+        | newSummary
+
+    print ""
+    print "========== Summary ==========\n"
+    print indent.n: 2 to :string result
+    print ""
+    print "========== ======= ==========\n"
+
+    result
+]

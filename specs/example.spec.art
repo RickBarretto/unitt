@@ -1,5 +1,20 @@
 import ./{../src/unitt}!
 
+test "I'll fail as standalone" [
+    expects -> false
+]
+
+test "string should not be interpolated when not asked for" [
+    expects.to.be: 'equal? [
+        "W | A | S | D" 
+        "W | A | S | D"
+    ]
+
+    expects -> equal? 
+        "W | A | S | D" 
+        "W | A | S | D"
+]
+
 test "this passes" [
     a: 1
     assert -> true

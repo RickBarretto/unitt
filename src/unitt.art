@@ -11,7 +11,7 @@
 ;;
 ;; export: ['test 'suite]
 
-unitt: store.json ~".unitt/|args\filename|.json"
+unitt: store.native ~".unitt/|args\filename|"
 unitt\standalone: []
 unitt\specs: []
 
@@ -64,7 +64,6 @@ describe: $[description :string tests :block][
     ; Sets Global variables to current Spec context
     __unitt__scope: 'specs
     __unitt_spec: #[
-        id: unique.id "spec-"
         description: description
         tests: []
     ]
@@ -77,7 +76,6 @@ describe: $[description :string tests :block][
     ; Resets global variables
     __unitt__scope: 'standalone
     __unitt_spec: #[
-        id: ""
         description: ""
         assertions: []
     ]
@@ -202,7 +200,6 @@ it: $[description :string testCase :block][
     ]
 
     __local_spec: #[
-        id: unique.id "test-"
         description: description
         assertions: __assertionsStatus
     ]

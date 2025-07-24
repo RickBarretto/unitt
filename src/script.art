@@ -1,2 +1,40 @@
 
-print "Hello, world!"
+import ./{runner/settings}!
+import ./{runner/cli}!
+
+import ./{runner/select}!
+import ./{runner/execute}!
+import ./{runner/summary}!
+import ./{runner/details}!
+
+as: $[object :any target :type][
+    to target object
+]
+
+if unknownArguments? args [
+    unknowns: unknownArguments args
+        | map => express
+        | join.with: ", "
+
+    print help
+    panic ~"Unknown argument(s): |unknowns|."
+]
+
+if helpAsked? args [
+    print help
+    exit 0
+]
+
+settings: settings args read.toml "unitt.toml"!
+
+delete.directory ".unitt"
+
+allTests: listTests settings
+result: executeTests allTests
+    | details not? settings\clean
+    | summary
+
+
+if and? 0 < result\failed, not? settings\silent [
+    panic "Some tests failed"
+]

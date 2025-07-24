@@ -1,0 +1,39 @@
+
+fallback: $[key :literal :word :string where :block][
+    last?: $[idx :integer][equal? inc idx size where]  
+
+    loop.with: 'i where 'container [
+        if last? i -> return container\[key]
+
+        if not? error? try [val: container\[key]]
+            -> if val -> return val
+    ]
+
+    null
+]
+
+
+define :Settings [
+    init: method [_cli :dictionary, _project :dictionary][
+        \_cli: _cli
+        \_project: _project
+        \_default: #[
+            path: "specs"
+            suffix: ".spec.art"
+            binary: "arturo"
+            silent: false
+            clean: false
+        ]
+    ]
+
+    path:     method [][fallback 'path      @[\_cli \_project \_default]]
+    suffix:   method [][fallback 'suffix    @[\_cli \_project \_default]]
+    binary:   method [][fallback 'binary    @[\_cli \_project \_default]]
+    silent:   method [][fallback 'silent    @[\_cli \_default]]
+    clean:    method [][fallback 'clean    @[\_cli \_default]]
+
+]
+
+settings: $[args :dictionary file :dictionary][
+    to :Settings [args file]
+]

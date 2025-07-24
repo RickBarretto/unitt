@@ -1,0 +1,41 @@
+
+knownArgs: to [:string] 
+    [help h silent binary path suffix clean values]
+
+debug: $[x][
+    inspect dup x
+]
+
+unknownArguments: $[arguments :dictionary][
+    arguments
+        | keys
+        | select [x] [not? contains? knownArgs x]
+]
+
+unknownArguments?: $[arguments :dictionary][
+    not? empty? unknownArguments arguments
+]
+
+helpAsked?: $[args :dictionary][
+    flags: keys args
+    or?
+        in? "help" flags
+        in? "h" flags
+]
+
+help: {:
+A lean unit testing framework for Arturo.
+Usage: unitt [options]
+
+    Options:
+
+        --help           Show this help message and exit
+        --clean          Display failed tests only (per module).
+        --silent         Override error code.
+
+    Override `unitt.toml':
+
+        --binary         Run tests with custom Arturo
+        --path:PATH      Specify the path to the test files
+        --suffix:SUFFIX  Specify the file suffix for test files
+:}

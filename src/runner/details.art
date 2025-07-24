@@ -1,0 +1,109 @@
+
+debug: $[val][
+    inspect val
+    val
+]
+
+formatAssertion: $[assertion :block][
+    if empty? assertion [
+        return "    skipped!"
+    ]
+
+    ensure -> 2 = size assertion
+    switch last @assertion
+        [join @["    ✅: " first assertion]]
+        [join @["    ❌: " first assertion]]
+]
+
+define :test [
+    init: constructor [unit :dictionary]
+
+    skipped?: method [][
+        empty? \unit\assertions
+    ]
+
+    failed?: method [][
+        \unit\assertions
+            | flatten | array
+            | select => logical?
+            | select => false?
+            | empty? | not?
+    ]
+
+    string: method [][
+        header: case @[\failed? \skipped?] [
+            @[true  false]  -> ~"❌ |\unit\description|"
+            @[false  true] -> ~"⏩ |\unit\description|"
+            any  -> ~"✅ |\unit\description|"
+        ]
+
+        assertions: "True"
+
+        assertions: \unit\assertions
+            | map => formatAssertion
+
+        join.with: "\n" flatten @[header assertions]
+    ]
+]
+
+specDetail: $[title :string spec :block][
+
+    result: spec
+        | map 'test [to :test [test]]
+        | join.with: "\n\n"
+
+    print ~"Describe: |title|"
+    print ""
+    print indent.n: 4 result
+    print ""
+]
+
+failed?: $[specs :block][
+    specs
+        | map 'test [to :test [test]]
+        | map 'test [do [test\failed?]]
+        | flatten
+        | any?
+]
+
+fileDetail: $[name :string file :dictionary complete? :logical][
+    
+    standalone: file
+        | get 'standalone
+        | array
+
+    specs: file
+        | get 'specs
+        | array
+        | map 'spec [@[spec\description, array get spec 'tests]]
+        | flatten.once
+
+    someFailed?: any? 
+        map specs [title spec][failed? spec] 
+        ++ failed? standalone 
+
+    if or? someFailed? complete? [
+        print ~"======== |name| ========"
+        print ""
+    ]
+
+    if not? empty? standalone [
+        if or? failed? standalone complete? [
+            specDetail "Module's Global Specs" standalone
+        ]
+    ]
+
+    loop specs [title spec] [
+        if or? failed? spec complete? [
+            specDetail title spec
+        ]
+    ]
+]
+
+
+details: $[tests :block, complete? :logical][
+    loop tests 'test [
+        fileDetail test, # test, complete?
+    ]
+    tests
+]
