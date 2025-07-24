@@ -32,9 +32,9 @@ define :test [
 
     string: method [][
         header: case @[\failed? \skipped?] [
-            @[true  false]  -> ~"❌ |\unit\description|"
-            @[false  true] -> ~"⏩ |\unit\description|"
-            any  -> ~"✅ |\unit\description|"
+            @[true  false]  -> ~"❌ - |\unit\description|"
+            @[false  true] -> ~"⏩ - |\unit\description|"
+            any  -> ~"✅ - |\unit\description|"
         ]
 
         assertions: "True"
