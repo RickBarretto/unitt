@@ -83,8 +83,8 @@ unix?: true
 describe "binary appending" [
     it "should operate integers" [
         b: to :binary 0
-        expects.be: 'equal? @[as.binary 2 append b 1]
-        expects.be: 'equal? @[as.binary 1 b ++ 1]
+        expects.be: 'equal? @[express 2 append b 1]
+        expects.be: 'equal? @[express 1 b ++ 1]
     ]
 
     it "should return a binary" [
@@ -112,34 +112,34 @@ test "split should deal with unix path" [
 This will show you:
 
 ```
-===== example.art =====
+======== .unitt\example\example.spec.art ========
 
-Suite: binary appending 
+Describe: Module's Global Specs
 
-    ❌ - assert that should operate integers
-         ❌: equal? 10 00 01
-         ❌: equal? 1 00 01
+    ⏩ split should deal with windows's paths
 
-    ✅ - assert that should return a binary
-         ✅: binary? 00 01
-         ✅: binary? 00 01
+    ✅ split should deal with unix path
+        ✅: equal? [. splited path] [. splited path]
+
+Describe: binary appending
+
+    ❌ - should operate integers
+        ❌: equal? "2" 00 01
+        ❌: equal? "1" 00 01
+
+    ✅ - should return a binary
+        ✅: binary? 00 01
+        ✅: binary? 00 01
 
 
-⏩ - assert that split should deal with windows's paths
-     skipped!
+========== Summary ==========
 
-✅ - assert that split should deal with unix path
-     ✅: equal? ["." "splited" "path"] ["." "splited" "path"]
+  ⏏️    TOTAL: 5 assertions
+  ✅  PASSED: 3 assertion
+  ⏩ SKIPPED: 0 assertions
+  ❌  FAILED: 2 assertion
 
-
-===== Statistics =====
-
- ⏏️   TOTAL: 3 assertions
-✅  PASSED: 2 assertions
-⏩ SKIPPED: 1 assertions
-❌  FAILED: 1 assertions
-
-===== ========== =====
+========== ======= ==========
 ```
 
 ## Documentation
