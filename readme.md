@@ -38,37 +38,22 @@
 arturo -p install unitt
 ```
 
-**Setup & Execution**
+**Setup**
 
-Create the file `test` on the root of your project:
+Create a `unitt.toml` file on your project root:
 
-```art
-#! arturo
+```toml
+# unitt.toml - Configuration for unitt
 
-import {unitt}!
-
-tryOr: $[action :block alt :any][
-    (throws? [val:] ++ action)? -> alt -> val
-]
-
-files: switch empty? args\values
-    -> findTests "tests"
-    -> args\values
-
-runTests
-    .fatal: tryOr [args\fatal] false
-    .suppress: tryOr [args\suppress] false
-    files
+path = "specs"              # Path to Tests
+suffix = ".spec.art"        # Test file's suffix
+binary = "./bin/arturo"     # Arturo Binary
 ```
 
-```sh
-# Runs test/test*.art by default
-./test
-```
+**Running**
 
-```sh
-# Glob Pattern from Shell
-./test test/*test.art
+```
+unitt
 ```
 
 ### Testing code
