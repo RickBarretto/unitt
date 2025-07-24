@@ -166,22 +166,15 @@ The 2nd one introduced a RSpec-inspired syntax alternatively, which is now the r
 - `suite: $[description :string tests :block]`:
     The same as `describe`.
 
-### *Setup*
-- `runTests: $[tests [:string]]`:
-    The *runner function*, this executes all `tests`,
-    show statistics and return a value. 
-    - `.fatal`:
-        Fails on the first error found (per file).
-    - `.suppress`: 
-        Always return 0 as error code. 
-- `findTests: $[folder :string]`:
-    Looks for *tests* inside `folder`.
-    The default *test* pattern is "test*.art".
-    - `.thatMatches :string`:
-        Defines what is a test-file via a kind-of *glob* pattern.
-        Use a `*` as spliter. 
-        - Obs.: That is a kind-of *glob* pattern, not a real one. 
-          So just use one and only one `*` to split the pre and suffix.
+
+## Breaking Changes
+
+There are some breaking changes from the latest major version, so make sure you've some time to change it before update.
+
+1. Script Runner: now, you don't need to setup a script runner anymore. Just delete it. Arturo's package manager has included the feature of script entries for packages, so you can run it such as a common CLI application out-of the box, such like pipx and npx.
+2. `test.prop`/`it.prop`: I've added this for property-based tests, but honestly this does absolutely nothing. This attribute just replaces `-` by a `~`. Your test description should be semantic enough to know if this is use-case based or property based. This also reduces a lot the complexity of the library, making it less error-prone.
+3. `assert.static`/`expected.static`: This was added when I had no idea how well my evaluator would be. Now, I think this is mature enough to just don't use it at all. Static assertions are not that useful when debugging tests, either. If you need something similar, transform your expression into a `:string`.
+4. `fatal`: This was very useful since then, but the way our architecture works now, I think this is kind-of useless. In summary: If some test has an uncaught exception, this stops unitt and shows you the error. For failing tests, you can use the `--clean` flag to show only failing specs.
 
 
 > [!WARNING]
