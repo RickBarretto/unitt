@@ -177,13 +177,8 @@ There are some breaking changes from the latest major version, so make sure you'
 
 
 > [!WARNING]
-> Never import this lib as `.lean`, or this will break the current code.
-> This happens due to the nature of Arturo (being concatenative), 
-> and the way we importings are working right now.
-> This may change in future.
+> Never import this lib as `.lean`, or this will break the current code. This happens due to the nature of Arturo (being concatenative),  and the way we importings are working right now. This may change in future.
 
 ---
 
-> Background photo on ["At a Glance"](#at-a-glance)  
-> by [Luca Bravo](https://unsplash.com/@lucabravo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) 
-> on [Unsplash](https://unsplash.com/photos/boat-docked-near-house-VowIFDxogG4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+> Background photo on ["At a Glance"](#at-a-glance) by [Luca Bravo](https://unsplash.com/@lucabravo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/boat-docked-near-house-VowIFDxogG4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
