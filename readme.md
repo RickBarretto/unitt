@@ -135,7 +135,7 @@ Unitt supports both: XUnit and RSpec-like syntax:
 * The 1st version was heavily influenced by XUnit.
 * The 2nd one introduced a RSpec-inspired syntax alternatively, which is now the recommended one.
 
-### *Rpec-ish API*
+### *RSpec-ish API*
 
 - `describe: $[description :string tests :block]`:
     Groups tests around some feature.
