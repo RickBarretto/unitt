@@ -40,14 +40,14 @@ arturo -p install unitt
 
 **Setup**
 
-Create a `unitt.toml` file on your project root:
+Create a `config.art` file on your project root:
 
-```toml
-# unitt.toml - Configuration for unitt
+```art
+; Configuration for unitt
 
-path = "specs"              # Path to Tests
-suffix = ".spec.art"        # Test file's suffix
-binary = "./bin/arturo"     # Arturo Binary
+path: "specs"              ; Path to Tests
+suffix: ".spec.art"        ; Test file's suffix
+binary: "./bin/arturo"     ; Arturo Binary
 ```
 
 **Running**

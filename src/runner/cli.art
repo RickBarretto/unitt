@@ -33,7 +33,7 @@ Usage: unitt [options]
         --clean          Display failed tests only (per module).
         --silent         Override error code.
 
-    Override `unitt.toml':
+    Override `config.art':
 
         --binary         Run tests with custom Arturo
         --path:PATH      Specify the path to the test files
