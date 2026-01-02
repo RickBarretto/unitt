@@ -362,10 +362,10 @@ Describe: Test :date values
         ✅: between? to :date "0001-06-01T00:00:00-00:14" to :date "0001-01-01T00:00:00-00:14" to :date "0001-12-01T00:00:00-00:14"
     
     ✅ - XX century is between XIX and XXI
-        ✅: between? to :date "1901-01-01T00:14:44+00:00" to :date "1801-01-01T00:00:00-00:14" to :date "2001-01-01T00:00:00+01:00"
+        ✅: between? to :date "1901-01-01T00:14:44+00:00" to :date "1801-01-01T00:00:00-00:14" to :date "2001-01-01T00:00:00+00:00"
     
     ✅ - father is between grandmother and son
-        ✅: between? to :date "1980-01-17T00:05:00+01:00" to :date "1943-01-18T00:11:00+01:00" to :date "2006-01-19T00:03:00+01:00"
+        ✅: between? to :date "1980-01-17T00:05:00+00:00" to :date "1943-01-18T00:11:00+00:00" to :date "2006-01-19T00:03:00+00:00"
 
 
 ========== Summary ==========
