@@ -31,7 +31,7 @@ jobs:
               run: |
                 cat > test.art << 'EOF'
                 got: strip first split.by:{========== ======= ==========} 
-                        execute {arturo src/script.art}
+                        execute {arturo --no-color src/script.art}
                 expected: read.file ".github/workflows/expected.out"
                 
                 (got <> expected) ? [
