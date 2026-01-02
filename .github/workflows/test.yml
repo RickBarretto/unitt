@@ -38,7 +38,8 @@ jobs:
 
                 (got <> expected) ? [
                     got >> "got.out"
-                    execute.directly ~{diff got.out |expectedPath|}
+                    print got
+                    ;execute.directly ~{diff got.out |expectedPath|}
                     panic.code:1 "Output doesn't match"
                 ] -> print color #green "All set!"
                 EOF
