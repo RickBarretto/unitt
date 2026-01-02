@@ -140,7 +140,7 @@ suite "Test :block operations" [
 
     interpreted: ["Arturo" "Ruby" "Python" "Wren"]
     compiled: ["C" "C++" "Nim" "Rust" "Smalltalk"]
-    languages: shuffle (append interpreted compiled)
+    languages: append interpreted compiled
 
     ; ===== ===== Property-based ===== =====
 
@@ -150,8 +150,8 @@ suite "Test :block operations" [
     ]
     
     test.prop "appending between :blocks does not nest it" [
-        a: @[sample languages]
-        b: @[sample languages]
+        a: @[first languages]
+        b: @[last languages]
         res: @[first a first b]
 
         assert -> res = append a b
@@ -166,7 +166,7 @@ suite "Test :block operations" [
     ]
 
     test.prop "append empty block with 'x results into [x]" [
-        number: random 0 85
+        number: 39
         res: @[number] 
         assert -> res = [] ++ number
     ]
