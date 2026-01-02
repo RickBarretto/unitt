@@ -1,0 +1,47 @@
+name: "CI"
+on:
+    push:
+        branches:
+        - '**'
+    pull_request:
+        branches:
+        - '**'
+
+concurrency: 
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:  
+    build:
+        name: "Test"
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Setup Arturo
+              uses: arturo-lang/arturo-action@v2
+              with: 
+                token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: "Checkout sources"
+              uses: actions/checkout@v4
+              with:
+                submodules: recursive
+
+            - name: Run unit tests
+              run: |
+                cat > test.art << 'EOF'
+                expectedPath: ".github/workflows/expected.out"
+
+                got: strip first split.by:{========== ======= ==========} 
+                        execute {arturo --no-color src/script.art}
+                expected: read.file expectedPath
+
+                (got <> expected) ? [
+                    got >> "got.out"
+                    print got
+                    ;execute.directly ~{diff got.out |expectedPath|}
+                    panic.code:1 "Output doesn't match"
+                ] -> print color #green "All set!"
+                EOF
+                
+                arturo test.art

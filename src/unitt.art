@@ -11,7 +11,8 @@
 ;;
 ;; export: ['test 'suite]
 
-unitt: store.native ~".unitt/|args\filename|"
+storeName: (key? args 'filename)? [args\filename] [unique.id "unitt"]
+unitt: store.native ~".unitt/|storeName|"
 unitt\standalone: []
 unitt\specs: []
 
