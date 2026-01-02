@@ -1,0 +1,32 @@
+name: "Test"
+on:
+    push:
+        branches:
+        - '**'
+    pull_request:
+        branches:
+        - '**'
+
+concurrency: 
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:  
+    build:
+        name: "Test"
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Setup Arturo
+              uses: arturo-lang/arturo-action@v2
+              with: 
+                token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: "Checkout sources"
+              uses: actions/checkout@v4
+              with:
+                submodules: recursive
+
+            - name: Run unit tests
+              run: |
+                arturo -e "print {All ok!}"
