@@ -180,9 +180,9 @@ Describe: Test :block operations
         ✅: block? ["Arturo" "Ruby" "Python" "Wren"] ++ ["C" "C++" "Nim" "Rust" "Smalltalk"]
     
     ✅ - appending between :blocks does not nest it
-        ✅: ["Nim" "Wren"] = append ["Nim"] ["Wren"]
+        ✅: ["Arturo" "Smalltalk"] = append ["Arturo"] ["Smalltalk"]
         ✅: [] = append [] []
-        ✅: all? map append ["Nim"] ["Wren"] 'x [not? block? x]
+        ✅: all? map append ["Arturo"] ["Smalltalk"] 'x [not? block? x]
     
     ✅ - appending :blocks of :T results in :blocks of :T
         ✅: all? map [Arturo] ++ [Python] '_0 [string? _0]
@@ -190,7 +190,7 @@ Describe: Test :block operations
         ✅: all? map [1/2] ++ [2/3] '_0 [rational? _0]
     
     ✅ - append empty block with 'x results into [x]
-        ✅: [25] = [] ++ 25
+        ✅: [39] = [] ++ 39
     
     ✅ - append empty blocks results on empty block
         ✅: empty? [] ++ []
