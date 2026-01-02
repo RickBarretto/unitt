@@ -25,7 +25,7 @@ if helpAsked? args [
     exit 0
 ]
 
-settings: settings args read.toml "unitt.toml"!
+settings: settings args # "config.art"!
 
 delete.directory ".unitt"
 
