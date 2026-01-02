@@ -30,12 +30,15 @@ jobs:
             - name: Run unit tests
               run: |
                 cat > test.art << 'EOF'
+                expectedPath: ".github/workflows/expected.out"
+
                 got: strip first split.by:{========== ======= ==========} 
                         execute {arturo --no-color src/script.art}
-                expected: read.file ".github/workflows/expected.out"
-                
+                expected: read.file expectedPath
+
                 (got <> expected) ? [
-                    print got
+                    got >> "got.out"
+                    execute.directly ~{diff got.out |expectedPath|}
                     panic.code:1 "Output doesn't match"
                 ] -> print color #green "All set!"
                 EOF
