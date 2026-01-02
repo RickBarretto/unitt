@@ -29,4 +29,15 @@ jobs:
 
             - name: Run unit tests
               run: |
-                arturo -e "print {All ok!}"
+                cat > test.art << 'EOF'
+                got: strip first split.by:{========== ======= ==========} 
+                        execute {arturo src/script.art}
+                expected: read ".github/workflows/correct.res"
+                
+                (got <> expected) ? [
+                    print got
+                    panic.code:1 "Output doesn't match"
+                ] -> print color #green "All set!"
+                EOF
+                
+                arturo test.art
