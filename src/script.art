@@ -25,9 +25,11 @@ if helpAsked? args [
     exit 0
 ]
 
-settings: settings args switch (exists? "config.art")
-    -> # "config.art"!
-    -> read.toml "unitt.toml"
+settings: (
+    settings args (exists? "config.art")?
+        -> # "config.art"
+        -> read.toml "unitt.toml"
+)!
 
 delete.directory ".unitt"
 
