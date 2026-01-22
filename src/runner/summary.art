@@ -56,6 +56,13 @@ define :summary [
         \passed: summary\passed
         \skipped: summary\skipped
         \failed:  summary\failed
+
+        \assertionLabel: "assertion"
+    ]
+
+    pluralize: function [what][
+        if one? what -> return \assertionLabel
+        return \assertionLabel ++ "s"
     ]
 
     total: method [][
@@ -68,10 +75,10 @@ define :summary [
 
     string: method [][
         ~{
-            ⏏️    TOTAL: |\total| assertions
-            ✅  PASSED: |\passed| assertion
-            ⏩ SKIPPED: |\skipped| assertions
-            ❌  FAILED: |\failed| assertion
+            ⏏️    TOTAL: |\total| |pluralize \total|
+            ✅  PASSED: |\passed| |pluralize \passed|
+            ⏩ SKIPPED: |\skipped| |pluralize \skipped|
+            ❌  FAILED: |\failed| |pluralize \failed|
         }
     ]
 ]
