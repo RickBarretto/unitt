@@ -75,7 +75,7 @@ define :summary [
 
     string: method [][
         ~{
-            ⏏️    TOTAL: |\total| |pluralize \total|
+            ⏏️   TOTAL: |\total| |pluralize \total|
             ✅  PASSED: |\passed| |pluralize \passed|
             ⏩ SKIPPED: |\skipped| |pluralize \skipped|
             ❌  FAILED: |\failed| |pluralize \failed|
