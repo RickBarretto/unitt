@@ -12,9 +12,9 @@
 ;; export: ['test 'suite]
 
 storeName: (key? args 'filename)? [args\filename] [unique.id "unitt"]
-unitt: store.native ~".unitt/|storeName|"
-unitt\standalone: []
-unitt\specs: []
+unittFile: store.native ~".unitt/|storeName|"
+unittFile\standalone: []
+unittFile\specs: []
 
 __unitt__scope: 'standalone
 __unitt_spec: #[
@@ -72,7 +72,7 @@ describe: $[description :string tests :block][
     do tests
 
     ; Push current Spec to unitt\specs
-    unitt\specs: unitt\specs ++ __unitt_spec
+    unittFile\specs: unittFile\specs ++ __unitt_spec
 
     ; Resets global variables
     __unitt__scope: 'standalone
@@ -206,7 +206,7 @@ it: $[description :string testCase :block][
     ]
 
     switch 'standalone = __unitt__scope [
-        unitt\standalone: unitt\standalone ++ __local_spec
+        unittFile\standalone: unittFile\standalone ++ __local_spec
     ][
         __unitt_spec\tests: __unitt_spec\tests ++ __local_spec
     ]
