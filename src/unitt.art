@@ -24,6 +24,14 @@ unitt: [
         this\filename: file ++ ".json"
     ]
 
+    beforeDescribe: method [description :string][
+        this\currentSpec: #[
+            description: description
+            tests: []
+        ]
+        this\standalone?: false
+    ]
+
     afterDescribe: method [][
         this\file\specs: append this\file\specs this\currentSpec
         write.json this\file this\filename
@@ -158,8 +166,8 @@ unitt: [
         inspect this\currentSpec
 
         (this\standalone?)?
-            -> [this\file\standalone: append this\file\standalone __this_test]
-            -> [this\currentSpec\tests: append this\currentSpec\tests __this_test]
+            [this\file\standalone: append this\file\standalone __this_test]
+            [this\currentSpec\tests: append this\currentSpec\tests __this_test]
 
         if this\standalone?
             -> write.json this\file this\filename
@@ -196,11 +204,11 @@ unitt: [
         tokens | map => [reprToken &] | join.with: " "
     ]
 
-    suite: method.public [description :string tests :block][\describe description tests] 
-    spec: method.public [description :string tests :block][\describe description tests] 
-    test: method.public [description :string testCase :block][\it description testCase]
-
 ]!
 
 filename: (key? args 'filename)? [args\filename] [unique.id "unitt"]
 export module.with: @[~".unitt/|filename|"] unitt!
+
+suite: var 'describe
+spec: var 'describe
+test: var 'it
