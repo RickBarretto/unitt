@@ -12,31 +12,33 @@
 ;; export: ['test 'suite]
 
 
+define :UnittSpec [
+
+    init: constructor [description :string tests :array]
+
+    run: method [][]
+
+    dictionary: method [][
+        #[
+            description: this\description
+            tests: this\tests
+        ]
+    ]
+
+]
+
+
 unitt: [
 
     init: method [file :string][
-        this\file: #[]
-        this\file\standalone: []
-        this\file\specs: []
-
-        this\currentSpec: #[something: 15]
-        this\standalone?: true
-        this\filename: file ++ ".json"
-    ]
-
-    beforeDescribe: method [description :string][
-        this\currentSpec: #[
-            description: description
-            tests: []
+        this\file: #[
+            standalone: []
+            specs: []
         ]
-        this\standalone?: false
-    ]
 
-    afterDescribe: method [][
-        this\file\specs: append this\file\specs this\currentSpec
-        write.json this\file this\filename
-        this\currentSpec: #[]
-        this\standalone?: true
+        this\current: null
+        this\moduleLevel?: true
+        this\filename: file ++ ".json"
     ]
 
     describe: method.public [description :string tests :block][
@@ -77,9 +79,12 @@ unitt: [
         ;;      ;      skipped!
         ;; }
 
-        this\beforeDescribe description
-        do tests
-        this\afterDescribe
+        this\moduleLevel?: false
+        this\current: to :UnittSpec @[description tests]
+        this\current\run
+        this\file\specs: append this\file\specs this\current
+        this\moduleLevel?: true
+        this\current: null
     ]
 
     it: method.public [description :string testCase :block][
