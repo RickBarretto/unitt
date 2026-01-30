@@ -21,7 +21,11 @@ unittEval: $[tokens][
 define :UnittTest [
     init: method [description :string][
         this\description: description
-        this\tests: []
+        this\assertions: []
+    ]
+
+    dictionary: method [][
+        #[description: this\description assertions: this\assertions]
     ]
 
     expects: method.public [expression :block][
@@ -33,7 +37,7 @@ define :UnittTest [
         display: unittEval expression
         result: equal? @expression @[true]
 
-        this\tests: this\tests ++ @[@[display result]]
+        this\assertions: this\assertions ++ @[@[display result]]
     ]
 ]
 
