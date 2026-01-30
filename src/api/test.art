@@ -55,8 +55,8 @@ if standalone? ::
 
     inspect api
 
-    ensure -> equal? api\tests\0 @[{equal? "Hello, World!" "Hello, " ++ "World!"} true]
-    ensure -> equal? api\tests\1 @[{not? equal? 5 mul 2 3} true]
-    ensure -> equal? api\tests\2 @[{true? true} true]
-    ensure -> equal? api\tests\3 @[{false? false} true]
-    ensure -> equal? api\tests\4 @[{throws? [var some]} true]
+    ensure -> equal? api\assertions\0 @[{equal? "Hello, World!" "Hello, " ++ "World!"} true]
+    ensure -> equal? api\assertions\1 @[{not? equal? 5 mul 2 3} true]
+    ensure -> equal? api\assertions\2 @[{true? true} true]
+    ensure -> equal? api\assertions\3 @[{false? false} true]
+    ensure -> equal? api\assertions\4 @[{throws? [var some]} true]
