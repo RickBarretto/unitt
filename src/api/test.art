@@ -24,7 +24,12 @@ define :UnittTest [
         this\tests: []
     ]
 
-    expects: method [expression :block][
+    expects: method.public [expression :block][
+        candidates: @[attr 'with attr 'to attr 'be ] | filter => null?
+
+        unless empty? candidates -> 
+            expression: prepend expression @[to :word last candidates]
+
         display: unittEval expression
         result: equal? @expression @[true]
 
@@ -40,8 +45,14 @@ if standalone? ::
     api: to :UnittTest ["API Tests"]!
     api\expects [equal? "Hello, World!" "Hello, " ++ "World!"]
     api\expects [not? equal? 5 (mul 2 3)]
+    api\expects.to.be: 'true? [true]
+    api\expects.be: 'false? [false]
+    api\expects.to: 'throws? [[var some]]
 
     inspect api
 
     ensure -> equal? api\tests\0 @[{equal? "Hello, World!" "Hello, " ++ "World!"} true]
     ensure -> equal? api\tests\1 @[{not? equal? 5 mul 2 3} true]
+    ensure -> equal? api\tests\2 @[{true? true} true]
+    ensure -> equal? api\tests\3 @[{false? false} true]
+    ensure -> equal? api\tests\4 @[{throws? [var some]} true]
