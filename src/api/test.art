@@ -1,22 +1,6 @@
 
 debug: $[x][x]
 
-unittEval: $[tokens][
-    expressable?: $[token][in? type token [:string]]
-
-    reprToken: $[token :any][
-        discard debug token
-        when [
-            inline? token               -> unittEval token
-            expressable? token          -> express token
-            true -> token
-        ]
-    ]
-
-    tokens | map => [reprToken &] 
-           | join.with: " "
-]
-
 
 define :UnittTest [
     init: method [description :string][
@@ -34,11 +18,28 @@ define :UnittTest [
         unless empty? candidates -> 
             expression: prepend expression @[to :word last candidates]
 
-        display: unittEval expression
+        display: this\eval expression
         result: equal? @expression @[true]
 
         this\assertions: this\assertions ++ @[@[display result]]
     ]
+
+    eval: method [tokens][
+        expressable?: $[token][in? type token [:string]]
+
+        reprToken: $[token :any][
+            discard debug token
+            when [
+                inline? token      -> this\eval token
+                expressable? token -> express token
+                true               -> token
+            ]
+        ]
+
+        tokens | map => [reprToken &] 
+               | join.with: " "
+    ]
+
 ]
 
 
