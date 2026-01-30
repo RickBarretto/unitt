@@ -45,7 +45,7 @@ define :UnittTest [
 
 if standalone? ::
 
-    debug: $[x][inspect dup x]
+    ; debug: $[x][inspect dup x]
 
     api: to :UnittTest ["API Tests"]!
     api\expects [equal? "Hello, World!" "Hello, " ++ "World!"]
@@ -54,7 +54,7 @@ if standalone? ::
     api\expects.be: 'false? [false]
     api\expects.to: 'throws? [[var some]]
 
-    inspect api
+    inspect to :dictionary api
 
     ensure -> equal? api\assertions\0 @[{equal? "Hello, World!" "Hello, " ++ "World!"} true]
     ensure -> equal? api\assertions\1 @[{not? equal? 5 mul 2 3} true]
