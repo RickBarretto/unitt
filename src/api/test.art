@@ -1,0 +1,47 @@
+
+debug: $[x][x]
+
+unittEval: $[tokens][
+    expressable?: $[token][in? type token [:string]]
+
+    reprToken: $[token :any][
+        discard debug token
+        when [
+            inline? token               -> unittEval token
+            expressable? token          -> express token
+            true -> token
+        ]
+    ]
+
+    tokens | map => [reprToken &] 
+           | join.with: " "
+]
+
+
+define :UnittTest [
+    init: method [description :string][
+        this\description: description
+        this\tests: []
+    ]
+
+    expects: method [expression :block][
+        display: unittEval expression
+        result: equal? @expression @[true]
+
+        this\tests: this\tests ++ @[@[display result]]
+    ]
+]
+
+
+if standalone? ::
+
+    debug: $[x][inspect dup x]
+
+    api: to :UnittTest ["API Tests"]!
+    api\expects [equal? "Hello, World!" "Hello, " ++ "World!"]
+    api\expects [not? equal? 5 (mul 2 3)]
+
+    inspect api
+
+    ensure -> equal? api\tests\0 @[{equal? "Hello, World!" "Hello, " ++ "World!"} true]
+    ensure -> equal? api\tests\1 @[{not? equal? 5 mul 2 3} true]
