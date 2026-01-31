@@ -7,30 +7,45 @@ unitt: [
             to :UnittStandaloneSpec []!
         ]
 
-        this\current: 'standalone
+        ; Runtime only
+        this\kind: 'standalone
+        this\spec: first this\specs
         this\test: null
     ]
 
     describe: method.public [description :string actions :block][
-        this\current: 'spec
-        this\specs: this\specs ++ (to :UnittSpec @[description]!)
+        spec: to :UnittSpec @[description]!
 
+        ; Set the current spec to context
+        this\kind: 'spec
+        this\spec: spec
+
+        ; Eval and register Spec
         do actions
+        this\specs: this\specs ++ this\spec
+
+        ; Reset the current spec to standalone
+        this\kind: 'standalone
+        this\spec: first this\specs
+        this\test: null
     ]
 
     it: method.public [expectation :string action :block][
+
+        ; Current test context
         test: to :UnittTest [expectation]!
         this\test: test
 
-        do action
-        
-        (this\current = 'spec)? [
-            spec: last this\specs
-            spec\test test
-        ][
-            spec: first this\specs
-            spec\test test
+        ; Eval and register Test
+        do action        
+        this\spec\test this\test
+
+        ; Update for standalone
+        if this\kind = 'standalone [
+            set this\specs\[0] this\spec
         ]
+
+        this\test: null
     ]
 
     expects: method.public [expression :block][
@@ -38,7 +53,9 @@ unitt: [
     ]
 
     debug: method.public [][
+        print ["--- DEBUG UNITT ---"]
         inspect this\specs
+        print "---------------------"
     ]
 
 ]!
