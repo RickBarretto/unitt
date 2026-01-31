@@ -42,7 +42,7 @@ unitt: [
 
         ; Update for standalone
         if this\kind = 'standalone [
-            set this\specs\[0] this\spec
+            set this\specs 0 this\spec
         ]
 
         this\test: null
@@ -65,6 +65,10 @@ export module unitt!
 
 
 if standalone? ::
+
+    it "Simple failing test" [
+        expects -> false
+    ]
 
     describe "simple append" [
         it "keeps the order" [
@@ -92,6 +96,10 @@ if standalone? ::
             expects.be: 'equal? @[append [] [] [] ++ [] ]
             expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
         ]
+    ]
+
+    it "Simple passing test" [
+        expects -> true
     ]
 
     debug
