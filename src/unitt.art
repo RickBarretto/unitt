@@ -1,0 +1,80 @@
+import ./{api/spec}
+
+unitt: [
+
+    init: method [][
+        this\specs: @[
+            to :UnittStandaloneSpec []!
+        ]
+
+        this\current: 'standalone
+        this\test: null
+    ]
+
+    describe: method.public [description :string actions :block][
+        this\current: 'spec
+        this\specs: this\specs ++ (to :UnittSpec @[description]!)
+
+        do actions
+    ]
+
+    it: method.public [expectation :string action :block][
+        test: to :UnittTest [expectation]!
+        this\test: test
+
+        do action
+        
+        (this\current = 'spec)? [
+            spec: last this\specs
+            spec\test test
+        ][
+            spec: first this\specs
+            spec\test test
+        ]
+    ]
+
+    expects: method.public [expression :block][
+        this\test\expects expression
+    ]
+
+    debug: method.public [][
+        inspect this\specs
+    ]
+
+]!
+
+
+export module unitt!
+
+
+if standalone? ::
+
+    describe "simple append" [
+        it "keeps the order" [
+            expects [equal? [a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[[a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[["b" "c" "d" "a"]     ["b" "c" "d"] ++ ["a"]]
+            expects.be: 'notEqual?  @[["a" "b" "c" "d"]     ["b" "c" "d"] ++ ["a"]]
+        ]
+
+        it.skip "has ++ as alias (todo)" [
+            expects.be: 'equal? @[append [] [] [] ++ [] ]
+            expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
+        ]
+    ]
+
+    describe "simple append 2" [
+        it "keeps the order" [
+            expects [equal? [a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[[a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[["b" "c" "d" "a"]     ["b" "c" "d"] ++ ["a"]]
+            expects.be: 'notEqual?  @[["a" "b" "c" "d"]     ["b" "c" "d"] ++ ["a"]]
+        ]
+
+        it.skip "has ++ as alias (todo) 2" [
+            expects.be: 'equal? @[append [] [] [] ++ [] ]
+            expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
+        ]
+    ]
+
+    debug
