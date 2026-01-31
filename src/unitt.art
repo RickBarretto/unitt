@@ -58,6 +58,15 @@ unitt: [
         print "---------------------"
     ]
 
+    unittWrite: method.public [file :string][
+        data: #[
+            stadalone: @first this\specs
+            specs: to [:dictionary] drop this\specs
+        ]
+
+        write.json data file
+    ]
+
 ]!
 
 
@@ -103,3 +112,4 @@ if standalone? ::
     ]
 
     debug
+    unittWrite "unitt_results.json"
