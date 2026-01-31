@@ -1,8 +1,5 @@
 import ./{test}
 
-debug: $[x][x]
-
-
 define :UnittSpec [
 
     init: method [description :string][
@@ -30,8 +27,6 @@ define :UnittStandaloneSpec is :UnittSpec [
 
 
 if standalone? ::
-
-    ; debug: $[x][inspect dup x]
 
     ; Testing Spec API
 

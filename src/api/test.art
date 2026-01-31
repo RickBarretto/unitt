@@ -1,7 +1,4 @@
 
-debug: $[x][x]
-
-
 define :UnittTest [
     init: method [description :string][
         this\description: description
@@ -32,7 +29,6 @@ define :UnittTest [
         expressable?: $[token][in? type token [:string]]
 
         reprToken: $[token :any][
-            discard debug token
             when [
                 inline? token      -> this\eval token
                 expressable? token -> express token
