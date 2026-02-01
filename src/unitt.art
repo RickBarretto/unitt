@@ -72,6 +72,10 @@ unitt: [
 
 export module unitt!
 
+suite: var 'describe
+test: var 'it
+assert: var 'expects
+
 
 if standalone? ::
 
