@@ -1,0 +1,72 @@
+
+define :UnittTest [
+    init: method [description :string][
+        this\description: description
+        this\assertions: []
+        this\skip?: attr 'skip
+    ]
+
+    dictionary: method [][
+        assertions: (this\skip?)?
+            -> [] 
+            -> this\assertions
+        #[description: this\description assertions: assertions]
+    ]
+
+    expects: method.public [expression :block][
+        candidates: @[attr 'with attr 'to attr 'be ] | filter => null?
+
+        unless empty? candidates -> 
+            expression: prepend expression @[to :word last candidates]
+
+        display: this\eval expression
+        result: equal? @expression @[true]
+
+        this\assertions: this\assertions ++ @[@[display result]]
+    ]
+
+    eval: method [tokens][
+        expressable?: $[token][in? type token [:string]]
+
+        reprToken: $[token :any][
+            when [
+                inline? token      -> this\eval token
+                expressable? token -> express token
+                true               -> token
+            ]
+        ]
+
+        tokens | map => [reprToken &] 
+               | join.with: " "
+    ]
+
+]
+
+
+if standalone? ::
+
+    ; debug: $[x][inspect dup x]
+
+    api: to :UnittTest ["API Tests"]!
+    api\expects [equal? "Hello, World!" "Hello, " ++ "World!"]
+    api\expects [not? equal? 5 (mul 2 3)]
+    api\expects.to.be: 'true? [true]
+    api\expects.be: 'false? [false]
+    api\expects.to: 'throws? [[var some]]
+
+    inspect to :dictionary api
+
+    ensure -> equal? api\assertions\0 @[{equal? "Hello, World!" "Hello, " ++ "World!"} true]
+    ensure -> equal? api\assertions\1 @[{not? equal? 5 mul 2 3} true]
+    ensure -> equal? api\assertions\2 @[{true? true} true]
+    ensure -> equal? api\assertions\3 @[{false? false} true]
+    ensure -> equal? api\assertions\4 @[{throws? [var some]} true]
+
+    skipped: to.skip :UnittTest ["Skipped Test"]!
+    skipped\expects [equal? 1 2]  ; This assertion will be skipped
+
+    inspect skipped
+
+    ensure -> equal? 
+        to :dictionary skipped
+        #[description: "Skipped Test" assertions: []]
