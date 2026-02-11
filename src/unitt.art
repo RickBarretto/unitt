@@ -193,6 +193,10 @@ unitt: [
         ;;
         ;; }
 
+        if this\test = null [
+            panic "expects should be used inside a test block"
+        ]
+
         this\test\expects expression
     ]
 ]!
