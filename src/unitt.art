@@ -2,10 +2,12 @@ import ./{api/spec}
 
 unitt: [
 
-    init: method [][
-        this\specs: @[
-            to :UnittStandaloneSpec []!
-        ]
+    init: method [filename][
+        this\storage: store.native ".unitt/" ++ filename
+        this\storage\standalone: []
+        this\storage\specs: []
+
+        this\specs: @[to :UnittStandaloneSpec []!]
 
         ; Runtime only
         this\kind: 'standalone
@@ -23,6 +25,9 @@ unitt: [
         ; Eval and register Spec
         do actions
         this\specs: this\specs ++ this\spec
+
+        ; Update storage at real-time for specs
+        this\storage\specs: to [:dictionary] drop this\specs
 
         ; Reset the current spec to standalone
         this\kind: 'standalone
@@ -45,6 +50,8 @@ unitt: [
             set this\specs 0 this\spec
         ]
 
+        ; Update storage at real-time for standalone tests
+        this\storage\standalone: @first this\specs
         this\test: null
     ]
 
@@ -57,20 +64,10 @@ unitt: [
         inspect this\specs
         print "---------------------"
     ]
-
-    unittWrite: method.public [file :string][
-        data: #[
-            stadalone: @first this\specs
-            specs: to [:dictionary] drop this\specs
-        ]
-
-        write.json data file
-    ]
-
 ]!
 
 
-export module unitt!
+export module.with: @[(args\["filename"]) ?? unique.id "unitt-"] unitt!
 
 suite: var 'describe
 test: var 'it
@@ -116,4 +113,3 @@ if standalone? ::
     ]
 
     debug
-    unittWrite "unitt_results.json"
