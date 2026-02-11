@@ -78,7 +78,7 @@ jobs:
                 # Test for *.test.art files
 
                 expected=`cat .github/workflows/expected.tests.out | tr -d '\r'`
-                output=`arturo --no-color src/script.art 2>/dev/null | tail | tr -d '\r' || true`
+                output=`arturo --no-color src/script.art --suffix:'.test.art' 2>/dev/null | tail | tr -d '\r' || true`
 
                 if [ "$output" = "$expected" ]; then
                     echo "✓ Test succeeded! :)"
