@@ -1,0 +1,409 @@
+======== .unitt\specs\lib\types\to.test.art ========
+
+======== .unitt\specs\lib\exceptions\functions.test.art ========
+
+Describe: Tests the internal functions
+
+    ✅ - thrown error is catched by 'try
+        ✅: not? throws? [error try [throw File not found]]
+    
+    ✅ - thrown error is catched by 'throws?
+        ✅: not? throws? [a throws? [throw File not found]]
+    
+    ✅ - try returns the thown error
+        ✅: error? err
+    
+    ✅ - try returns null is none error is thrown
+        ✅: null? err
+    
+    ✅ - thrown errors at user level are runtime errors by default
+        ✅: runtimeError = fileNotFound
+    
+    ✅ - throw's message parameter goes to :error's message member
+        ✅: "File not found" = fileNotFound\message
+
+======== .unitt\specs\lib\exceptions\types.test.art ========
+
+Describe: Test types and its properties
+
+    ✅ - catched error is an :error
+        ✅: error? err
+        ✅: :error = type err
+    
+    ✅ - :error contains \kind and \message
+        ✅: not? throws? [kind err\kind msg err\message]
+    
+    ✅ - :error's \kind is an :errorKind
+        ✅: errorKind? err\kind
+        ✅: :errorkind = type err\kind
+    
+    ✅ - :error's \message is an :string
+        ✅: string? err\message
+        ✅: :string = type err\message
+
+Describe: Test types for :errorKind and custom ones
+
+    ⏩ - custom :errorKinds can be created from :strings
+    
+    ✅ - custom :errorKinds can't be created from :string-like values
+        ✅: throws? [fileNotFound to :errorkind customLabel]
+        ✅: throws? [fileNotFound to :errorkind customLabel]
+
+======== .unitt\specs\lib\core\let.test.art ========
+
+Describe: Allowed Operations
+
+    ✅ - multiple assignment to a single value when this is not a :block
+        ✅: a = value
+        ✅: b = value
+        ✅: c = value
+    
+    ✅ - unpacked value always returns a :block
+        ✅: block? unpacker
+        ✅: unpacker = value
+    
+    ✅ - let can unpack values when the unpacker is on middle
+        ✅: a = 1
+        ✅: b = [2 3 4]
+        ✅: c = 5
+    
+    ✅ - let can unpack values when the unpacker is on the left
+        ✅: a = [1 2 3]
+        ✅: b = 4
+        ✅: c = 5
+    
+    ✅ - let can unpack values when the unpacker is on the right
+        ✅: a = 1
+        ✅: b = 2
+        ✅: c = [3 4 5]
+    
+    ✅ - let can skip values to be unpacked if the unpacker is empty
+        ✅: a = 1
+        ✅: c = 5
+
+Describe: Unallowed Operations
+
+    ✅ - let can't unpack non- :block s
+        ✅: throws? [value 1 [[unpacker]] : value]
+    
+    ✅ - let can't unpack more than once
+        ✅: throws? [[[a] [b]] : [1 2 3 4]]
+    
+    ✅ - let can't assign to unknown types
+        ✅: throws? [[* b] : [1 2 3 4]]
+        ✅: throws? [[a [*] c] : [1 2 3 4]]
+    
+    ✅ - let can't assign when values are missing
+        ✅: throws? [[a b c] : [1 2]]
+    
+    ✅ - let can't assign when values are missing
+        ✅: throws? [[a b c] : [1 2]]
+
+======== .unitt\specs\lib\core\new.test.art ========
+
+Describe: test if new object reference does not change the older one
+
+    ✅ - change new primitive values does not change the old ones
+        ✅: a <> b
+        ✅: a <> b
+        ✅: a <> b
+        ✅: a <> b
+    
+    ✅ - change the new block's value does not change the old one
+        ✅: a <> b
+    
+    ✅ - change the new block's value does not change the old one
+        ✅: a <> b
+
+Describe: test if new allocate the object to a new address
+
+    ✅ - change new primitive values does not change the old ones
+        ✅: addressOfA <> addressOfB
+        ✅: addressOfA <> addressOfB
+        ✅: addressOfA <> addressOfB
+        ✅: addressOfA <> addressOfB
+
+======== .unitt\specs\lib\collections\combine.test.art ========
+
+Describe: General Tests
+
+    ✅ - all combinations of given collection is itself inside a block
+        ✅: equal? @ [someBlock] combine someBlock
+    
+    ✅ - all repeated combinations of an unitary collectionis itself wrapped into a block
+        ✅: equal? [[A]] combine repeated [A]
+    
+    ✅ - combine.by: k returns inner values of k size
+        ✅: every? combine by k someBlock el [k = size el]
+        ✅: every? combine repeated by k someBlock el [k = size el]
+    
+    ✅ - combine A is a shortcut for combine.by: (size A) A
+        ✅: equal? combine someBlock combine by size someBlock someBlock
+        ✅: equal? combine repeated someBlock combine repeated by size someBlock someBlock
+    
+    ✅ - .count is the size of the combination
+        ✅: equal? size combine by 2 someBlock combine by 2 count someBlock
+        ✅: equal? size combine repeated someBlock combine repeated count someBlock
+        ✅: equal? size combine repeated by 2 someBlock combine repeated by 2 count someBlock
+        ✅: equal? size combine by 0 someBlock combine by 0 count someBlock
+        ✅: equal? size combine repeated by 0 someBlock combine repeated by 0 count someBlock
+
+Describe: Matematical Properties
+
+    ✅ - C[n:n] = 1
+        ✅: 1 = combine count someBlock
+        ✅: 1 = combine count by size someBlock someBlock
+    
+    ✅ - C[n:0] = 1
+        ✅: 1 = combine count by 0 someBlock
+    
+    ✅ - C[n:k] = 0, for all k > n
+        ✅: 0 = combine count by inc size someBlock someBlock
+    
+    ✅ - C[n:k] = 0, for all k < 0
+        ✅: 0 = combine count by neg 1 someBlock
+    
+    ✅ - C[n:k] = n! / (k! * (n - k)!)
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+        ✅: default = combine count by k Set
+        ✅: repeating = combine count repeated by k Set
+
+Describe: Specific Tests
+
+    ✅ - combine.repeated [A B C]
+        ✅: result = combine repeated [A B C]
+        ✅: equal? size result combine count repeated [A B C]
+    
+    ✅ - combine.by: 2 [A B C]
+        ✅: result = combine by 2 [A B C]
+        ✅: equal? size result combine count by 2 [A B C]
+    
+    ✅ - combine.repeated.by: 2 [A B C]
+        ✅: result = combine repeated by 2 [A B C]
+        ✅: equal? size result combine count repeated by 2 [A B C]
+    
+    ✅ - combine.repeated.by: 3 [A B]
+        ✅: result = combine repeated by 3 [A B]
+        ✅: equal? size result combine count repeated by 3 [A B]
+
+======== .unitt\specs\lib\collections\contains-.test.art ========
+
+Describe: contains? for :string types
+
+    ✅ - :string may contain :string
+        ✅: contains? "Arturo" "Art"
+        ✅: not? contains? "Arturo" "Ops!"
+    
+    ✅ - :string may contain :char
+        ✅: contains? "Arturo" A
+        ✅: contains? "Arturo" t
+        ✅: not? contains? "Arturo" i
+    
+    ✅ - :string may contain :literal
+        ✅: contains? "Arturo" Art
+        ✅: contains? "Arturo" t
+        ✅: not? contains? "Arturo" i
+    
+    ✅ - :string may contain :regex
+        ✅: contains? "Arturo" [Art]
+        ✅: not? contains? "Arturo" [i]
+
+Describe: contains? for :range types
+
+    ✅ - :range may contain :integer
+        ✅: contains? 1 .. 10 1
+        ✅: contains? 1 .. 10 5
+        ✅: contains? 1 .. 10 7
+        ✅: contains? 1 .. 10 10
+        ✅: not? contains? 1 .. 10 0
+    
+    ✅ - :range may contain :floating
+        ✅: contains? 1 .. 10 1.0
+        ✅: contains? 1 .. 10 5.0
+        ✅: contains? 1 .. 10 7.0
+        ✅: contains? 1 .. 10 10.0
+        ✅: not? contains? 1 .. 10 0.0
+    
+    ✅ - :range is a discrete interval
+        ✅: not? contains? 1 .. 10 5.5
+        ✅: not? contains? range step 2 1 10 2
+
+Describe: contains? for :block types
+
+    ✅ - :block may contain :any
+        ✅: contains? sample 1
+        ✅: contains? sample "Example"
+        ✅: contains? sample example
+        ✅: contains? sample []
+        ✅: contains? sample # []
+        ✅: not? contains? sample "Hmm"
+    
+    ✅ - contains?.deep can find it into nested :blocks
+        ✅: contains? deep [1 2 3 [4 5] 6 7] 3
+        ✅: contains? deep [1 2 3 [4 5] 6 7] 4
+        ✅: contains? deep [1 2 3 [4 5] 6 7] 5
+        ✅: contains? deep [1 2 3 [4 5] 6 7] [4 5]
+        ✅: contains? [1 2 3 [4 5] 6 7] [4 5]
+        ✅: not? contains? [1 2 3 [4 5] 6 7] 4
+        ✅: not? contains? [1 2 3 [4 5] 6 7] 5
+    
+    ✅ - contains?.deep can't find :dictionary's values into nested :blocks
+        ✅: not? contains? deep @ [# [name Joe]] "Joe"
+
+Describe: contains? for :dictionary types
+
+    ✅ - :dictionary may contain :any
+        ✅: contains? sample "John"
+        ✅: contains? sample "Doe"
+        ✅: contains? sample programmer
+        ✅: contains? sample 22
+        ✅: contains? sample [Arturo Python Ruby Ada Rust Zig Nim]
+        ✅: not? contains? sample "Joe"
+        ✅: not? contains? sample "Jane"
+    
+    ✅ - contains?.deep can find it into nested :dictionary
+        ✅: contains? deep sample "Joe"
+        ✅: contains? deep sample "Jane"
+    
+    ✅ - contains?.deep can't find :block's values into nested :dictionary
+        ✅: not? contains? deep sample to :word "Arturo"
+
+Describe: test .at attribute
+
+    ✅ - element at 0 must be equal to first
+        ✅: contains? at 0 str first str
+        ✅: contains? at 0 blk first blk
+        ✅: contains? at 0 dict "Joe"
+    
+    ✅ - element at high must be equal to last
+        ✅: contains? at dec size str str last str
+        ✅: contains? at dec size blk blk last blk
+        ✅: contains? at 1 dict "Doe"
+    
+    ✅ - element at x must be equal to get x
+        ✅: contains? at index str str\[index]
+        ✅: contains? at index blk blk\[index]
+        ✅: contains? at index str str\[index]
+        ✅: contains? at index blk blk\[index]
+        ✅: contains? at index str str\[index]
+        ✅: contains? at index blk blk\[index]
+        ✅: contains? at index str str\[index]
+        ✅: contains? at index blk blk\[index]
+        ✅: contains? at index str str\[index]
+        ✅: contains? at index blk blk\[index]
+    
+    ⏩ - should throw for index out of bounds
+
+======== .unitt\specs\lib\collections\couple.test.art ========
+
+======== .unitt\specs\lib\collections\decouple.test.art ========
+
+======== .unitt\specs\lib\collections\dictionary.test.art ========
+
+Describe: simple dictionary
+
+    ✅ - should store all fields
+        ✅: "John" = actualName
+        ✅: "Doe" = actualSurname
+        ✅: 35 = actualAge
+
+Describe: nested dictionary
+
+    ✅ - should access 1-depth values
+        ✅: "John Doe" = actualFullname
+        ✅: expectedLocation = actualLocation
+    
+    ✅ - should access n-depth values
+        ✅: "S\xC3\xA3o Paulo" = actualCity
+        ✅: "Brazil" = actualCountry
+    
+    ✅ - should store keys as lower when .lower
+        ✅: [username] = actual
+
+Describe: Module Specification
+
+    
+
+Describe: scope and evaluation
+
+    ✅ - should read out-of-scope variables
+        ✅: country = actual
+    
+    ✅ - should not alter outside values with same label
+        ✅: "EU" = entity
+        ✅: "Spain" = country
+        ✅: "Greece" = actual
+    
+    ✅ - should evaluate functions
+        ✅: 3 = actual
+    
+    ✅ - should be accessible after a block evaluation
+        ✅: set? example
+        ✅: "value" = example\some
+
+Describe: inject fields with `.with`
+
+    ✅ - should contain ntity field
+        ✅: "EU" = location\entity
+    
+    ✅ - should keep other fields
+        ✅: "Spain" = location\country
+    
+    ✅ - should accept [:literal]
+        ✅: "EU" = location\entity
+    
+    ✅ - should store injected keys as lower when .lower
+        ✅: [entity] = actual
+
+Describe: construction from raw
+
+    ✅ - should store all keys & values in order
+        ✅: [name surname age] = actualKeys
+        ✅: [John Doe 35] = actualValues
+    
+    ✅ - should not evaluate :block
+        ✅: in? "name" keys actual
+        ✅: in? to :word "john" values actual
+        ✅: not? in? "nome" keys actual
+        ✅: not? in? "Jane" values actual
+
+Describe: dictionary from function
+
+    ✅ - should return dictionary
+        ✅: # [some value] = returnsDict
+        ✅: "value" = actualField
+    
+    ✅ - should access field direclty for 0-arity
+        ✅: "value" = returnsDict\some
+
+
+========== Summary ==========
+
+  ⏏️   TOTAL: 187 assertions
+  ✅  PASSED: 185 assertions
+  ⏩ SKIPPED: 2 assertions
+  ❌  FAILED: 0 assertions
+
+========== ======= ==========
+
