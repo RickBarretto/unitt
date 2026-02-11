@@ -146,8 +146,4 @@ suite "test .at attribute" [
             assert -> contains?.at: index blk (blk\[index])
         ]
     ]
-    
-    test.skip "should throw for index out of bounds" [
-        assert -> throws? [contains?.at: 1 [0 1] 0]
-    ]
 ]
