@@ -58,8 +58,26 @@ jobs:
                 # This one line is critical for FreeBSD jobs!
                 # (in other OSes. it just does nothing harmful)
                 cd $GITHUB_WORKSPACE
+
+                # Test for *.spec.art files
                 
-                expected=`cat .github/workflows/expected.out | tr -d '\r'`
+                expected=`cat .github/workflows/expected.specs.out | tr -d '\r'`
+                output=`arturo --no-color src/script.art 2>/dev/null | tail | tr -d '\r' || true`
+
+                if [ "$output" = "$expected" ]; then
+                    echo "✓ Test succeeded! :)"
+                else
+                    echo "✗ Tests failed :("
+                    echo ""
+                    echo "$expected" > /tmp/expected.txt
+                    echo "$output" > /tmp/output.txt
+                    diff /tmp/expected.txt /tmp/output.txt || true
+                    exit 1
+                fi
+
+                # Test for *.test.art files
+
+                expected=`cat .github/workflows/expected.tests.out | tr -d '\r'`
                 output=`arturo --no-color src/script.art 2>/dev/null | tail | tr -d '\r' || true`
 
                 if [ "$output" = "$expected" ]; then
