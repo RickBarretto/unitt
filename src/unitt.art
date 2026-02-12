@@ -1,217 +1,248 @@
 ;; author: « RickBarretto
-;; year: 2024-2025
+;; year: 2024-2026
 ;; licence: « MIT
-;; version: 2.0.0-beta
+;; version: 3.0.3
 ;; repository: « https://github.com/RickBarretto/unitt
+;; installation: « arturo -p install unitt
 ;;
 ;; warning: {
 ;;    Never import this as lean, or this will break the whole code.
 ;;    At least, for now. This may change in future updates.
 ;; }
 ;;
-;; export: ['test 'suite]
+;; export: ['unitt 'test 'suite 'describe 'it 'assert 'expects]
 
-storeName: (key? args 'filename)? [args\filename] [unique.id "unitt"]
-unitt: store.native ~".unitt/|storeName|"
-unitt\standalone: []
-unitt\specs: []
+import ./{api/spec}
 
-__unitt__scope: 'standalone
-__unitt_spec: #[
-    id: ""
-    description: ""
-    tests: []
-]
+unitt: [
 
+    init: method [filename][
+        this\storage: store.native ".unitt/" ++ filename
+        this\storage\standalone: []
+        this\storage\specs: []
 
-describe: $[description :string tests :block][
-    ;; description: « Visually groups tests.
-    ;;
-    ;; arguments: [
-    ;;      description: « the suite description
-    ;;      test: « the block containing the tests statements
-    ;; ]
-    ;; options: [
-    ;;      prop: :logical « defines if a test is property-based
-    ;;      skip: :logical « skip test if true
-    ;; ]
-    ;;
-    ;; example: {
-    ;;      ; testAppend.art
-    ;;      import {unitt}!
-    ;;      
-    ;;      unix?: true
-    ;;      describe "Groups some tests together" [
-    ;;
-    ;;          test.prop "appending with keyword or operator has the same behavior" [
-    ;;              a: [a b c d e f g]
-    ;;              b: [h i j k l m n]
-    ;;              assert.with: 'equal? @[express append a b express a ++ b]
-    ;;          ]
-    ;;          
-    ;;          test.skip: unix? "split is working for windows's paths" [
-    ;;              assert.with: 'equal? @[["." "splited" "path"] split.path ".\\splited\\path"]
-    ;;          ]
-    ;;      ]
-    ;;      ; Description: Groups some tests together 
-    ;;      ;
-    ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
-    ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
-    ;;      ;
-    ;;      ; ⏩ - assert that split is working for windows's paths
-    ;;      ;      skipped!
-    ;; }
+        this\specs: @[to :UnittStandaloneSpec []!]
 
-    ; Sets Global variables to current Spec context
-    __unitt__scope: 'specs
-    __unitt_spec: #[
-        description: description
-        tests: []
+        ; Runtime only
+        this\kind: 'standalone
+        this\spec: first this\specs
+        this\test: null
     ]
 
-    do tests
+    describe: method.public [description :string actions :block][
+        ;; description: « Groups tests.
+        ;;
+        ;; arguments: [
+        ;;      description: « the suite description
+        ;;      actions: « the block containing the tests statements
+        ;; ]
+        ;;
+        ;; example: {
+        ;;      ; testAppend.art
+        ;;      import {unitt}!
+        ;;      
+        ;;      unix?: true
+        ;;      describe "Groups some tests together" [
+        ;;
+        ;;          it "appending with keyword or operator has the same behavior" [
+        ;;              a: [a b c d e f g]
+        ;;              b: [h i j k l m n]
+        ;;              assert.with: 'equal? @[express append a b express a ++ b]
+        ;;          ]
+        ;;          
+        ;;          it.skip: unix? "split is working for windows's paths" [
+        ;;              assert.with: 'equal? @[["." "splited" "path"] split.path ".\\splited\\path"]
+        ;;          ]
+        ;;      ]
+        ;;      ; Description: Groups some tests together 
+        ;;      ;
+        ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
+        ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
+        ;;      ;
+        ;;      ; ⏩ - assert that split is working for windows's paths
+        ;;      ;      skipped!
+        ;; }
 
-    ; Push current Spec to unitt\specs
-    unitt\specs: unitt\specs ++ __unitt_spec
+        spec: to :UnittSpec @[description]!
 
-    ; Resets global variables
-    __unitt__scope: 'standalone
-    __unitt_spec: #[
-        description: ""
-        assertions: []
+        ; Set the current spec to context
+        this\kind: 'spec
+        this\spec: spec
+
+        ; Eval and register Spec
+        do actions
+        this\specs: this\specs ++ this\spec
+
+        ; Update storage at real-time for specs
+        this\storage\specs: to [:dictionary] drop this\specs
+
+        ; Reset the current spec to standalone
+        this\kind: 'standalone
+        this\spec: first this\specs
+        this\test: null
     ]
-]
+
+    it: method.public [expectation :string action :block][
+        ;; description: {
+        ;;    Attaches a test case to the current running suite.
+        ;;    Assertions should be done with `expects :block`.
+        ;; }
+        ;; arguments: [
+        ;;      expectation: « the test description
+        ;;      action: {
+        ;;          the block containing the test's logic and assertion
+        ;;      }
+        ;; ]
+        ;; options: [
+        ;;      skip: :logical « skip test if true
+        ;; ]
+        ;; 
+        ;; example: {
+        ;;      ; testAppend.art
+        ;;      import {unitt}!
+        ;;      
+        ;;      it "appending with keyword or operator has the same behavior" [
+        ;;          a: [a b c d e f g]
+        ;;          b: [h i j k l m n]
+        ;;
+        ;;          expects.be: 'equal? @[express append a b express a ++ b]
+        ;;          expects.be: 'equal? @[express append b a express b ++ a]
+        ;;      ]
+        ;;      ; ✅ - assert that appending with keyword or operator has the same behavior 
+        ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
+        ;;      ;
+        ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
+        ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
+        ;;          
+        ;;      it.skip: unix? "split is working for windows's paths" [
+        ;;          expects.be: 'equal? ["." "splited" "path"] = split.path ".\\splited\\path"
+        ;;      ]
+        ;;      ; # running on Windows:
+        ;;      ; ✅ - assert that split is working for windows's paths
+        ;;      ;      ✅: equal? ["." "splited" "path"] ["." "splited" "path"]
+        ;;      ; 
+        ;;      ; # running on Unix:
+        ;;      ; ⏩ - assert that split is working for windows's paths 
+        ;;      ;      skipped!
+        ;;      
+        ;;      it "`a` won't be evaluated" [
+        ;;          expects.static -> a = 5 
+        ;;      ]
+        ;;      ; ✅ - assert that `a` won't be evaluated 
+        ;;      ;      ✅: a = 5
+        ;;
+        ;; }
+
+        ; Current test context
+        test: to :UnittTest [expectation]!
+        this\test: test
+
+        ; Eval and register Test
+        do action        
+        this\spec\test this\test
+
+        ; Update for standalone
+        if this\kind = 'standalone [
+            set this\specs 0 this\spec
+        ]
+
+        ; Update storage at real-time for standalone tests
+        this\storage\standalone: @first this\specs
+        this\test: null
+    ]
+
+    expects: method.public [expression :block][
+        ;; description: {
+        ;;    Add the assertion to the current running test unit. 
+        ;;
+        ;;    Important to know that the expression is not evaluated at the 
+        ;;    assertion moment, but at the end of the test execution.
+        ;;    Not eveything there is also evaluates, 
+        ;;    and some values may be displayed as they are.
+        ;; }
+        ;; arguments: [
+        ;;      expression: « the expression to be asserted.
+        ;; ]
+        ;;
+        ;; options: [
+        ;;      be: :literal {
+        ;;          the function to be used for assertion, if not provided, 
+        ;;          the expression will be evaluated as a boolean.
+        ;;          When using this, the block becomes the parameters 
+        ;;          of the function.
+        ;;      }
+        ;;      to: :literal « same as above.
+        ;; ]
+        ;; 
+        ;; example: {
+        ;;      ; testAppend.art
+        ;;      import {unitt}!
+        ;;      
+        ;;      it "appending with keyword or operator has the same behavior" [
+        ;;          a: [a b c d e f g]
+        ;;          b: [h i j k l m n]
+        ;;
+        ;;          expects.be: 'equal? @[express append a b express a ++ b]
+        ;;          expects.be: 'equal? @[express append b a express b ++ a]
+        ;;      ]
+        ;;      ; ✅ - assert that appending with keyword or operator has the same behavior 
+        ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
+        ;;      ;
+        ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
+        ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
+        ;;
+        ;; }
+
+        if this\test = null [
+            panic "expects should be used inside a test block"
+        ]
+
+        this\test\expects expression
+    ]
+]!
+
+
+export module.with: @[(args\["filename"]) ?? unique.id "unitt-"] unitt!
 
 suite: var 'describe
-
-_repr: $[tokens][
-    ignorable: [
-        :function 
-        :literal 
-        :pathLiteral 
-        :method 
-        :object
-        :symbol
-    ]
-    reprToken: $[token :any][
-        if inline? token            ; :inline should be 
-            -> return _repr token   ; recursively evaluated
-
-        if contains? [:string :literal :pathLiteral :symbolLiteral] type token 
-            -> return express token
-
-        if throws? [value: var token]
-            -> return token
-
-        switch in? (type var token) ignorable
-            -> token
-            -> express value
-    ]
-
-    tokens | map => [reprToken &] 
-           | join.with: " "
-]
-
-
-it: $[description :string testCase :block][
-    ;; description: {
-    ;;    Run an unit-test, printing it's result.
-    ;;    Assertions should be done with the internal function `expects :block`.
-    ;; }
-    ;; arguments: [
-    ;;      description: « the test description
-    ;;      testCase: {
-    ;;          the block containing the test's logic and assertion
-    ;;      }
-    ;; ]
-    ;; options: [
-    ;;      skip: :logical « skip test if true
-    ;; ]
-    ;;
-    ;; note: {
-    ;;    * `expects`/`assert` is injected, and only available inside the `it`'s block.
-    ;; }
-    ;; 
-    ;; example: {
-    ;;      ; testAppend.art
-    ;;      import {unitt}!
-    ;;      
-    ;;      it "appending with keyword or operator has the same behavior" [
-    ;;          a: [a b c d e f g]
-    ;;          b: [h i j k l m n]
-    ;;
-    ;;          expects.be: 'equal? @[express append a b express a ++ b]
-    ;;          expects.be: 'equal? @[express append b a express b ++ a]
-    ;;      ]
-    ;;      ; ✅ - assert that appending with keyword or operator has the same behavior 
-    ;;      ;      ✅: equal? [a b c d e f g h i j k l m n] [a b c d e f g h i j k l m n]
-    ;;      ;
-    ;;      ; ✅ - assert that appending with keyword or operator has the same behavior
-    ;;      ;      ✅: equal? [h i j k l m n a b c d e f g] [h i j k l m n a b c d e f g]
-    ;;          
-    ;;      it.skip: unix? "split is working for windows's paths" [
-    ;;          expects.be: 'equal? ["." "splited" "path"] = split.path ".\\splited\\path"
-    ;;      ]
-    ;;      ; # running on Windows:
-    ;;      ; ✅ - assert that split is working for windows's paths
-    ;;      ;      ✅: equal? ["." "splited" "path"] ["." "splited" "path"]
-    ;;      ; 
-    ;;      ; # running on Unix:
-    ;;      ; ⏩ - assert that split is working for windows's paths 
-    ;;      ;      skipped!
-    ;;      
-    ;;      it "`a` won't be evaluated" [
-    ;;          expects.static -> a = 5 
-    ;;      ]
-    ;;      ; ✅ - assert that `a` won't be evaluated 
-    ;;      ;      ✅: a = 5
-    ;;
-    ;; }
-
-
-    ; erases the test case if this must be skipped
-    ; basically the same as run an empty block.
-    if attr 'skip -> testCase: []
-
-    __assertions: []
-
-    expects: $[condition :block][
-        ; It's internal function to be used inside the testCase block.
-
-        ; The injected function wrapped into a block that will evaluate the expression.
-        ; This function is injected by using: .be:, .to: or .to.be:
-        __fn: @[attr 'with attr 'to attr 'be ] | filter => null?
-
-        ; If there is a function to be applied
-        ; this keyword will be put into the condition block.
-        if not? empty? __fn -> 
-            condition: prepend condition @[to :word last __fn]
-        
-        ; Then appends the this assertion into the internal assertion list.
-        '__assertions ++ @[condition]
-    ]
-
-    ; Alternative alias for the `expects` function.
-    assert: var 'expects
-
-    do testCase
-
-    __assertionsStatus: map __assertions '__assertion [
-         @[_repr __assertion, equal? @__assertion @[true]]
-    ]
-
-    __local_spec: #[
-        description: description
-        assertions: __assertionsStatus
-    ]
-
-    switch 'standalone = __unitt__scope [
-        unitt\standalone: unitt\standalone ++ __local_spec
-    ][
-        __unitt_spec\tests: __unitt_spec\tests ++ __local_spec
-    ]
-
-]
-
-; Alternative alias for the `it` function.
 test: var 'it
+assert: var 'expects
+
+
+if standalone? ::
+
+    it "Simple failing test" [
+        expects -> false
+    ]
+
+    describe "simple append" [
+        it "keeps the order" [
+            expects [equal? [a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[[a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[["b" "c" "d" "a"]     ["b" "c" "d"] ++ ["a"]]
+            expects.be: 'notEqual?  @[["a" "b" "c" "d"]     ["b" "c" "d"] ++ ["a"]]
+        ]
+
+        it.skip "has ++ as alias (todo)" [
+            expects.be: 'equal? @[append [] [] [] ++ [] ]
+            expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
+        ]
+    ]
+
+    describe "simple append 2" [
+        it "keeps the order" [
+            expects [equal? [a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[[a b c d]     [a] ++ [b c d]]
+            expects.be: 'equal?     @[["b" "c" "d" "a"]     ["b" "c" "d"] ++ ["a"]]
+            expects.be: 'notEqual?  @[["a" "b" "c" "d"]     ["b" "c" "d"] ++ ["a"]]
+        ]
+
+        it.skip "has ++ as alias (todo) 2" [
+            expects.be: 'equal? @[append [] [] [] ++ [] ]
+            expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
+        ]
+    ]
+
+    it "Simple passing test" [
+        expects -> true
+    ]

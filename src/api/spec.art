@@ -1,0 +1,72 @@
+import ./{test}
+
+define :UnittSpec [
+
+    init: method [description :string][
+        this\description: description
+        this\tests: []
+    ]
+
+    dictionary: method[][ #[
+        description: this\description
+        tests: to [:dictionary] this\tests
+    ] ]
+
+    test: method.public [t :UnittTest][
+        this\tests: this\tests ++ t
+    ]
+
+]
+
+define :UnittStandaloneSpec is :UnittSpec [
+    init: method [][
+        this\description: "Module Specification"
+        this\tests: []
+    ]
+]
+
+
+if standalone? ::
+
+    ; Testing Spec API
+
+    api1: to :UnittSpec ["Spec 1"]!
+    test1: to :UnittTest ["Test 1"]!
+    test2: to :UnittTest ["Test 2"]!
+
+    test1\expects [equal? 1 1]
+    test1\expects [equal? "abc" "abc"]
+    test2\expects [not? equal? 1 2]
+
+    api1\test test1
+    api1\test test2
+
+    inspect to :dictionary api1
+
+    ensure -> equal? api1\description "Spec 1"
+    ensure -> equal? api1\tests\0\description "Test 1"
+    ensure -> equal? api1\tests\1\description "Test 2"
+    ensure -> equal? api1\tests\0\assertions\0 @[{equal? 1 1} true]
+    ensure -> equal? api1\tests\0\assertions\1 @[{equal? "abc" "abc"} true]
+    ensure -> equal? api1\tests\1\assertions\0 @[{not? equal? 1 2} true]
+
+
+    ; Testing Standalone Spec API
+
+    api2: to :UnittStandaloneSpec []!
+    test3: to :UnittTest ["Test 3"]!
+    test4: to :UnittTest ["Test 4"]!
+
+    test3\expects [true? true]
+    test4\expects [false? false]
+
+    api2\test test3
+    api2\test test4
+
+    inspect to :dictionary api2
+
+    ensure -> equal? api2\description "Module Specification"
+    ensure -> equal? api2\tests\0\description "Test 3"
+    ensure -> equal? api2\tests\1\description "Test 4"
+    ensure -> equal? api2\tests\0\assertions\0 @[{true? true} true]
+    ensure -> equal? api2\tests\1\assertions\0 @[{false? false} true]
