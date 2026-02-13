@@ -131,13 +131,17 @@ if standalone? ::
     ; Test Arturo file settings
 
     {
-        path: "specs"
-        suffix: ".spec.art"
+        path: "tests"
+        suffix: ".test.art"
     } >> "settings.art"
 
     file: to :FileSettings ["settings.art"]
 
-    ensure -> file\path = "specs"
-    ensure -> file\suffix = ".spec.art"
+    ensure -> file\path = "tests"
+    ensure -> file\suffix = ".test.art"
+    ensure -> file\binary = null
+    ensure -> (to :dictionary file) = #[path: "tests" suffix: ".test.art"]
+
+    delete "settings.art"
     ensure -> file\binary = null
     ensure -> (to :dictionary file) = #[path: "specs" suffix: ".spec.art"]
