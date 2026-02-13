@@ -4,3 +4,23 @@ findTests: $[at :string suffixedBy :string][
         | select => [suffix? & suffixedBy]
         | map => normalize
 ]
+
+executeAll: $[tests :block arturo :string redirectTo :string][
+    ensure.that: "No test found!" -> not? empty? tests
+    ensure -> every? tests => string?
+
+    print "Executing tests..."
+    delete.directory redirectTo
+    write.directory null redirectTo
+
+    loop tests 'test [
+        command: ~"|arturo| |test| --filename:|test|"
+        result: execute.code command
+
+        if not? zero? result\code [
+            print ~"Uncaught error in |test|:"
+            print express.pretty result
+            exit 1
+        ]
+    ]
+]

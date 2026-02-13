@@ -16,8 +16,8 @@ if standalone? ::
         to :CliSettings [args]
     ]
 
-    inspect findTests settings\path settings\suffix
-    ;     | executeAll ".unitt"
+    findTests settings\path settings\suffix
+        | executeAll settings\binary normalize ".unitt"
 
     ; results: findResults ".unitt"
     ; print to :string results
