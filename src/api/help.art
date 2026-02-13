@@ -11,13 +11,14 @@ Usage: unitt [options]
 
     Options:
 
-        --help           Show this help message and exit
-        --clean          Display failed tests only (per module).
-        --silent         Override error code.
+        --help              Show this help message and exit
+        --clean             Display failed tests only (per module).
+        --silent            Override error code.
 
     Override `config.art':
 
-        --binary:BINARY  Run tests with custom Arturo
-        --path:PATH      Specify the path to the test files
-        --suffix:SUFFIX  Specify the file suffix for test files
+        --binary:<path>     Run tests with custom Arturo
+        --path:<path>       Specify the path to the test files
+        --suffix:<pattern>  Specify the file suffix for test files
+
 :}
