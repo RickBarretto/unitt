@@ -153,7 +153,7 @@ unitt: [
         ]
 
         ; Update storage at real-time for standalone tests
-        this\storage\standalone: @first this\specs
+        this\storage\standalone: to :block first this\specs
         this\test: null
     ]
 
