@@ -17,7 +17,7 @@ Usage: unitt [options]
 
     Override `config.art':
 
-        --binary         Run tests with custom Arturo
+        --binary:BINARY  Run tests with custom Arturo
         --path:PATH      Specify the path to the test files
         --suffix:SUFFIX  Specify the file suffix for test files
 :}
