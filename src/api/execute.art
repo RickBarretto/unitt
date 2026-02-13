@@ -1,0 +1,6 @@
+
+findTests: $[at :string suffixedBy :string][
+    list.recursive at
+        | select => [suffix? & suffixedBy]
+        | map => normalize
+]
