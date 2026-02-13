@@ -1,0 +1,23 @@
+
+helpAsked?: $[argument :block][
+    ensure -> every? argument => string?
+
+    some? ["--help" "-h"] 'it -> in? it argument
+]
+
+help: {:
+A lean unit testing framework for Arturo.
+Usage: unitt [options]
+
+    Options:
+
+        --help           Show this help message and exit
+        --clean          Display failed tests only (per module).
+        --silent         Override error code.
+
+    Override `config.art':
+
+        --binary         Run tests with custom Arturo
+        --path:PATH      Specify the path to the test files
+        --suffix:SUFFIX  Specify the file suffix for test files
+:}
