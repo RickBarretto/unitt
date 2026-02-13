@@ -1,6 +1,9 @@
-import ./{api/execute}!
+; UI import
 import ./{api/help}!
 import ./{api/settings}!
+
+; API imports
+import ./{api/execute}!
 import ./{api/result}!
 
 
