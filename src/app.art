@@ -1,6 +1,7 @@
 import ./{api/execute}!
 import ./{api/help}!
 import ./{api/settings}!
+import ./{api/result}!
 
 
 if standalone? ::
@@ -19,7 +20,8 @@ if standalone? ::
     findTests settings\path settings\suffix
         | executeAll settings\binary normalize ".unitt"
 
-    ; results: findResults ".unitt"
+    results: findResults ".unitt"
+    inspect results
     ; print to :string results
 
     ; if results\failed? [
