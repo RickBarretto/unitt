@@ -16,8 +16,10 @@ import ./{api/spec}
 
 unitt: [
 
-    init: method [filename][
-        this\storage: store.native filename
+    init: method [][
+        this\storage: (key? args 'filename)?
+            -> store.native args\filename
+            -> #[]
         this\storage\standalone: []
         this\storage\specs: []
 
@@ -27,6 +29,10 @@ unitt: [
         this\kind: 'standalone
         this\spec: first this\specs
         this\test: null
+    ]
+
+    exported: method.public [][
+        this\storage
     ]
 
     describe: method.public [description :string actions :block][
@@ -202,7 +208,7 @@ unitt: [
 ]!
 
 
-export module.with: @[(args\["filename"]) ?? unique.id "unitt-"] unitt!
+export module unitt!
 
 suite: var 'describe
 test: var 'it
@@ -246,3 +252,5 @@ if standalone? ::
     it "Simple passing test" [
         expects -> true
     ]
+
+    inspect exported
