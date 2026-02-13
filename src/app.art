@@ -9,12 +9,10 @@ if standalone? ::
         exit 0
     ]
 
-    print "..."
-
     settings: mergeSettings @[
         if exists? "config.toml" -> to :FileSettings ["config.toml"]
         if exists? "config.art" -> to :FileSettings ["config.art"]
         to :CliSettings [args]
     ]
 
-    inspect settings
+    
