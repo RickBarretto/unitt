@@ -25,4 +25,20 @@ EXAMPLES
 
     unitt --help
     unitt --clean --binary:"/bin/arturo" --path:"./tests" --suffix:".test.art"
+
+OVERRIDING DEFAULTS
+
+    Unitt follows a convention-over-configuration approach, but you can override the defaults by providing the appropriate options. 
+    For example, if your test files are located in a different directory or have a different suffix, you can specify that using the `--path` and `--suffix` options.
+    The order of priority are: CLI, file settings and defaults.
+
+    You can also specify new defaults in `config.art`:
+
+    ```
+    binary: "/bin/arturo"
+    path: "./tests"
+    suffix: ".test.art"
+    clean: true
+    ```
+
 :}
