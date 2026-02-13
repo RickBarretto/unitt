@@ -94,7 +94,7 @@ if standalone? ::
 
     ; Test CLI settings
 
-    cli: to :CliSettings @[#[
+    cli: to :CliSettings [#[
         path: "tests"
         suffix: ".test.art"
         otherStuff: "ignored"
@@ -173,7 +173,7 @@ if standalone? ::
 
     file: to :FileSettings ["settings.art"]
 
-    cli: to :CliSettings @[#[
+    cli: to :CliSettings [#[
         suffix: ".test.art"
         path: "e2e"
         clean: true
