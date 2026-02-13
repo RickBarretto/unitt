@@ -17,7 +17,7 @@ import ./{api/spec}
 unitt: [
 
     init: method [filename][
-        this\storage: store.native ".unitt/" ++ filename
+        this\storage: store.native filename
         this\storage\standalone: []
         this\storage\specs: []
 

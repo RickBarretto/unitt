@@ -14,7 +14,7 @@ executeAll: $[tests :block arturo :string redirectTo :string][
     write.directory null redirectTo
 
     loop tests 'test [
-        command: ~"|arturo| |test| --filename:|test|"
+        command: ~"|arturo| |test| --filename:|redirectTo|/|test|"
         result: execute.code command
 
         if not? zero? result\code [
