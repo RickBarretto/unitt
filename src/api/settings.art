@@ -22,24 +22,22 @@ define :FileSettings is :Settings [
     ]
 
     path: method [][
-        when [
-            key? this\data 'path -> this\data\path
-            true -> null
-        ]
+        (key? this\data 'path)?
+            -> this\data\path
+            -> null
     ]
 
     suffix: method [][
-        when [
-            key? this\data 'suffix -> this\data\suffix
-            true -> null
-        ]
+        (key? this\data 'suffix)?
+            -> this\data\suffix
+            -> null
     ]
 
     binary: method [][
-        when [
-            key? this\data 'binary -> this\data\binary
-            true -> null
-        ]
+        (key? this\data 'binary)?
+            -> this\data\binary
+            -> null
+    ]
     ]
     
     load: method [file :string][
