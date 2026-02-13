@@ -22,6 +22,8 @@ define :Settings [
         path :string
         suffix :string
         binary :string
+        clean :logical :null
+        silent :logical :null
     ]
 
     dictionary: method [][
@@ -29,6 +31,8 @@ define :Settings [
             path: this\path
             suffix: this\suffix
             binary: this\binary
+            clean: this\clean ?? false
+            silent: this\silent ?? false
         ]
     ]
 ]
@@ -37,11 +41,13 @@ define :Settings [
 define :FileSettings is :Settings [
     init: method [file :string][
         data: this\load file
+            | filterKeys [path suffix binary clean silent]
 
         this\path: gets data 'path
         this\suffix: gets data 'suffix
         this\binary: gets data 'binary
-        this\data: data
+        this\clean: (gets data 'clean) ?? false
+        this\silent: (gets data 'silent) ?? false
     ]
 
     load: method [file :string][
@@ -51,22 +57,17 @@ define :FileSettings is :Settings [
             not? exists? file -> #[]
         ]
     ]
-
-    dictionary: method [][
-        filterKeys this\data [path suffix binary]
-    ]
 ]
 
 define :CliSettings is :Settings [
     init: method [data :dictionary][
-        this\path: gets data 'path
-        this\suffix: gets data 'suffix
-        this\binary: gets data 'binary
-        this\data: data
-    ]
+        d: filterKeys data [path suffix binary clean silent]
 
-    dictionary: method [][
-        filterKeys this\data [path suffix binary]
+        this\path: gets d 'path
+        this\suffix: gets d 'suffix
+        this\binary: gets d 'binary
+        this\clean: (gets d 'clean) ?? false
+        this\silent: (gets d 'silent) ?? false
     ]
 ]
 
@@ -76,11 +77,13 @@ mergeSettings: $[others :block][
         path: "specs"
         suffix: ".spec.art"
         binary: "arturo"
+        clean: false
+        silent: false
     ]
 
     loop others 's [
         loop (to :dictionary s) [key val][
-            set settings key val
+            if not? null? val -> set settings key val
         ]
     ]
 
@@ -95,12 +98,22 @@ if standalone? ::
         path: "tests"
         suffix: ".test.art"
         otherStuff: "ignored"
+        silent: true
     ]]
 
     ensure -> cli\path = "tests"
     ensure -> cli\suffix = ".test.art"
     ensure -> cli\binary = null
-    ensure -> (to :dictionary cli) = #[path: "tests" suffix: ".test.art"]
+    ensure -> cli\clean = false
+    ensure -> cli\silent = true
+
+    ensure -> (to :dictionary cli) = #[
+        path: "tests" 
+        suffix: ".test.art"
+        binary: null 
+        clean: false 
+        silent: true 
+    ]
 
     ; Test Arturo file settings
 
@@ -114,7 +127,16 @@ if standalone? ::
     ensure -> file\path = "tests"
     ensure -> file\suffix = ".test.art"
     ensure -> file\binary = null
-    ensure -> (to :dictionary file) = #[path: "tests" suffix: ".test.art"]
+    ensure -> file\clean = false
+    ensure -> file\silent = false
+
+    ensure -> (to :dictionary file) = #[
+        path: "tests" 
+        suffix: ".test.art" 
+        binary: null
+        clean: false 
+        silent: false
+    ]
 
     delete "settings.art"
 
@@ -130,7 +152,15 @@ if standalone? ::
     ensure -> file\path = "tests"
     ensure -> file\suffix = ".test.art"
     ensure -> file\binary = null
-    ensure -> (to :dictionary file) = #[path: "tests" suffix: ".test.art"]
+    ensure -> file\clean = false
+    ensure -> file\silent = false
+    ensure -> (to :dictionary file) = #[
+        path: "tests" 
+        suffix: ".test.art"
+        binary: null
+        clean: false 
+        silent: false
+    ]
 
     delete "settings.toml"
 
@@ -146,6 +176,7 @@ if standalone? ::
     cli: to :CliSettings @[#[
         suffix: ".test.art"
         path: "e2e"
+        clean: true
     ]]
 
     final: mergeSettings @[file cli]
@@ -153,6 +184,14 @@ if standalone? ::
     ensure -> final\path = "e2e"
     ensure -> final\suffix = ".test.art"
     ensure -> final\binary = "custom-arturo"
-    ensure -> (to :dictionary final) = #[path: "e2e" suffix: ".test.art" binary: "custom-arturo"]
+    ensure -> final\clean = true
+    ensure -> final\silent = false
+    ensure -> (to :dictionary final) = #[
+        path: "e2e" 
+        suffix: ".test.art" 
+        binary: "custom-arturo" 
+        clean: true 
+        silent: false
+    ]
 
     delete "settings.art"
