@@ -1,0 +1,144 @@
+
+define :Settings [
+    init: constructor [
+        path :string
+        suffix :string
+        binary :string
+    ]
+
+    dictionary: method [][
+        #[
+            path: this\path
+            suffix: this\suffix
+            binary: this\binary
+        ]
+    ]
+]
+
+
+define :FileSettings is :Settings [
+    init: method [file :string][
+        this\data: this\load file
+    ]
+
+    path: method [][
+        when [
+            key? this\data 'path -> this\data\path
+            true -> null
+        ]
+    ]
+
+    suffix: method [][
+        when [
+            key? this\data 'suffix -> this\data\suffix
+            true -> null
+        ]
+    ]
+
+    binary: method [][
+        when [
+            key? this\data 'binary -> this\data\binary
+            true -> null
+        ]
+    ]
+    
+    load: method [file :string][
+        when [
+            suffix? file ".art" -> # file
+            suffix? file ".toml" -> read.toml file 
+            not? exists? file -> #[]
+        ]
+    ]
+
+    dictionary: method [][
+        result: #[]
+
+        when.any [
+            key? this\data "path" -> result\path: this\data\path
+            key? this\data "suffix" -> result\suffix: this\data\suffix
+            key? this\data "binary" -> result\binary: this\data\binary
+        ]
+
+        result
+    ]
+]
+
+define :CliSettings is :Settings [
+    init: constructor [data :dictionary]
+
+    path: method [][
+        (key? this\data 'path)?
+            -> this\data\path
+            -> null
+    ]
+
+    suffix: method [][
+        (key? this\data 'suffix)?
+            -> this\data\suffix
+            -> null
+    ]
+
+    binary: method [][
+        (key? this\data 'binary)?
+            -> this\data\binary
+            -> null
+    ]
+
+    dictionary: method [][
+        result: #[]
+        when.any [
+            key? this\data 'path -> result\path: this\path
+            key? this\data 'suffix -> result\suffix: this\suffix
+            key? this\data 'binary -> result\binary: this\binary
+        ]
+
+        result
+    ]
+]
+
+mergeSettings: $[file :FileSettings cli :CliSettings][
+    settings: #[
+        path: "specs"
+        suffix: ".spec.art"
+        binary: "arturo"
+    ]
+
+    loop dictionary file [key val][
+        set settings key val
+    ]
+
+    loop dictionary cli [key val][
+        set settings key val
+    ]
+
+    to :Settings settings
+]
+
+if standalone? ::
+
+    ; Test CLI settings
+
+    cli: to :CliSettings @[#[
+        path: "tests"
+        suffix: ".test.art"
+        otherStuff: "ignored"
+    ]]
+
+    ensure -> cli\path = "tests"
+    ensure -> cli\suffix = ".test.art"
+    ensure -> cli\binary = null
+    ensure -> (to :dictionary cli) = #[path: "tests" suffix: ".test.art"]
+
+    ; Test Arturo file settings
+
+    {
+        path: "specs"
+        suffix: ".spec.art"
+    } >> "settings.art"
+
+    file: to :FileSettings ["settings.art"]
+
+    ensure -> file\path = "specs"
+    ensure -> file\suffix = ".spec.art"
+    ensure -> file\binary = null
+    ensure -> (to :dictionary file) = #[path: "specs" suffix: ".spec.art"]
