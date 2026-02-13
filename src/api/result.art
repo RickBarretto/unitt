@@ -1,0 +1,6 @@
+
+findResults: $[at :string][
+    at | list.recursive 
+       | map => normalize
+]
+
