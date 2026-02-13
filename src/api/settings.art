@@ -143,5 +143,19 @@ if standalone? ::
     ensure -> (to :dictionary file) = #[path: "tests" suffix: ".test.art"]
 
     delete "settings.art"
+
+    ; Test TOML file settings
+
+    {
+        path = "tests"
+        suffix = ".test.art"
+    } >> "settings.toml"
+
+    file: to :FileSettings ["settings.toml"]
+
+    ensure -> file\path = "tests"
+    ensure -> file\suffix = ".test.art"
     ensure -> file\binary = null
-    ensure -> (to :dictionary file) = #[path: "specs" suffix: ".spec.art"]
+    ensure -> (to :dictionary file) = #[path: "tests" suffix: ".test.art"]
+
+    delete "settings.toml"
