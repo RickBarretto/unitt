@@ -18,7 +18,7 @@ unitt: [
 
     init: method [][
         this\storage: (key? args 'filename)?
-            -> store.native args\filename
+            -> store.json args\filename ++ ".json"
             -> #[]
         this\storage\standalone: []
         this\storage\specs: []
@@ -253,4 +253,4 @@ if standalone? ::
         expects -> true
     ]
 
-    inspect exported
+    exported >>.json "example.json"
