@@ -1,3 +1,4 @@
+import ./{api/execute}!
 import ./{api/help}!
 import ./{api/settings}!
 
@@ -15,13 +16,13 @@ if standalone? ::
         to :CliSettings [args]
     ]
 
-    findTests settings\path settings\suffix
-        | executeAll ".unitt"
+    inspect findTests settings\path settings\suffix
+    ;     | executeAll ".unitt"
 
-    results: findResults ".unitt"
-    print to :string results
+    ; results: findResults ".unitt"
+    ; print to :string results
 
-    if results\failed? [
-        print "Some tests failed."
-        exit 1
-    ]
+    ; if results\failed? [
+    ;     print "Some tests failed."
+    ;     exit 1
+    ; ]
