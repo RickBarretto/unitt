@@ -21,4 +21,8 @@ Usage: unitt [options]
         --path:<path>       Specify the path to the test files
         --suffix:<pattern>  Specify the file suffix for test files
 
+EXAMPLES
+
+    unitt --help
+    unitt --clean --binary:"/bin/arturo" --path:"./tests" --suffix:".test.art"
 :}
