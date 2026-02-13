@@ -20,6 +20,11 @@ unitt: [
         this\storage: (key? args 'filename)?
             -> store.json args\filename ++ ".json"
             -> #[]
+
+        this\storage\filename: (key? args 'filename)?
+            [args\filename | split.path | drop | join.path]
+            ["Standalone File Test"]
+
         this\storage\standalone: []
         this\storage\specs: []
 
