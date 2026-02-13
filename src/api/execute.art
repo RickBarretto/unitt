@@ -1,8 +1,8 @@
 
 findTests: $[at :string suffixedBy :string][
-    list.recursive at
-        | select => [suffix? & suffixedBy]
-        | map => normalize
+    at | list.recursive
+       | select => [suffix? & suffixedBy]
+       | map => normalize
 ]
 
 executeAll: $[tests :block arturo :string redirectTo :string][
