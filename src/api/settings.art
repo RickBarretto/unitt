@@ -96,19 +96,18 @@ define :CliSettings is :Settings [
     ]
 ]
 
-mergeSettings: $[file :FileSettings cli :CliSettings][
+mergeSettings: $[others :block][
+    ensure -> every? others 'o [is? :Settings o]
     settings: #[
         path: "specs"
         suffix: ".spec.art"
         binary: "arturo"
     ]
 
-    loop dictionary file [key val][
-        set settings key val
-    ]
-
-    loop dictionary cli [key val][
-        set settings key val
+    loop others 's [
+        loop (to :dictionary s) [key val][
+            set settings key val
+        ]
     ]
 
     to :Settings settings
