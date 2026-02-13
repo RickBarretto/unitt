@@ -159,3 +159,26 @@ if standalone? ::
     ensure -> (to :dictionary file) = #[path: "tests" suffix: ".test.art"]
 
     delete "settings.toml"
+
+    ; Test merging settings
+
+    {
+        path: "tests"
+        binary: "custom-arturo"
+    } >> "settings.art"
+
+    file: to :FileSettings ["settings.art"]
+
+    cli: to :CliSettings @[#[
+        suffix: ".test.art"
+        path: "e2e"
+    ]]
+
+    final: mergeSettings @[file cli]
+
+    ensure -> final\path = "e2e"
+    ensure -> final\suffix = ".test.art"
+    ensure -> final\binary = "custom-arturo"
+    ensure -> (to :dictionary final) = #[path: "e2e" suffix: ".test.art" binary: "custom-arturo"]
+
+    delete "settings.art"
