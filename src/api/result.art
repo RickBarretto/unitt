@@ -2,6 +2,23 @@ as: $[value :any target :type :block][
     to target value
 ]
 
+define :Summary [
+    init: method [passed :integer skipped :integer failed :integer][
+        this\passed: passed
+        this\skipped: skipped
+        this\failed: failed
+        this\total: sum @[passed skipped failed]
+    ]
+
+    add: method [other :Summary][
+        Summary new [
+            passed: this\passed + other\passed
+            skipped: this\skipped + other\skipped
+            failed: this\failed + other\failed
+        ]
+    ]
+]
+
 define :AssertionResult [
     init: constructor [expression :string passed? :logical]
 
@@ -18,6 +35,14 @@ define :AssertionResult [
 
 define :TestResult [
     init: constructor [description :string assertions :block]
+
+    summary: method [][
+        to :Summary #[
+            passed: 1
+            failed: 1
+            skipped: 1
+        ]
+    ]
 
     string: method [][
         status: (every? @this\assertions => last)?
@@ -43,6 +68,14 @@ define :TestResult [
 define :StandaloneResult [
     init: constructor [tests :block]
 
+    summary: method [][
+        to :Summary #[
+            passed: 1
+            failed: 1
+            skipped: 1
+        ]
+    ]
+
     string: method [][
         if empty? this\tests -> return ""
 
@@ -59,6 +92,14 @@ define :StandaloneResult [
 
 define :SpecResult [
     init: constructor [description :string tests :block]
+
+    summary: method [][
+        to :Summary #[
+            passed: 1
+            failed: 1
+            skipped: 1
+        ]
+    ]
 
     string: method [][
         description: @["Describe:" this\description]
@@ -77,6 +118,14 @@ define :SpecResult [
 
 define :FileResult [
     init: constructor [filename :string standalone :block specs :block]
+
+    summary: method [][
+        to :Summary #[
+            passed: 1
+            failed: 1
+            skipped: 1
+        ]
+    ]
 
     string: method [][
         filename: @["========" this\filename "========"]
@@ -102,6 +151,14 @@ define :FileResult [
 
 define :Result [
     init: constructor [files :block]
+
+    summary: method [][
+        to :Summary #[
+            passed: 1
+            failed: 1
+            skipped: 1
+        ]
+    ]
 
     block: method [][
         this\files 
