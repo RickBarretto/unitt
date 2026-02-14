@@ -20,7 +20,13 @@ define :TestResult [
     init: constructor [description :string assertions :block]
 
     string: method [][
-        description: @["Description:" this\description]
+        status: (every? @this\assertions => last)?
+            -> "✅"
+            -> "❌"
+
+        if empty? this\assertions -> status: "⏩"
+
+        description: @[status "-" this\description]
             | join.words
 
         assertions: this\assertions 
