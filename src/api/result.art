@@ -153,9 +153,11 @@ define :FileResult [
 
 define :Result [
     init: method [files :block][
-        this\files: files 
+        files: files 
             | map => [read.json &]
-            | map => [to :FileResult &]   
+            | map => [to :FileResult &]
+
+        this\files: files
     ]
 
     string: method [][
