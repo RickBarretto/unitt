@@ -93,7 +93,7 @@ define :SpecResult [
         this\description: description
         this\tests: to [:TestResult] tests
 
-        this\summary: inspect <= to :Summary #[
+        this\summary: to :Summary #[
             passed: map this\tests 't [t\summary\passed] | sum
             failed: map this\tests 't [t\summary\failed] | sum
             skipped: map this\tests 't [t\summary\skipped] | sum
