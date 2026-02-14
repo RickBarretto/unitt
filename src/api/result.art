@@ -110,7 +110,9 @@ define :Result [
     ]
 
     string: method [][
-        to :block this | join.with: "\n\n\n\n"
+        to :block this 
+            | join.with: "\n\n\n\n"
+            | append "\n" 
     ]
 ]
 
