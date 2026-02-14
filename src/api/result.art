@@ -152,7 +152,7 @@ define :FileResult [
 ]
 
 define :Result [
-    init: constructor [files :block][
+    init: method [files :block][
         this\files: files 
             | map => [read.json &]
             | map => [to :FileResult &]   
