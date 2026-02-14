@@ -90,9 +90,12 @@ define :FileResult [
             | as [:SpecResult]
             | as [:string]
 
-        @[filename standalone specs]
-            | flatten
-            | join.with: "\n\n"
+        @[
+            filename 
+            if empty? standalone -> standalone 
+            specs
+        ] | flatten
+          | join.with: "\n\n"
     ]
 
 ]
