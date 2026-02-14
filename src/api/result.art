@@ -26,6 +26,7 @@ define :TestResult [
         assertions: this\assertions 
             | as [:AssertionResult]
             | as [:string]
+            | map => indent
 
         @[description assertions]
             | flatten
@@ -42,6 +43,7 @@ define :StandaloneResult [
         tests: this\tests
             | as [:TestResult]
             | as [:string]
+            | map => indent
 
         @["Standalone Tests:" tests]
             | flatten
@@ -59,6 +61,7 @@ define :SpecResult [
         tests: this\tests
             | as [:TestResult]
             | as [:string]
+            | map => indent
 
         @[description tests]
             | flatten
