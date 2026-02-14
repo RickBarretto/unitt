@@ -39,7 +39,7 @@ define :TestResult [
     ]
 
     summary: method [][
-        inspect <= to :Summary #[
+        to :Summary #[
             passed: select this\assertions 'a [a\passed?] | size
             failed: select this\assertions 'a [not? a\passed?] | size
             skipped: (empty? this\assertions)? -> 1 -> 0
