@@ -1,23 +1,51 @@
+as: $[value :any target :type :block][
+    to target value
+]
+
 define :AssertionResult [
-    init: constructor [assertion :block result :boolean]
+    init: constructor [expression :string passed? :logical]
+
+    string: method [][
+        status: (this\passed?)?
+            -> "✅"
+            -> "❌"
+
+        @[status this\expression]
+            | join.words
+    ]
+
 ]
 
 define :TestResult [
-    init: constructor [description :string]
+    init: constructor [description :string assertions :block]
+
+    string: method [][
+        description: @["Description:" this\description]
+            | join.words
+
+        assertions: this\assertions 
+            | as [:AssertionResult]
+            | as [:string]
+
+        @[description assertions]
+            | flatten
+            | join.lines
+    ]
 ]
 
 define :StandaloneResult [
     init: constructor [tests :block]
 
     string: method [][
-        if empty? this\tests [
-            return ""
-        ]
+        if empty? this\tests -> return ""
 
-        join.lines flatten @[
-            ~"Standalone Tests:"
-            to [:string] this\tests
-        ]
+        tests: this\tests
+            | as [:TestResult]
+            | as [:string]
+
+        @["Standalone Tests:" tests]
+            | flatten
+            | join.lines
     ]
 ]
 
@@ -25,11 +53,16 @@ define :SpecResult [
     init: constructor [description :string tests :block]
 
     string: method [][
-        join.lines flatten @[
-            ~"Describe: |this\description|"
-            ""
-            to [:string] this\tests
-        ]
+        description: @["Describe:" this\description]
+            | join.words
+
+        tests: this\tests
+            | as [:TestResult]
+            | as [:string]
+
+        @[description tests]
+            | flatten
+            | join.lines
     ]
 ]
 
@@ -37,17 +70,14 @@ define :FileResult [
     init: constructor [filename :string standalone :block specs :block]
 
     string: method [][
+        filename: @["========" this\filename "========"]
+            | join.words
         standalone: to :string to :StandaloneResult [this\standalone]
-        specs: to :string to [:SpecResult] this\specs
+        specs: to [:string] to [:SpecResult] this\specs
 
-        join.lines @[
-            ~"======== |this\filename| ========"
-            ""
-            standalone
-            ""
-            specs
-            ""
-        ]
+        @[filename standalone specs]
+            | flatten
+            | join.lines
     ]
 
 ]
