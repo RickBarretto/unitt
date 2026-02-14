@@ -53,7 +53,7 @@ define :StandaloneResult [
 
         @["Standalone Tests:" tests]
             | flatten
-            | join.lines
+            | join.with: "\n\n"
     ]
 ]
 
@@ -71,7 +71,7 @@ define :SpecResult [
 
         @[description tests]
             | flatten
-            | join.lines
+            | join.with: "\n\n"
     ]
 ]
 
@@ -92,7 +92,7 @@ define :FileResult [
 
         @[filename standalone specs]
             | flatten
-            | join.lines
+            | join.with: "\n\n"
     ]
 
 ]
@@ -107,7 +107,7 @@ define :Result [
     ]
 
     string: method [][
-        to :block this | join.lines
+        to :block this | join.with: "\n\n\n\n"
     ]
 ]
 
