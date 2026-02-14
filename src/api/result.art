@@ -7,11 +7,30 @@ define :TestResult [
 ]
 
 define :StandaloneResult [
-    init: constructor [specs :block]
+    init: constructor [tests :block]
+
+    string: method [][
+        if empty? this\tests [
+            return ""
+        ]
+
+        join.lines flatten @[
+            ~"Standalone Tests:"
+            to [:string] this\tests
+        ]
+    ]
 ]
 
 define :SpecResult [
     init: constructor [description :string tests :block]
+
+    string: method [][
+        join.lines flatten @[
+            ~"Describe: |this\description|"
+            ""
+            to [:string] this\tests
+        ]
+    ]
 ]
 
 define :FileResult [
