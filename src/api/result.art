@@ -152,24 +152,14 @@ define :FileResult [
 ]
 
 define :Result [
-    init: constructor [files :block]
-
-    summary: method [][
-        to :Summary #[
-            passed: 1
-            failed: 1
-            skipped: 1
-        ]
-    ]
-
-    block: method [][
-        this\files 
+    init: constructor [files :block][
+        this\files: files 
             | map => [read.json &]
-            | map => [to :FileResult &]
+            | map => [to :FileResult &]   
     ]
 
     string: method [][
-        to :block this 
+        this\files
             | join.with: "\n\n\n\n"
             | append "\n" 
     ]
