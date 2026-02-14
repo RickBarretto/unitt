@@ -144,8 +144,10 @@ define :Result [
             | map => [read.json &]
             | map => [to :FileResult &]
 
+        summary: files | map 'f [f\summary]
+
         this\files: files
-        this\summary: to :Summary [0 0 0] 
+        this\summary: summary
     ]
 
     string: method [][
