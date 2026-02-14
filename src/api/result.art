@@ -1,6 +1,26 @@
+define :FileResult [
+    init: constructor [
+        filename :string
+        standalone :block
+        specs :block
+    ]
+]
+
+define :Result [
+    init: constructor [files :block]
+
+    block: method [][
+        this\files 
+            | map => [read.json &]
+            | map => [to :FileResult &]
+    ]
+]
 
 findResults: $[at :string][
-    at | list.recursive 
-       | map => normalize
+    files: at 
+        | list.recursive 
+        | map => normalize
+
+    to :Result [files]
 ]
 
