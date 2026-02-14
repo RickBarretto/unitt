@@ -65,13 +65,13 @@ define :TestResult [
 ]
 
 define :StandaloneResult [
-    init: constructor [tests :block]
+    init: method [tests :block][
+        this\tests: to [:TestResult] tests
 
-    summary: method [][
-        to :Summary #[
-            passed: 1
-            failed: 1
-            skipped: 1
+        this\summary: to :Summary #[
+            passed: map this\tests 't [t\summary\passed] | sum
+            failed: map this\tests 't [t\summary\failed] | sum
+            skipped: map this\tests 't [t\summary\skipped] | sum
         ]
     ]
 
@@ -79,7 +79,6 @@ define :StandaloneResult [
         if empty? this\tests -> return ""
 
         tests: this\tests
-            | as [:TestResult]
             | as [:string]
             | map => indent
 
@@ -90,7 +89,16 @@ define :StandaloneResult [
 ]
 
 define :SpecResult [
-    init: constructor [description :string tests :block]
+    init: method [description :string tests :block][
+        this\description: description
+        this\tests: to [:TestResult] tests
+
+        this\summary: inspect <= to :Summary #[
+            passed: map this\tests 't [t\summary\passed] | sum
+            failed: map this\tests 't [t\summary\failed] | sum
+            skipped: map this\tests 't [t\summary\skipped] | sum
+        ]
+    ]
 
     summary: method [][
         to :Summary #[
@@ -105,7 +113,6 @@ define :SpecResult [
             | join.words
 
         tests: this\tests
-            | as [:TestResult]
             | as [:string]
             | map => indent
 
