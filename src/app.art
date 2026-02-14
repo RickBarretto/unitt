@@ -24,7 +24,7 @@ if standalone? ::
         | executeAll settings\binary normalize ".unitt"
 
     results: findResults ".unitt"
-    inspect to :block results
+    inspect to :string results
     ; print to :string results
 
     ; if results\failed? [

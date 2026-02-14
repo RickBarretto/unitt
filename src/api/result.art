@@ -14,6 +14,10 @@ define :Result [
             | map => [read.json &]
             | map => [to :FileResult &]
     ]
+
+    string: method [][
+        to :block this | join.lines
+    ]
 ]
 
 findResults: $[at :string][
