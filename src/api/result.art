@@ -123,7 +123,11 @@ define :SpecResult [
 ]
 
 define :FileResult [
-    init: constructor [filename :string standalone :block specs :block]
+    init: method [filename :string standalone :block specs :block][
+        this\filename: filename
+        this\standalone: standalone
+        this\specs: specs
+    ]
 
     summary: method [][
         to :Summary #[
