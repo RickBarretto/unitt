@@ -119,14 +119,8 @@ define :FileResult [
         this\filename: filename
         this\standalone: standalone
         this\specs: specs
-    ]
 
-    summary: method [][
-        to :Summary #[
-            passed: 1
-            failed: 1
-            skipped: 1
-        ]
+        this\summary: to :Summary [0 0 0]
     ]
 
     string: method [][
