@@ -72,8 +72,14 @@ define :FileResult [
     string: method [][
         filename: @["========" this\filename "========"]
             | join.words
-        standalone: to :string to :StandaloneResult [this\standalone]
-        specs: to [:string] to [:SpecResult] this\specs
+
+        standalone: @[@[this\standalone]]
+            | as [:StandaloneResult]
+            | as [:string]
+
+        specs: this\specs
+            | as [:SpecResult]
+            | as [:string]
 
         @[filename standalone specs]
             | flatten
