@@ -30,22 +30,24 @@ define :AssertionResult [
         @[status this\expression]
             | join.words
     ]
-
 ]
 
 define :TestResult [
-    init: constructor [description :string assertions :block]
+    init: method [description :string assertions :block][
+        this\description: description
+        this\assertions: to [:AssertionResult] assertions
+    ]
 
     summary: method [][
-        to :Summary #[
-            passed: 1
-            failed: 1
-            skipped: 1
+        inspect <= to :Summary #[
+            passed: select this\assertions 'a [a\passed?] | size
+            failed: select this\assertions 'a [not? a\passed?] | size
+            skipped: (empty? this\assertions)? -> 1 -> 0
         ]
     ]
 
     string: method [][
-        status: (every? @this\assertions => last)?
+        status: (every? this\assertions 'a -> get a 'passed?)?
             -> "✅"
             -> "❌"
 
@@ -55,7 +57,6 @@ define :TestResult [
             | join.words
 
         assertions: this\assertions 
-            | as [:AssertionResult]
             | as [:string]
             | map => indent
 
