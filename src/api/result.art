@@ -117,23 +117,16 @@ define :SpecResult [
 define :FileResult [
     init: method [filename :string standalone :block specs :block][
         this\filename: filename
-        this\standalone: standalone
-        this\specs: specs
+        this\standalone: as @[@[standalone]] [:StandaloneResult]
+        this\specs: as specs [:SpecResult]
 
         this\summary: to :Summary [0 0 0]
     ]
 
     string: method [][
-        filename: @["========" this\filename "========"]
-            | join.words
-
-        standalone: @[@[this\standalone]]
-            | as [:StandaloneResult]
-            | as [:string]
-
-        specs: this\specs
-            | as [:SpecResult]
-            | as [:string]
+        filename: join.words @["========" this\filename "========"]
+        standalone: as this\standalone [:string]
+        specs: as this\specs [:string]
 
         @[
             filename 
