@@ -158,6 +158,7 @@ define :Result [
             | map => [to :FileResult &]
 
         this\files: files
+        this\summary: to :Summary [0 0 0] 
     ]
 
     string: method [][
