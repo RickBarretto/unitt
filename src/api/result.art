@@ -100,14 +100,6 @@ define :SpecResult [
         ]
     ]
 
-    summary: method [][
-        to :Summary #[
-            passed: 1
-            failed: 1
-            skipped: 1
-        ]
-    ]
-
     string: method [][
         description: @["Describe:" this\description]
             | join.words
