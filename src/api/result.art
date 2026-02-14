@@ -1,9 +1,36 @@
+define :AssertionResult [
+    init: constructor [assertion :block result :boolean]
+]
+
+define :TestResult [
+    init: constructor [description :string]
+]
+
+define :StandaloneResult [
+    init: constructor [specs :block]
+]
+
+define :SpecResult [
+    init: constructor [description :string tests :block]
+]
+
 define :FileResult [
-    init: constructor [
-        filename :string
-        standalone :block
-        specs :block
+    init: constructor [filename :string standalone :block specs :block]
+
+    string: method [][
+        standalone: to :string to :StandaloneResult [this\standalone]
+        specs: to :string to [:SpecResult] this\specs
+
+        join.lines @[
+            ~"======== |this\filename| ========"
+            ""
+            standalone
+            ""
+            specs
+            ""
+        ]
     ]
+
 ]
 
 define :Result [
