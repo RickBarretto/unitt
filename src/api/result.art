@@ -188,6 +188,7 @@ define :Result [
 
         this\files: files
         this\summary: summary
+        this\failed?: this\summary\failed > 0
     ]
 
     string: method [][
