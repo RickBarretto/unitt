@@ -166,6 +166,16 @@ define :FileResult [
         this\failed?: this\summary\failed > 0
     ]
 
+    clear: method [][
+        clone: new this
+        standalone: this\standalone | select 'spec -> spec\failed?
+        specs: this\specs | select 'spec -> spec\failed? 
+
+        clone\standalone: standalone 
+        clone\specs: specs
+        clone
+    ]
+
     string: method [][
         filename: join.words @["========" this\filename "========"]
         standalone: as this\standalone [:string]
@@ -197,6 +207,16 @@ define :Result [
         this\files: files
         this\summary: summary
         this\failed?: this\summary\failed > 0
+    ]
+
+    clear: method [][
+        clone: new this
+        files: this\files 
+            | select 'file [file\failed?]
+            | map 'file [do [file\clear]]
+        
+        clone\files: files
+        clone
     ]
 
     string: method [][
