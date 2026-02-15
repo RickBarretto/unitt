@@ -63,6 +63,8 @@ define :TestResult [
             failed: select this\assertions 'a [not? a\passed?] | size
             skipped: (empty? this\assertions)? -> 1 -> 0
         ]
+
+        this\failed?: this\summary\failed > 0
     ]
 
     string: method [][
@@ -94,6 +96,8 @@ define :StandaloneResult [
             failed: map this\tests 't [t\summary\failed] | sum
             skipped: map this\tests 't [t\summary\skipped] | sum
         ]
+
+        this\failed?: this\summary\failed > 0
     ]
 
     string: method [][
@@ -119,6 +123,8 @@ define :SpecResult [
             failed: map this\tests 't [t\summary\failed] | sum
             skipped: map this\tests 't [t\summary\skipped] | sum
         ]
+
+        this\failed?: this\summary\failed > 0
     ]
 
     string: method [][
@@ -156,6 +162,8 @@ define :FileResult [
             skipped: standaloneSummary\skipped + specsSummary\skipped
             failed: standaloneSummary\failed + specsSummary\failed
         ]
+
+        this\failed?: this\summary\failed > 0
     ]
 
     string: method [][
