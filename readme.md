@@ -168,6 +168,10 @@ Unitt supports both: XUnit and RSpec-like syntax:
 
 ## `Standalone?` mode
 
+You can also run your tests directly, without using `unitt` CLI.
+To ensure this will work for both, `unitt` and `arturo` invokation,
+put this under a `if standalone? ::` block.
+
 - `unitt\report: $[mode :literal]`:
     Reports the tests on your terminal.
     - mode:
