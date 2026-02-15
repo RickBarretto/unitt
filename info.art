@@ -1,5 +1,5 @@
 entry:      "src/unitt"
-executable: "src/script"
+executable: "src/app"
 depends:    []
 requires:   [> 0.9.84]
 

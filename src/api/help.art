@@ -1,0 +1,44 @@
+
+helpAsked?: $[argument :block][
+    ensure -> every? argument => string?
+
+    some? ["--help" "-h"] 'it -> in? it argument
+]
+
+help: {:
+A lean unit testing framework for Arturo.
+Usage: unitt [options]
+
+    Options:
+
+        --help              Show this help message and exit
+        --clean             Display failed tests only (per module).
+        --silent            Override error code.
+
+    Override `config.art':
+
+        --binary:<path>     Run tests with custom Arturo
+        --path:<path>       Specify the path to the test files
+        --suffix:<pattern>  Specify the file suffix for test files
+
+EXAMPLES
+
+    unitt --help
+    unitt --clean --binary:"/bin/arturo" --path:"./tests" --suffix:".test.art"
+
+OVERRIDING DEFAULTS
+
+    Unitt follows a convention-over-configuration approach, but you can override the defaults by providing the appropriate options. 
+    For example, if your test files are located in a different directory or have a different suffix, you can specify that using the `--path` and `--suffix` options.
+    The order of priority are: CLI, file settings and defaults.
+
+    You can also specify new defaults in `config.art`:
+
+    ```
+    binary: "/bin/arturo"
+    path: "./tests"
+    suffix: ".test.art"
+    clean: true
+    ```
+
+:}

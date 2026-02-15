@@ -12,12 +12,49 @@
 ;;
 ;; export: ['unitt 'test 'suite 'describe 'it 'assert 'expects]
 
-import ./{api/spec}
+import ./{api/result}!
+import ./{api/spec}!
 
-unitt: [
+define :Unitt [
+    init: method [storage :dictionary][
+        this\result: to :FileResult [
+            ""
+            storage\standalone 
+            storage\specs
+        ]!
+    ]
 
-    init: method [filename][
-        this\storage: store.native ".unitt/" ++ filename
+    report: method [what :literal][
+        ensure -> in? what ['full 'minimal]
+
+        result: this\result
+
+        case what [
+            'full [print to :string do [result]]
+            'minimal [print to :string do [result\clean]]
+        ]
+
+        print to :string result\summary
+    ]
+
+    exit: method [][
+        (this\result\failed?)?
+            -> panic.unstyled "Some tests failed!"
+            -> exit 0
+    ]
+]!
+
+unittModule: [
+
+    init: method [][
+        this\storage: (key? args 'filename)?
+            -> store.json args\filename ++ ".json"
+            -> #[]
+
+        this\storage\filename: (key? args 'filename)?
+            [args\filename | split.path | drop | join.path]
+            ["Standalone File Test"]
+
         this\storage\standalone: []
         this\storage\specs: []
 
@@ -27,6 +64,10 @@ unitt: [
         this\kind: 'standalone
         this\spec: first this\specs
         this\test: null
+    ]
+
+    _unitt: method.public [][
+        this\storage
     ]
 
     describe: method.public [description :string actions :block][
@@ -147,7 +188,7 @@ unitt: [
         ]
 
         ; Update storage at real-time for standalone tests
-        this\storage\standalone: @first this\specs
+        this\storage\standalone: to :block first this\specs
         this\test: null
     ]
 
@@ -202,11 +243,17 @@ unitt: [
 ]!
 
 
-export module.with: @[(args\["filename"]) ?? unique.id "unitt-"] unitt!
+export module unittModule!
 
 suite: var 'describe
 test: var 'it
 assert: var 'expects
+
+unitt: $[][
+    u: _unitt
+    ensure.that: "You must use it under standalone? block" -> dictionary? u
+    to :Unitt [u]!
+]
 
 
 if standalone? ::
@@ -246,3 +293,16 @@ if standalone? ::
     it "Simple passing test" [
         expects -> true
     ]
+
+
+    u: unitt!
+
+    u\result >>.json "example.json"
+    ensure -> exists? "example.json"
+
+    u\report 'full
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    u\report 'minimal
+
+    delete "example.json"
+    u\exit

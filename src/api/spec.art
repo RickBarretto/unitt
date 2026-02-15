@@ -23,6 +23,10 @@ define :UnittStandaloneSpec is :UnittSpec [
         this\description: "Module Specification"
         this\tests: []
     ]
+
+    block: method[][ 
+        to [:dictionary] this\tests 
+    ]
 ]
 
 

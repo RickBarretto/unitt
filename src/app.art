@@ -1,0 +1,38 @@
+; UI import
+import ./{api/help}!
+import ./{api/settings}!
+
+; API imports
+import ./{api/execute}!
+import ./{api/result}!
+
+
+if standalone? ::
+
+    if helpAsked? arg [
+        print help
+        exit 0
+    ]
+
+    settings: mergeSettings @[
+        if exists? "config.toml" -> to :FileSettings ["config.toml"]
+        if exists? "config.art" -> to :FileSettings ["config.art"]
+        to :CliSettings [args]
+    ]
+
+    findTests settings\path settings\suffix
+        | executeAll settings\binary normalize ".unitt"
+
+    results: findResults ".unitt"
+
+    (settings\clean)? [
+        print to :string do [results\clean]
+    ][
+        print to :string results
+    ]
+
+    print to :string results\summary
+
+    if and? (not? settings\silent) 
+            (results\failed?) 
+        -> panic.unstyled "Some tests failed!"

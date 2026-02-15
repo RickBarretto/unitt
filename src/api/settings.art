@@ -1,0 +1,197 @@
+
+gets: $[container index][
+    switch throws? [discard get container index]
+        -> null
+        -> get container index
+]
+
+filterKeys: $[container :dictionary allowed :block][
+    result: #[]
+
+    loop (to [:literal] allowed) 'key [
+        if key? container key [
+            set result key (gets container key)
+        ]
+    ]
+
+    result
+]
+
+define :Settings [
+    init: constructor [
+        path :string
+        suffix :string
+        binary :string
+        clean :logical :null
+        silent :logical :null
+    ]
+
+    dictionary: method [][
+        #[
+            path: this\path
+            suffix: this\suffix
+            binary: this\binary
+            clean: this\clean ?? false
+            silent: this\silent ?? false
+        ]
+    ]
+]
+
+
+define :FileSettings is :Settings [
+    init: method [file :string][
+        data: this\load file
+            | filterKeys [path suffix binary clean silent]
+
+        this\path: gets data 'path
+        this\suffix: gets data 'suffix
+        this\binary: gets data 'binary
+        this\clean: (gets data 'clean) ?? false
+        this\silent: (gets data 'silent) ?? false
+    ]
+
+    load: method [file :string][
+        when [
+            not? exists? file -> #[]
+            suffix? file ".art" -> # file
+            suffix? file ".toml" -> read.toml file 
+        ]
+    ]
+]
+
+define :CliSettings is :Settings [
+    init: method [data :dictionary][
+        d: filterKeys data [path suffix binary clean silent]
+
+        this\path: gets d 'path
+        this\suffix: gets d 'suffix
+        this\binary: gets d 'binary
+        this\clean: (gets d 'clean) ?? false
+        this\silent: (gets d 'silent) ?? false
+    ]
+]
+
+mergeSettings: $[others :block][
+    ensure -> every? others 'o [is? :Settings o]
+    settings: #[
+        path: "specs"
+        suffix: ".spec.art"
+        binary: "arturo"
+        clean: false
+        silent: false
+    ]
+
+    loop others 's [
+        loop (to :dictionary s) [key val][
+            if not? null? val -> set settings key val
+        ]
+    ]
+
+    to :Settings settings
+]
+
+if standalone? ::
+
+    ; Test CLI settings
+
+    cli: to :CliSettings [#[
+        path: "tests"
+        suffix: ".test.art"
+        otherStuff: "ignored"
+        silent: true
+    ]]
+
+    ensure -> cli\path = "tests"
+    ensure -> cli\suffix = ".test.art"
+    ensure -> cli\binary = null
+    ensure -> cli\clean = false
+    ensure -> cli\silent = true
+
+    ensure -> (to :dictionary cli) = #[
+        path: "tests" 
+        suffix: ".test.art"
+        binary: null 
+        clean: false 
+        silent: true 
+    ]
+
+    ; Test Arturo file settings
+
+    {
+        path: "tests"
+        suffix: ".test.art"
+    } >> "settings.art"
+
+    file: to :FileSettings ["settings.art"]
+
+    ensure -> file\path = "tests"
+    ensure -> file\suffix = ".test.art"
+    ensure -> file\binary = null
+    ensure -> file\clean = false
+    ensure -> file\silent = false
+
+    ensure -> (to :dictionary file) = #[
+        path: "tests" 
+        suffix: ".test.art" 
+        binary: null
+        clean: false 
+        silent: false
+    ]
+
+    delete "settings.art"
+
+    ; Test TOML file settings
+
+    {
+        path = "tests"
+        suffix = ".test.art"
+    } >> "settings.toml"
+
+    file: to :FileSettings ["settings.toml"]
+
+    ensure -> file\path = "tests"
+    ensure -> file\suffix = ".test.art"
+    ensure -> file\binary = null
+    ensure -> file\clean = false
+    ensure -> file\silent = false
+    ensure -> (to :dictionary file) = #[
+        path: "tests" 
+        suffix: ".test.art"
+        binary: null
+        clean: false 
+        silent: false
+    ]
+
+    delete "settings.toml"
+
+    ; Test merging settings
+
+    {
+        path: "tests"
+        binary: "custom-arturo"
+    } >> "settings.art"
+
+    file: to :FileSettings ["settings.art"]
+
+    cli: to :CliSettings [#[
+        suffix: ".test.art"
+        path: "e2e"
+        clean: true
+    ]]
+
+    final: mergeSettings @[file cli]
+
+    ensure -> final\path = "e2e"
+    ensure -> final\suffix = ".test.art"
+    ensure -> final\binary = "custom-arturo"
+    ensure -> final\clean = true
+    ensure -> final\silent = false
+    ensure -> (to :dictionary final) = #[
+        path: "e2e" 
+        suffix: ".test.art" 
+        binary: "custom-arturo" 
+        clean: true 
+        silent: false
+    ]
+
+    delete "settings.art"

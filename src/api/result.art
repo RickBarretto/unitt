@@ -1,0 +1,256 @@
+as: $[value :any target :type :block][
+    to target value
+]
+
+define :AssertionCount [
+    init: constructor [n :integer]
+
+    string: method [][
+        (one? this\n)?
+            -> "1 assertion"
+            -> join.words @[this\n "assertions"]
+    ]
+]
+
+define :Summary [
+    init: method [passed :integer skipped :integer failed :integer][
+        this\passed: passed
+        this\skipped: skipped
+        this\failed: failed
+        this\total: sum @[passed skipped failed]
+    ]
+
+    string: method [][
+        total: to :string to :AssertionCount [this\total]
+        passed: to :string to :AssertionCount [this\passed]
+        skipped: to :string to :AssertionCount [this\skipped]
+        failed: to :string to :AssertionCount [this\failed]
+
+        join.lines @[
+            "========== Summary =========="
+            ""
+            join.words @["  ⏏️   TOTAL:" total]
+            join.words @["  ✅  PASSED:" passed]
+            join.words @["  ⏩ SKIPPED:" skipped]
+            join.words @["  ❌  FAILED:" failed]
+            ""
+            "========== ======= =========="
+            ""
+        ]
+    ]
+]
+
+define :AssertionResult [
+    init: constructor [expression :string passed? :logical]
+
+    string: method [][
+        status: (this\passed?)?
+            -> "✅"
+            -> "❌"
+
+        @[status this\expression]
+            | join.words
+    ]
+]
+
+define :TestResult [
+    init: method [description :string assertions :block][
+        this\description: description
+        this\assertions: to [:AssertionResult] assertions
+     
+        this\summary: to :Summary #[
+            passed: select this\assertions 'a [a\passed?] | size
+            failed: select this\assertions 'a [not? a\passed?] | size
+            skipped: (empty? this\assertions)? -> 1 -> 0
+        ]
+
+        this\failed?: this\summary\failed > 0
+    ]
+
+    string: method [][
+        status: (every? this\assertions 'a -> get a 'passed?)?
+            -> "✅"
+            -> "❌"
+
+        if empty? this\assertions -> status: "⏩"
+
+        description: @[status "-" this\description]
+            | join.words
+
+        assertions: this\assertions 
+            | as [:string]
+            | map => indent
+
+        @[description assertions]
+            | flatten
+            | join.lines
+    ]
+]
+
+define :StandaloneResult [
+    init: method [tests :block][
+        this\tests: to [:TestResult] tests
+
+        this\summary: to :Summary #[
+            passed: map this\tests 't [t\summary\passed] | sum
+            failed: map this\tests 't [t\summary\failed] | sum
+            skipped: map this\tests 't [t\summary\skipped] | sum
+        ]
+
+        this\failed?: this\summary\failed > 0
+    ]
+
+    clean: method [][
+        clone: new this
+        tests: this\tests | select 't -> t\failed?
+
+        clone\tests: tests
+        clone
+    ]
+
+    string: method [][
+        if empty? this\tests -> return ""
+
+        tests: this\tests
+            | as [:string]
+            | map => indent
+
+        @["Standalone Tests:" tests]
+            | flatten
+            | join.with: "\n\n"
+    ]
+]
+
+define :SpecResult [
+    init: method [description :string tests :block][
+        this\description: description
+        this\tests: to [:TestResult] tests
+
+        this\summary: to :Summary #[
+            passed: map this\tests 't [t\summary\passed] | sum
+            failed: map this\tests 't [t\summary\failed] | sum
+            skipped: map this\tests 't [t\summary\skipped] | sum
+        ]
+
+        this\failed?: this\summary\failed > 0
+    ]
+
+    clean: method [][
+        clone: new this
+        tests: this\tests | select 't -> t\failed?
+
+        clone\tests: tests
+        clone
+    ]
+
+    string: method [][
+        description: @["Describe:" this\description]
+            | join.words
+
+        tests: this\tests
+            | as [:string]
+            | map => indent
+
+        @[description tests]
+            | flatten
+            | join.with: "\n\n"
+    ]
+]
+
+define :FileResult [
+    init: method [filename :string standalone :block specs :block][
+        this\filename: filename
+        this\standalone: as @[@[standalone]] [:StandaloneResult]
+        this\specs: as specs [:SpecResult]
+
+        standalone: first this\standalone
+        standaloneSummary: get standalone 'summary
+        specsSummary: to :Summary [0 0 0]
+
+        loop this\specs 's [
+            specsSummary\passed: specsSummary\passed + s\summary\passed
+            specsSummary\skipped: specsSummary\skipped + s\summary\skipped
+            specsSummary\failed: specsSummary\failed + s\summary\failed
+        ]
+
+        this\summary: to :Summary #[
+            passed: standaloneSummary\passed + specsSummary\passed
+            skipped: standaloneSummary\skipped + specsSummary\skipped
+            failed: standaloneSummary\failed + specsSummary\failed
+        ]
+
+        this\failed?: this\summary\failed > 0
+    ]
+
+    clean: method [][
+        clone: new this
+        standalone: this\standalone 
+            | select 'spec -> spec\failed?
+            | map 'spec -> do [spec\clean]
+        specs: this\specs 
+            | select 'spec -> spec\failed? 
+            | map 'spec -> do [spec\clean]
+
+        clone\standalone: standalone 
+        clone\specs: specs
+        clone
+    ]
+
+    string: method [][
+        filename: join.words @["========" this\filename "========"]
+        standalone: as this\standalone [:string]
+        specs: as this\specs [:string]
+
+        structure: (empty? standalone)? 
+            -> @[filename specs] 
+            -> @[filename standalone specs]
+
+        structure | flatten
+                  | join.with: "\n\n"
+    ]
+
+]
+
+define :Result [
+    init: method [files :block][
+        files: files 
+            | map => [read.json &]
+            | map => [to :FileResult &]
+
+        summaries: files | map 'f [f\summary]
+        summary: to :Summary #[
+            passed: map summaries 's [s\passed] | sum
+            skipped: map summaries 's [s\skipped] | sum
+            failed: map summaries 's [s\failed] | sum
+        ]
+
+        this\files: files
+        this\summary: summary
+        this\failed?: this\summary\failed > 0
+    ]
+
+    clean: method [][
+        clone: new this
+        files: this\files 
+            | select 'file [file\failed?]
+            | map 'file [do [file\clean]]
+        
+        clone\files: files
+        clone
+    ]
+
+    string: method [][
+        this\files
+            | join.with: "\n\n\n\n"
+            | append "\n" 
+    ]
+]
+
+findResults: $[at :string][
+    files: at 
+        | list.recursive 
+        | map => normalize
+
+    to :Result [files]
+]
+

@@ -3,3 +3,4 @@ bin/
 .unitt/
 .vscode/
 *.exe
+example.json
