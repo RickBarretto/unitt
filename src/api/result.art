@@ -112,7 +112,21 @@ define :FileResult [
         this\standalone: as @[@[standalone]] [:StandaloneResult]
         this\specs: as specs [:SpecResult]
 
-        this\summary: to :Summary [0 0 0]
+        standalone: first this\standalone
+        standaloneSummary: get standalone 'summary
+        specsSummary: to :Summary [0 0 0]
+
+        loop this\specs 's [
+            specsSummary\passed: specsSummary\passed + s\summary\passed
+            specsSummary\skipped: specsSummary\skipped + s\summary\skipped
+            specsSummary\failed: specsSummary\failed + s\summary\failed
+        ]
+
+        this\summary: to :Summary #[
+            passed: standaloneSummary\passed + specsSummary\passed
+            skipped: standaloneSummary\skipped + specsSummary\skipped
+            failed: standaloneSummary\failed + specsSummary\failed
+        ]
     ]
 
     string: method [][
