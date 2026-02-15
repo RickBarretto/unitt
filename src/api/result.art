@@ -9,14 +9,6 @@ define :Summary [
         this\failed: failed
         this\total: sum @[passed skipped failed]
     ]
-
-    add: method [other :Summary][
-        Summary new [
-            passed: this\passed + other\passed
-            skipped: this\skipped + other\skipped
-            failed: this\failed + other\failed
-        ]
-    ]
 ]
 
 define :AssertionResult [
