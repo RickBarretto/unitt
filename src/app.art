@@ -24,7 +24,13 @@ if standalone? ::
         | executeAll settings\binary normalize ".unitt"
 
     results: findResults ".unitt"
-    print to :string results
+
+    (settings\clean)? [
+        print to :string do [results\clear]
+    ][
+        print to :string results
+    ]
+
     print to :string results\summary
 
     if and? (not? settings\silent) 
