@@ -2,12 +2,41 @@ as: $[value :any target :type :block][
     to target value
 ]
 
+define :AssertionCount [
+    init: constructor [n :integer]
+
+    string: method [][
+        (one? this\n)?
+            -> "1 assertion"
+            -> join.words @[this\n "assertions"]
+    ]
+]
+
 define :Summary [
     init: method [passed :integer skipped :integer failed :integer][
         this\passed: passed
         this\skipped: skipped
         this\failed: failed
         this\total: sum @[passed skipped failed]
+    ]
+
+    string: method [][
+        total: to :string to :AssertionCount [this\total]
+        passed: to :string to :AssertionCount [this\passed]
+        skipped: to :string to :AssertionCount [this\skipped]
+        failed: to :string to :AssertionCount [this\failed]
+
+        join.lines @[
+            "========== Summary =========="
+            ""
+            join.words @["  ⏏️   TOTAL:" total]
+            join.words @["  ✅  PASSED:" passed]
+            join.words @["  ⏩ SKIPPED:" skipped]
+            join.words @["  ❌  FAILED:" failed]
+            ""
+            "========== ======= =========="
+            ""
+        ]
     ]
 ]
 
