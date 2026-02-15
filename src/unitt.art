@@ -40,6 +40,29 @@ unitt: [
         this\storage
     ]
 
+    report: method.public [what :literal][
+        import ./{api/result}!
+        ensure -> in? what ['full 'minimal]
+
+        result: to :FileResult [
+            ""
+            this\storage\standalone 
+            this\storage\specs
+        ]!
+
+        case what [
+            'full [join.with: "\n\n" @[
+                to :string result
+                to :string result\summary
+            ]]
+            'minimal join.with: "\n\n" @[
+                to :string do [result\clean]
+                to :string result\summary
+            ]
+        ]
+
+    ]
+
     describe: method.public [description :string actions :block][
         ;; description: « Groups tests.
         ;;
@@ -259,3 +282,11 @@ if standalone? ::
     ]
 
     exported >>.json "example.json"
+
+    print report 'full
+
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+    print report 'minimal
+
+    delete "example.json"
