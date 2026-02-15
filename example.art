@@ -37,4 +37,6 @@ it "Simple passing test" [
 ]
 
 if standalone? ::
-    print report 'full
+    u: unitt!
+    u\report 'full
+    u\exit

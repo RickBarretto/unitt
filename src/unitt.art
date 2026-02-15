@@ -12,9 +12,39 @@
 ;;
 ;; export: ['unitt 'test 'suite 'describe 'it 'assert 'expects]
 
-import ./{api/spec}
+import ./{api/result}!
+import ./{api/spec}!
 
-unitt: [
+define :Unitt [
+    init: method [storage :dictionary][
+        this\result: to :FileResult [
+            ""
+            storage\standalone 
+            storage\specs
+        ]!
+    ]
+
+    report: method [what :literal][
+        ensure -> in? what ['full 'minimal]
+
+        result: this\result
+
+        case what [
+            'full [print to :string do [result]]
+            'minimal [print to :string do [result\clean]]
+        ]
+
+        print to :string result\summary
+    ]
+
+    exit: method [][
+        (this\result\failed?)?
+            -> panic.unstyled "Some tests failed!"
+            -> exit 0
+    ]
+]!
+
+unittModule: [
 
     init: method [][
         this\storage: (key? args 'filename)?
@@ -36,31 +66,8 @@ unitt: [
         this\test: null
     ]
 
-    exported: method.public [][
+    _unitt: method.public [][
         this\storage
-    ]
-
-    report: method.public [what :literal][
-        import ./{api/result}!
-        ensure -> in? what ['full 'minimal]
-
-        result: to :FileResult [
-            ""
-            this\storage\standalone 
-            this\storage\specs
-        ]!
-
-        case what [
-            'full [join.with: "\n\n" @[
-                to :string result
-                to :string result\summary
-            ]]
-            'minimal join.with: "\n\n" @[
-                to :string do [result\clean]
-                to :string result\summary
-            ]
-        ]
-
     ]
 
     describe: method.public [description :string actions :block][
@@ -236,11 +243,15 @@ unitt: [
 ]!
 
 
-export module unitt!
+export module unittModule!
 
 suite: var 'describe
 test: var 'it
 assert: var 'expects
+
+unitt: $[][
+    to :Unitt [_unitt]!
+]
 
 
 if standalone? ::
@@ -281,12 +292,15 @@ if standalone? ::
         expects -> true
     ]
 
-    exported >>.json "example.json"
 
-    print report 'full
+    u: unitt!
 
+    u\result >>.json "example.json"
+    ensure -> exists? "example.json"
+
+    u\report 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-
-    print report 'minimal
+    u\report 'minimal
 
     delete "example.json"
+    u\exit
