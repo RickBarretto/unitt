@@ -27,5 +27,6 @@ if standalone? ::
     print to :string results
     print to :string results\summary
 
-    if results\failed? 
+    if and? (not? settings\silent) 
+            (results\failed?) 
         -> panic.unstyled "Some tests failed!"
