@@ -134,12 +134,12 @@ define :FileResult [
         standalone: as this\standalone [:string]
         specs: as this\specs [:string]
 
-        @[
-            filename 
-            if empty? standalone -> standalone 
-            specs
-        ] | flatten
-          | join.with: "\n\n"
+        structure: (empty? standalone)? 
+            -> @[filename specs] 
+            -> @[filename standalone specs]
+
+        structure | flatten
+                  | join.with: "\n\n"
     ]
 
 ]
