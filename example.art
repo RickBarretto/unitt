@@ -1,0 +1,40 @@
+import ./{src/unitt}!
+
+it "Simple failing test" [
+    expects -> false
+]
+
+describe "simple append" [
+    it "keeps the order" [
+        expects [equal? [a b c d]     [a] ++ [b c d]]
+        expects.be: 'equal?     @[[a b c d]     [a] ++ [b c d]]
+        expects.be: 'equal?     @[["b" "c" "d" "a"]     ["b" "c" "d"] ++ ["a"]]
+        expects.be: 'notEqual?  @[["a" "b" "c" "d"]     ["b" "c" "d"] ++ ["a"]]
+    ]
+
+    it.skip "has ++ as alias (todo)" [
+        expects.be: 'equal? @[append [] [] [] ++ [] ]
+        expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
+    ]
+]
+
+describe "simple append 2" [
+    it "keeps the order" [
+        expects [equal? [a b c d]     [a] ++ [b c d]]
+        expects.be: 'equal?     @[[a b c d]     [a] ++ [b c d]]
+        expects.be: 'equal?     @[["b" "c" "d" "a"]     ["b" "c" "d"] ++ ["a"]]
+        expects.be: 'notEqual?  @[["a" "b" "c" "d"]     ["b" "c" "d"] ++ ["a"]]
+    ]
+
+    it.skip "has ++ as alias (todo) 2" [
+        expects.be: 'equal? @[append [] [] [] ++ [] ]
+        expects.be: 'equal? @[append ["a" "b" "c"] ["a" "b"] ["a" "b" "c"] ++ ["a" "b"] ]
+    ]
+]
+
+it "Simple passing test" [
+    expects -> true
+]
+
+if standalone? ::
+    print report 'full
