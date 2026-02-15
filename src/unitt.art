@@ -250,7 +250,9 @@ test: var 'it
 assert: var 'expects
 
 unitt: $[][
-    to :Unitt [_unitt]!
+    u: _unitt
+    ensure.that: "You must use it under standalone? block" -> dictionary? u
+    to :Unitt [u]!
 ]
 
 
