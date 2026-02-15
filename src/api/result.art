@@ -150,7 +150,12 @@ define :Result [
             | map => [read.json &]
             | map => [to :FileResult &]
 
-        summary: files | map 'f [f\summary]
+        summaries: files | map 'f [f\summary]
+        summary: to :Summary #[
+            passed: map summaries 's [s\passed] | sum
+            skipped: map summaries 's [s\skipped] | sum
+            failed: map summaries 's [s\failed] | sum
+        ]
 
         this\files: files
         this\summary: summary
