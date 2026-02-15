@@ -100,6 +100,14 @@ define :StandaloneResult [
         this\failed?: this\summary\failed > 0
     ]
 
+    clear: method [][
+        clone: new this
+        tests: this\tests | select 't -> t\failed?
+
+        clone\tests: tests
+        clone
+    ]
+
     string: method [][
         if empty? this\tests -> return ""
 
@@ -125,6 +133,14 @@ define :SpecResult [
         ]
 
         this\failed?: this\summary\failed > 0
+    ]
+
+    clear: method [][
+        clone: new this
+        tests: this\tests | select 't -> t\failed?
+
+        clone\tests: tests
+        clone
     ]
 
     string: method [][
@@ -168,8 +184,12 @@ define :FileResult [
 
     clear: method [][
         clone: new this
-        standalone: this\standalone | select 'spec -> spec\failed?
-        specs: this\specs | select 'spec -> spec\failed? 
+        standalone: this\standalone 
+            | select 'spec -> spec\failed?
+            | map 'spec -> do [spec\clear]
+        specs: this\specs 
+            | select 'spec -> spec\failed? 
+            | map 'spec -> do [spec\clear]
 
         clone\standalone: standalone 
         clone\specs: specs
