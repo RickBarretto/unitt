@@ -43,8 +43,6 @@ define :Unitt [
 
     report: method [what :literal][
         ensure -> in? what ['full 'minimal]
-        this\_updateResults
-
         result: this\results
 
         case what [
@@ -307,6 +305,7 @@ if standalone? ::
     it "Simple passing test" [
         expects -> true
     ]
+
 
     unitt\report.keep 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
