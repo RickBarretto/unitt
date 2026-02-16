@@ -87,10 +87,8 @@ test "split should deal with unix path" [
 ]
 
 if standalone? ::
-    u: unitt!
-
-    u\report 'full
-    u\exit
+    unitt\report 'full
+    unitt\exit
 ```
 
 This will show you:
