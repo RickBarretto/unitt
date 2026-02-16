@@ -300,12 +300,7 @@ if standalone? ::
 
     u: unitt!
 
-    u\result >>.json "example.json"
-    ensure -> exists? "example.json"
-
     u\report 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     u\report 'minimal
-
-    delete "example.json"
     u\exit
