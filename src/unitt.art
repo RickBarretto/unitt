@@ -35,11 +35,17 @@ define :Unitt [
         ]
     ]
 
+    results: method [][
+        this\_updateResults
+        ensure -> not? null? this\_results
+        this\_results
+    ]
+
     report: method [what :literal][
         ensure -> in? what ['full 'minimal]
         this\_updateResults
 
-        result: \_results
+        result: this\results
 
         case what [
             'full [print to :string do [result]]
