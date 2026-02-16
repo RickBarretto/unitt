@@ -306,6 +306,15 @@ if standalone? ::
         expects -> true
     ]
 
+    unitt\results >>.json "results.json"
+    results: read.json "results.json"
+    ensure -> empty? results\filename
+    ensure -> key? results 'standalone
+    ensure -> key? results 'specs
+    ensure -> key? results 'summary
+    ensure -> key? results 'failed?
+
+    delete "results.json"
 
     unitt\report.keep 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
