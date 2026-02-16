@@ -177,7 +177,9 @@ put this under a `if standalone? ::` block.
         - `'minimal`: Shows failed tests and summary
     - options:
         - `.keep`: Keep running the current script. 
-            Otherwise, this will exit the current script with the proper exit code. 
+            Otherwise, this will exit the current script with the proper exit code.
+- `unitt\results: $[] :FileResult`:
+    Returns the current state of the test-file. This may be used for debugging purposes or custom handling.
 
 ## Breaking Changes
 
