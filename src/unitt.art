@@ -20,21 +20,30 @@ define :Unitt [
         this\_results: ø
     ]
 
-    _getResults: method [][
-        unless this\_results ->
+    _updateResults: method [][
+        cached?: dictionary? this\_results
+        unless cached? [
+            values: _unitt
+            ensure.that: "unitt is only acessable for standalone scripts." 
+                -> dictionary? values
+
             this\_results: to :FileResult [
                 ""
-                _unitt\standalone
-                _unitt\specs
+                values\standalone
+                values\specs
             ]!
-    
+        ]
+    ]
+
+    results: method [][
+        this\_updateResults
+        ensure -> not? null? this\_results
         this\_results
     ]
 
     report: method [what :literal][
         ensure -> in? what ['full 'minimal]
-
-        result: \_getResults!
+        result: this\results
 
         case what [
             'full [print to :string do [result]]
@@ -42,13 +51,13 @@ define :Unitt [
         ]
 
         print to :string result\summary
-    ]
 
-    exit: method [][
-        result: \_getResults!
-        result\failed? ?
-            -> panic.unstyled "Some tests failed!"
-            -> exit 0
+        unless (attr 'keep) ?? false [
+            result\failed? ?
+                -> panic.unstyled "Some tests failed!"
+                -> exit 0
+        ]
+
     ]
 ]!
 
@@ -297,15 +306,16 @@ if standalone? ::
         expects -> true
     ]
 
+    unitt\results >>.json "results.json"
+    results: read.json "results.json"
+    ensure -> empty? results\filename
+    ensure -> key? results 'standalone
+    ensure -> key? results 'specs
+    ensure -> key? results 'summary
+    ensure -> key? results 'failed?
 
-    u: unitt!
+    delete "results.json"
 
-    u\result >>.json "example.json"
-    ensure -> exists? "example.json"
-
-    u\report 'full
+    unitt\report.keep 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    u\report 'minimal
-
-    delete "example.json"
-    u\exit
+    unitt\report 'minimal
