@@ -16,18 +16,25 @@ import ./{api/result}!
 import ./{api/spec}!
 
 define :Unitt [
-    init: method [storage :dictionary][
-        this\result: to :FileResult [
-            ""
-            storage\standalone 
-            storage\specs
-        ]!
+    init: method [][
+        this\_results: ø
+    ]
+
+    _getResults: method [][
+        unless this\_results ->
+            this\_results: to :FileResult [
+                ""
+                _unitt\standalone
+                _unitt\specs
+            ]!
+    
+        this\_results
     ]
 
     report: method [what :literal][
         ensure -> in? what ['full 'minimal]
 
-        result: this\result
+        result: \_getResults!
 
         case what [
             'full [print to :string do [result]]
@@ -38,7 +45,8 @@ define :Unitt [
     ]
 
     exit: method [][
-        (this\result\failed?)?
+        result: \_getResults!
+        result\failed? ?
             -> panic.unstyled "Some tests failed!"
             -> exit 0
     ]
@@ -249,12 +257,7 @@ suite: var 'describe
 test: var 'it
 assert: var 'expects
 
-unitt: $[][
-    u: _unitt
-    ensure.that: "You must use it under standalone? block" -> dictionary? u
-    to :Unitt [u]!
-]
-
+unitt: to :Unitt []!
 
 if standalone? ::
 
