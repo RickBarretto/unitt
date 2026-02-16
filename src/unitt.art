@@ -22,12 +22,17 @@ define :Unitt [
 
     _updateResults: method [][
         cached?: dictionary? this\_results
-        unless cached? ->
+        unless cached? [
+            values: _unitt
+            ensure.that: "unitt is only acessable for standalone scripts." 
+                -> dictionary? values
+
             this\_results: to :FileResult [
                 ""
-                _unitt\standalone
-                _unitt\specs
-            ]!    
+                values\standalone
+                values\specs
+            ]!
+        ]
     ]
 
     report: method [what :literal][
