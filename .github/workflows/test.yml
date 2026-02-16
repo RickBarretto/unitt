@@ -95,6 +95,7 @@ jobs:
 
             - name: Run individual files
               run: |
+                cd $GITHUB_WORKSPACE
 
                 arturo --no-color src/unitt.art
                 arturo --no-color src/api/settings.art
