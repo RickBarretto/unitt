@@ -21,7 +21,8 @@ define :Unitt [
     ]
 
     _getResults: method [][
-        unless this\_results ->
+        cached?: dictionary? this\_results
+        unless cached? ->
             this\_results: to :FileResult [
                 ""
                 _unitt\standalone
