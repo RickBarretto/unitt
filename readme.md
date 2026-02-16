@@ -8,12 +8,12 @@
   <img 
     alt="Arturo logo" 
     width="20" 
-    src="https://github.com/arturo-lang/arturo/raw/master/docs/images/logo.png#gh-light-mode-only"
+    src="./docs/arturo-light-mode.png#gh-light-mode-only"
   />
   <img 
     alt="Arturo logo" 
     width="20" 
-    src="https://github.com/arturo-lang/arturo/raw/master/docs/images/logo-lightgray.png#gh-dark-mode-only" 
+    src="./docs/arturo-dark-mode.png#gh-dark-mode-only" 
   />
   <br>
   <b>~ CODE IS ART ~</b>
@@ -215,6 +215,7 @@ There are some breaking changes from the latest major version, so make sure you'
 ---
 
 > Background photo on ["At a Glance"](#at-a-glance) by [Luca Bravo](https://unsplash.com/@lucabravo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/boat-docked-near-house-VowIFDxogG4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+
 
 
 
