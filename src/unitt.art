@@ -297,10 +297,7 @@ if standalone? ::
         expects -> true
     ]
 
-
-    u: unitt!
-
-    u\report 'full
+    unitt\report 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    u\report 'minimal
-    u\exit
+    unitt\report 'minimal
+    unitt\exit
