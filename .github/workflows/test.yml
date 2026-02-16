@@ -92,3 +92,11 @@ jobs:
                     diff /tmp/expected.txt /tmp/output.txt || true
                     exit 1
                 fi
+
+            - name: Run individual files
+              run: |
+
+                arturo --no-color src/unitt.art
+                arturo --no-color src/api/settings.art
+                arturo --no-color src/api/spec.art
+                arturo --no-color src/api/test.art
