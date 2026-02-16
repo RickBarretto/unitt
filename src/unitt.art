@@ -20,22 +20,21 @@ define :Unitt [
         this\_results: ø
     ]
 
-    _getResults: method [][
+    _updateResults: method [][
         cached?: dictionary? this\_results
         unless cached? ->
             this\_results: to :FileResult [
                 ""
                 _unitt\standalone
                 _unitt\specs
-            ]!
-    
-        this\_results
+            ]!    
     ]
 
     report: method [what :literal][
         ensure -> in? what ['full 'minimal]
+        this\_updateResults
 
-        result: \_getResults!
+        result: \_results
 
         case what [
             'full [print to :string do [result]]
