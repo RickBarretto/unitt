@@ -112,7 +112,7 @@ if standalone? ::
 This will show you:
 
 ```
-======== .unitt\example\example.spec.art ========
+======== example\example.spec.art ========
 
 Describe: Module's Global Specs
 
@@ -215,6 +215,7 @@ There are some breaking changes from the latest major version, so make sure you'
 ---
 
 > Background photo on ["At a Glance"](#at-a-glance) by [Luca Bravo](https://unsplash.com/@lucabravo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/boat-docked-near-house-VowIFDxogG4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+
 
 
 
