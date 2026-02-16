@@ -1,17 +1,36 @@
-<h1 align="center">
-    Unitt
-</h1>
+<h1 align="center">Unitt</h1>
 
 <div align="center">
-    <h4>A lean unit-test tool<br>for the 
-    <a href="https://github.com/arturo-lang/arturo/">
-        Arturo Programming language
-    </a>
-    </h4>
-<a href="https://github.com/RickBarretto/unitt/blob/master/LICENSE" style="text-decoration: none; display: inline-block;"><img src="https://img.shields.io/github/license/RickBarretto/unitt?style=for-the-badge" alt="License"/></a> <a href="https://github.com/arturo-lang/arturo" style="text-decoration: none; display: inline-block;"><img src="https://img.shields.io/badge/language-Arturo-6A156B.svg?style=for-the-badge" alt="Language"/></a> <a href="https://github.com/RickBarretto/unitt/actions" style="text-decoration: none; display: inline-block;"><img src="https://img.shields.io/github/actions/workflow/status/RickBarretto/unitt/test.yml?branch=master&style=for-the-badge" alt="Build Status"/></a>
+  <i>
+    A lean unit-test tool for the <a href="https://github.com/arturo-lang/arturo/">Arturo Programming language</a>
+  </i>
+  <br><br><br>
+  <img 
+    alt="Arturo logo" 
+    width="20" 
+    src="https://github.com/arturo-lang/arturo/raw/master/docs/images/logo.png#gh-light-mode-only"
+  />
+  <img 
+    alt="Arturo logo" 
+    width="20" 
+    src="https://github.com/arturo-lang/arturo/raw/master/docs/images/logo-lightgray.png#gh-dark-mode-only" 
+  />
+  <br>
+  <b>~ CODE IS ART ~</b>
+  <br><br>
 </div>
 
-----
+<p align="center">
+  <a href="https://github.com/RickBarretto/unitt/blob/master/LICENSE" style="text-decoration: none; display: inline-block;">
+    <img src="https://img.shields.io/github/license/RickBarretto/unitt?style=for-the-badge" alt="License"/>
+  </a> 
+  <a href="https://github.com/arturo-lang/arturo" style="text-decoration: none; display: inline-block;">
+    <img src="https://img.shields.io/badge/language-Arturo-6A156B.svg?style=for-the-badge" alt="Language"/>
+  </a> 
+  <a href="https://github.com/RickBarretto/unitt/actions" style="text-decoration: none; display: inline-block;">
+    <img src="https://img.shields.io/github/actions/workflow/status/RickBarretto/unitt/test.yml?branch=master&style=for-the-badge" alt="Build Status"/>
+  </a>
+</p>
 
 ## At a Glance
 
@@ -196,6 +215,7 @@ There are some breaking changes from the latest major version, so make sure you'
 ---
 
 > Background photo on ["At a Glance"](#at-a-glance) by [Luca Bravo](https://unsplash.com/@lucabravo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/boat-docked-near-house-VowIFDxogG4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+
 
 
 
