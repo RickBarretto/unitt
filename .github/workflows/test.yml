@@ -53,13 +53,14 @@ jobs:
                 os: ${{ matrix.os }}
                 arch: ${{ matrix.arch }}
 
-            - name: Run unit tests
-              run: |
+            - name: Open Workspace
+              run: | 
                 # This one line is critical for FreeBSD jobs!
                 # (in other OSes. it just does nothing harmful)
                 cd $GITHUB_WORKSPACE
 
-                # Test for *.spec.art files
+            - name: Test spec files
+              run: |
                 
                 expected=`cat .github/workflows/expected.specs.out | tr -d '\r'`
                 output=`arturo --no-color src/app.art 2>/dev/null | tail | tr -d '\r' || true`
@@ -74,9 +75,9 @@ jobs:
                     diff /tmp/expected.txt /tmp/output.txt || true
                     exit 1
                 fi
-
-                # Test for *.test.art files
-
+            
+            - name: Test test files
+              run: |
                 expected=`cat .github/workflows/expected.tests.out | tr -d '\r'`
                 output=`arturo --no-color src/app.art --suffix:'.test.art' 2>/dev/null | tail | tr -d '\r' || true`
 
@@ -91,3 +92,12 @@ jobs:
                     diff /tmp/expected.txt /tmp/output.txt || true
                     exit 1
                 fi
+
+            - name: Run individual files
+              run: |
+                cd $GITHUB_WORKSPACE
+
+                arturo --no-color src/unitt.art
+                arturo --no-color src/api/settings.art
+                arturo --no-color src/api/spec.art
+                arturo --no-color src/api/test.art

@@ -318,4 +318,4 @@ if standalone? ::
 
     unitt\report.keep 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    unitt\report 'minimal
+    unitt\report.keep 'minimal
