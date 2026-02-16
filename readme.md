@@ -172,13 +172,12 @@ put this under a `if standalone? ::` block.
 
 - `unitt\report: $[mode :literal]`:
     Reports the tests on your terminal.
-    - mode:
+    - `mode`:
         - `'full`: Shows all tests and summary
         - `'minimal`: Shows failed tests and summary
-- `unitt\exit`:
-    Exits with proper code.
-- `unitt\result: :dictionary`
-    Returns the raw storage. For debugging or additional extensions, related.
+    - options:
+        - `.keep`: Keep running the current script. 
+            Otherwise, this will exit the current script with the proper exit code. 
 
 ## Breaking Changes
 

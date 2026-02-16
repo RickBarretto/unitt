@@ -38,4 +38,3 @@ it "Simple passing test" [
 
 if standalone? ::
     unitt\report 'full
-    unitt\exit

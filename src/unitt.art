@@ -42,13 +42,13 @@ define :Unitt [
         ]
 
         print to :string result\summary
-    ]
 
-    exit: method [][
-        result: \_getResults!
-        result\failed? ?
-            -> panic.unstyled "Some tests failed!"
-            -> exit 0
+        unless (attr 'keep) ?? false [
+            result\failed? ?
+                -> panic.unstyled "Some tests failed!"
+                -> exit 0
+        ]
+
     ]
 ]!
 
@@ -297,7 +297,6 @@ if standalone? ::
         expects -> true
     ]
 
-    unitt\report 'full
+    unitt\report.keep 'full
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     unitt\report 'minimal
-    unitt\exit
