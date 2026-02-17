@@ -15,7 +15,7 @@ if standalone? ::
     ]
 
     settings: mergeSettings @[
-        if exists? "config.toml" -> to :FileSettings ["config.toml"]
+        if exists? "config.toml" -> to :FileSettings ["unitt.toml"]
         if exists? "config.art" -> to :FileSettings ["config.art"]
         to :CliSettings [args]
     ]
@@ -36,3 +36,4 @@ if standalone? ::
     if and? (not? settings\silent) 
             (results\failed?) 
         -> panic.unstyled "Some tests failed!"
+
